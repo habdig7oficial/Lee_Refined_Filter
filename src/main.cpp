@@ -13,8 +13,15 @@ struct config_struct {
 };
 
 
-Mat refinedFilter(Mat image, int window){
-  //for(int i = 0; i < image.rows - wid)
+template<typename T>
+Mat refinedFilter(Mat &image, int window){
+  for(int i = 0; i < image.rows; i++){
+    for(int j = 0; j < image.cols; j++){
+      T pixel = image.at<T>(i, j);
+      //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
+      cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
+    }
+  }
   return image;
 }
 
@@ -49,25 +56,45 @@ int main(int argc, char *argv[]){
     config.window = 11;
   }
   
-  Mat image = imread(config.image_path, IMREAD_ANYDEPTH | config.color_type);
+  Mat image = imread(config.image_path, IMREAD_ANYDEPTH | IMREAD_GRAYSCALE);
   Mat coherence = imread(config.coherence_path, IMREAD_UNCHANGED );
 
   int padding = config.window / 2;
 
+  cout << "Rows: " << image.rows << " Cols: " << image.cols << " Channels: " << image.channels() << " Depth: " << image.depth() << " Type: " << image.type()<< endl;
   cout << "Window is: " << (int) config.window << " Reflected padded is: " << padding << endl;
   Mat padded_image;
   copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
 
-  Mat slice = refinedFilter(padded_image, padding);
-  
+  Mat filtered;
+
+  switch(image.depth()){
+    case CV_8U:
+	filtered = refinedFilter<uchar>(padded_image, padding);
+      break;
+
+    case CV_16U:
+      filtered = refinedFilter<ushort>(padded_image, padding);
+      break;
+       
+
+    case CV_32F:
+	filtered = refinedFilter<float>(padded_image, padding);
+      break;
+
+    default:
+      printf("Unsuported Prescision");
+      return 1;
+  }
+
   imshow("Original Image", image);
   imshow("Coherence Image", coherence);
   imshow("Reflected Image", padded_image);
-  imshow("Sliced Image", slice);
+  imshow("Filtered Image", filtered);
   waitKey(0);
 
 
-  //bool saved = imwrite("./output.tiff", padded);
+  bool saved = imwrite("./output.tiff", filtered);
 
   destroyAllWindows();
   return 0;
