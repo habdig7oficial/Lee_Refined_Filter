@@ -9,7 +9,15 @@ struct config_struct {
   char *image_path;
   char *coherence_path;
   char color_type;
+  char window;
 };
+
+
+Mat refinedFilter(Mat image, int window){
+  //for(int i = 0; i < image.rows - wid)
+  return image;
+}
+
 
 int main(int argc, char *argv[]){
 
@@ -24,7 +32,9 @@ int main(int argc, char *argv[]){
  
     if(strcmp(argv[i], "--channels") == 0)
       config.color_type = atoi(argv[i + 1]);
-   
+
+    if(strcmp(argv[i], "--window") == 0)
+      config.window = atoi(argv[i + 1]);
   }
 
   if(strcmp(config.image_path, "") == 0){
@@ -35,19 +45,25 @@ int main(int argc, char *argv[]){
     fprintf(stderr, "Coherence file was not provided\n");
     return -1;
   }
+  else if(config.window == 0){
+    config.window = 11;
+  }
   
   Mat image = imread(config.image_path, IMREAD_ANYDEPTH | config.color_type);
-  Mat coherence = imread(config.coherence_path, IMREAD_ANYDEPTH | config.color_type );
+  Mat coherence = imread(config.coherence_path, IMREAD_UNCHANGED );
 
-  Mat padded;
-  copyMakeBorder(image, padded, 100, 100, 100, 100, BORDER_REFLECT);
+  int padding = config.window / 2;
 
-  Mat slice = image(Range(0,100), Range(0,100));
+  cout << "Window is: " << (int) config.window << " Reflected padded is: " << padding << endl;
+  Mat padded_image;
+  copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
+
+  Mat slice = refinedFilter(padded_image, padding);
   
   imshow("Original Image", image);
   imshow("Coherence Image", coherence);
-  imshow("Reflected Image", padded);
-  imshow("Reflected Image", slice);
+  imshow("Reflected Image", padded_image);
+  imshow("Sliced Image", slice);
   waitKey(0);
 
 
