@@ -13,17 +13,17 @@ template<typename T>
 Mat refinedFilter(Mat &image, int window){
 
   int c = 0;
-  Mat debugChannel = Mat::ones(image.rows, image.cols, CV_32F) * 1;
+  Mat debugChannel = Mat::ones(image.rows, image.cols, CV_32F);
   vector<Mat> debugVec;
 
-  debugVec.push_back(debugChannel);
+  debugVec.push_back(Mat::ones(image.rows, image.cols, CV_32F));
 
   
   int padding = window / 2;
   for(int i = padding; i < image.rows - padding; i++){
     for(int j = padding; j < image.cols - padding; j++){
       T pixel = image.at<T>(i, j);
-      // image.at<T>(i, j) = 1;
+      debugChannel.at<T>(i, j) = 0;
       //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
       cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
     }
