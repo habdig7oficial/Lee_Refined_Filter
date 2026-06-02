@@ -15,9 +15,11 @@ struct config_struct {
 
 template<typename T>
 Mat refinedFilter(Mat &image, int window){
-  for(int i = 0; i < image.rows; i++){
-    for(int j = 0; j < image.cols; j++){
+  int padding = window / 2;
+  for(int i = padding; i < image.rows - padding; i++){
+    for(int j = padding; j < image.cols - padding; j++){
       T pixel = image.at<T>(i, j);
+      image.at<T>(i, j) = 1;
       //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
       cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
     }
@@ -70,16 +72,16 @@ int main(int argc, char *argv[]){
 
   switch(image.depth()){
     case CV_8U:
-	filtered = refinedFilter<uchar>(padded_image, padding);
+	filtered = refinedFilter<uchar>(padded_image, config.window);
       break;
 
     case CV_16U:
-      filtered = refinedFilter<ushort>(padded_image, padding);
+      filtered = refinedFilter<ushort>(padded_image, config.window);
       break;
        
 
     case CV_32F:
-	filtered = refinedFilter<float>(padded_image, padding);
+	filtered = refinedFilter<float>(padded_image, config.window);
       break;
 
     default:
