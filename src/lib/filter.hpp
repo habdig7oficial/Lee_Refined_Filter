@@ -10,31 +10,59 @@ void strideImg(Mat &image, Mat &padded_image, int padding){
 }
 
 template<typename T>
-Mat refinedFilter(Mat &image, int window){
+Mat refinedFilter(Mat &image, int window, int type = CV_32F){
 
-  int c = 0;
-  Mat debugChannel = Mat::ones(image.rows, image.cols, CV_32F);
+  Mat debugImg;
+  Mat debugChannel = Mat::ones(image.rows, image.cols, type);
   vector<Mat> debugVec;
 
-  debugVec.push_back(Mat::ones(image.rows, image.cols, CV_32F));
+  T left, right, top, down, center;
+  
+  Mat aux = Mat::ones(image.rows, image.cols, type);
 
   
   int padding = window / 2;
   for(int i = padding; i < image.rows - padding; i++){
     for(int j = padding; j < image.cols - padding; j++){
       T pixel = image.at<T>(i, j);
+      
+      left = debugChannel.at<T>(i - padding, j);
+      right = debugChannel.at<T>(i + padding, j);
+      top = debugChannel.at<T>(i, j - padding);
+      down = debugChannel.at<T>(i, j + padding);
+      center = debugChannel.at<T>(i, j);
+
+      debugChannel.at<T>(i - padding, j) = 
+      debugChannel.at<T>(i + padding, j) = 
+      debugChannel.at<T>(i, j - padding) = 
+      debugChannel.at<T>(i, j + padding) =
       debugChannel.at<T>(i, j) = 0;
+
+
+      
+      debugVec.push_back(debugChannel);
+      debugVec.push_back(image);
+      debugVec.push_back(debugChannel);
+      
+      merge(debugVec, debugImg);
+      imshow("Making sliding window", debugImg);
+      waitKey(100);
+
+      debugChannel.at<T>(i - padding, j) = left;
+      debugChannel.at<T>(i + padding, j) = right;
+      debugChannel.at<T>(i, j - padding) = top;
+      debugChannel.at<T>(i, j + padding) = down;
+      debugChannel.at<T>(i, j) = center;
+
+      debugVec.clear();
+      
       //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
       cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
     }
   }
 
-  debugVec.push_back(image);
-  debugVec.push_back(debugChannel);
   
-  Mat debugImg;
 
-  merge(debugVec, debugImg);
-  
+
   return debugImg;
 }
