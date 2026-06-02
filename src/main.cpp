@@ -1,9 +1,8 @@
 #include "iostream"
-#include "opencv2/opencv.hpp"  
 #include "string.h"
+#include "lib/filter.hpp"
 
 using namespace std;
-using namespace cv;
 
 struct config_struct {
   char *image_path;
@@ -11,21 +10,6 @@ struct config_struct {
   char color_type;
   char window;
 };
-
-
-template<typename T>
-Mat refinedFilter(Mat &image, int window){
-  int padding = window / 2;
-  for(int i = padding; i < image.rows - padding; i++){
-    for(int j = padding; j < image.cols - padding; j++){
-      T pixel = image.at<T>(i, j);
-      image.at<T>(i, j) = 1;
-      //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
-      cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
-    }
-  }
-  return image;
-}
 
 
 int main(int argc, char *argv[]){
@@ -65,8 +49,9 @@ int main(int argc, char *argv[]){
 
   cout << "Rows: " << image.rows << " Cols: " << image.cols << " Channels: " << image.channels() << " Depth: " << image.depth() << " Type: " << image.type()<< endl;
   cout << "Window is: " << (int) config.window << " Reflected padded is: " << padding << endl;
+
   Mat padded_image;
-  copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
+  strideImg(image, padded_image, padding);
 
   Mat filtered;
 
