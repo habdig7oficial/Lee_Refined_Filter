@@ -38,7 +38,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F){
       debugChannel.at<T>(i, j + padding) =
       debugChannel.at<T>(i, j) = 0;
 
-
       
       debugVec.push_back(debugChannel);
       debugVec.push_back(image);
@@ -46,7 +45,7 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F){
       
       merge(debugVec, debugImg);
       imshow("Making sliding window", debugImg);
-      waitKey(100);
+      waitKey(1);
 
       debugChannel.at<T>(i - padding, j) = left;
       debugChannel.at<T>(i + padding, j) = right;
@@ -55,14 +54,24 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F){
       debugChannel.at<T>(i, j) = center;
 
       debugVec.clear();
+
+      /*
+      for(int k = i - padding; k < i + padding; k++){
+	for(int m = j - padding; m < j + padding; m++){
+	  debugChannel.at<T>(k, m) = 0; 
+	}
+      }
+      */
       
       //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
       cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
     }
   }
-
-  
-
+  /*
+  debugVec.push_back(debugChannel);
+  debugVec.push_back(image);
+  debugVec.push_back(debugChannel);
+  merge(debugVec, debugImg);*/
 
   return debugImg;
 }
