@@ -4,6 +4,7 @@
 using namespace cv;
 using namespace std;
 
+
 /* Reflect the border of the image to apply the Lee filter on the edge of the image */
 void strideImg(Mat &image, Mat &padded_image, int padding){
    copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
@@ -33,10 +34,10 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F){
       center = debugChannel.at<T>(i, j);
 
       debugChannel.at<T>(i - padding, j) = 
-      debugChannel.at<T>(i + padding, j) = 
-      debugChannel.at<T>(i, j - padding) = 
-      debugChannel.at<T>(i, j + padding) =
-      debugChannel.at<T>(i, j) = 0;
+	debugChannel.at<T>(i + padding, j) = 
+	debugChannel.at<T>(i, j - padding) = 
+	debugChannel.at<T>(i, j + padding) =
+	debugChannel.at<T>(i, j) = 0;
 
       
       debugVec.push_back(debugChannel);
@@ -55,23 +56,29 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F){
 
       debugVec.clear();
 
-      /*
-      for(int k = i - padding; k < i + padding; k++){
-	for(int m = j - padding; m < j + padding; m++){
-	  debugChannel.at<T>(k, m) = 0; 
+      T total = 0;
+      
+      for(int wi = i - padding; wi < i + padding; wi++){
+	for(int wj = j - padding; wj < j + padding; wj++){
+	  total += image.at<T>(wi, wi);
+	  cout << "\t (" << wi << " ," << wj << ") =" << total << " "  << image.at<T>(i - padding, j) << endl;
 	}
       }
-      */
+
+      T mean = (total / window);
+      
+      cout << "Sum: " << total << ", Avg: " << mean << endl;
       
       //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
       cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
     }
   }
   /*
-  debugVec.push_back(debugChannel);
-  debugVec.push_back(image);
-  debugVec.push_back(debugChannel);
-  merge(debugVec, debugImg);*/
+    debugVec.push_back(debugChannel);
+    debugVec.push_back(image);
+    debugVec.push_back(debugChannel);
+    merge(debugVec, debugImg);*/
 
   return debugImg;
 }
+
