@@ -11,15 +11,23 @@
 
 #include "cmath"
 #include "iostream"
+#include "gsl/gsl_sf_gamma.h"
+
+
+#include "iomanip"
 
 using namespace std;
 
 double gierull(double x, double r, double theta, int L){
-  //double beta = r * 
+  double beta = r * cos(x - theta);
+
+  // double sum1 = 0.5 * beta * exp(L * log(1 - pow(theta, 2))) + gsl_sf_lngamma() 
 
   cout << "hello from gierrul" << endl;
 
+  cout << fixed << setprecision(10);
+  cout << beta << endl;
   
   
-  return cos(1);
+  return 1;
 }

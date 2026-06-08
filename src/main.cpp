@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
   }
 
   /* Equation */
-
+  
   cout << "Gierull Test:" << endl;
 
   cout << gierull(1, 0.7, 0.0, 16);
@@ -55,6 +55,7 @@ int main(int argc, char *argv[]){
   cout << "---------------------------" << endl;
 
   return 0;
+  
   /* Image manipulation */
   
   Mat image = imread(config.image_path, IMREAD_ANYDEPTH | IMREAD_GRAYSCALE);
