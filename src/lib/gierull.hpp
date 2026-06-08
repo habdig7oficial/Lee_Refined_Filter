@@ -20,8 +20,12 @@ using namespace std;
 
 double gierull(double x, double r, double theta, int L){
   double beta = r * cos(x - theta);
-
-  // double sum1 = 0.5 * beta * exp(L * log(1 - pow(theta, 2))) + gsl_sf_lngamma() 
+  
+  double sum1 = 0.5 * beta * exp(L * log(1 - pow(theta, 2)))
+    + gsl_sf_lngamma(L + 0.5)
+    - (L + 0.5) * log(1 - pow(beta, 2))
+    // + gsl_sf_lngamma()
+    ; 
 
   cout << "hello from gierrul" << endl;
 
@@ -29,5 +33,5 @@ double gierull(double x, double r, double theta, int L){
   cout << beta << endl;
   
   
-  return 1;
+  return sum1;
 }
