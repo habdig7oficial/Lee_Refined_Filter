@@ -16,6 +16,9 @@ struct config_struct {
 
 int main(int argc, char *argv[]){
 
+  /* Set prescision for the whole program  */
+  cout << fixed << setprecision(15); 
+
   /* args  */
   struct config_struct config = {};
   

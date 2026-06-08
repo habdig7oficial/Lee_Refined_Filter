@@ -15,23 +15,26 @@
 
 
 #include "iomanip"
+#include "numbers"
 
 using namespace std;
 
 double gierull(double x, double r, double theta, int L){
   double beta = r * cos(x - theta);
+  r = abs(r);
   
-  double sum1 = 0.5 * beta * exp(L * log(1 - pow(theta, 2)))
-    + gsl_sf_lngamma(L + 0.5)
-    - (L + 0.5) * log(1 - pow(beta, 2))
-    // + gsl_sf_lngamma()
+  double sum1 = 0.5 * beta *
+    exp(L * log(1 - pow(r, 2))
+	+ gsl_sf_lngamma(L + 0.5)
+	- (L + 0.5) * log(1 - pow(beta, 2))
+	- gsl_sf_lngamma(L)
+    ) / sqrt(numbers::pi)
     ; 
 
   cout << "hello from gierrul" << endl;
-
-  cout << fixed << setprecision(10);
   cout << beta << endl;
-  
+  cout << sum1 << endl;
+  cout << gsl_sf_lngamma(L) / sqrt(numbers::pi) << endl;
   
   return sum1;
 }
