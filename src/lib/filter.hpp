@@ -21,7 +21,8 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F){
   
   Mat aux = Mat::ones(image.rows, image.cols, type);
 
-  
+
+  /* Check if window is inside image  */
   int padding = window / 2;
   for(int i = padding; i < image.rows - padding; i++){
     for(int j = padding; j < image.cols - padding; j++){
@@ -56,8 +57,8 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F){
 
       debugVec.clear();
 
+
       T total = 0;
-      
       for(int wi = i - padding; wi < i + padding; wi++){
 	for(int wj = j - padding; wj < j + padding; wj++){
 	  total += image.at<T>(wi, wi);

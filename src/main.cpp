@@ -2,6 +2,8 @@
 #include "string.h"
 #include "lib/filter.hpp"
 
+#include "lib/gierull.hpp"
+
 using namespace std;
 
 struct config_struct {
@@ -14,6 +16,7 @@ struct config_struct {
 
 int main(int argc, char *argv[]){
 
+  /* args  */
   struct config_struct config = {};
   
   for(int i = 0; i < argc; i++){
@@ -41,6 +44,18 @@ int main(int argc, char *argv[]){
   else if(config.window == 0){
     config.window = 11;
   }
+
+  /* Equation */
+
+  cout << "Gierull Test:" << endl;
+
+  cout << gierull(1, 0.7, 0.0, 16);
+
+
+  cout << "---------------------------" << endl;
+
+  return 0;
+  /* Image manipulation */
   
   Mat image = imread(config.image_path, IMREAD_ANYDEPTH | IMREAD_GRAYSCALE);
   Mat coherence = imread(config.coherence_path, IMREAD_UNCHANGED );
