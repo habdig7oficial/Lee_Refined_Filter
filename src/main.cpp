@@ -3,6 +3,7 @@
 #include "lib/filter.hpp"
 
 #include "lib/gierull.hpp"
+#include "gsl/gsl_integration.h"
 
 using namespace std;
 
@@ -52,14 +53,23 @@ int main(int argc, char *argv[]){
   
   cout << "Gierull Test:" << endl;
 
+  gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);
+
+  double res, err;
   gierull::Param gsl_params = {
     .r = 0.7,
     .theta = 0.0,
     .L = 16
   };
 
-  cout << gierull::gierull(2.5, (void *) &gsl_params);
+  gsl_function F;
+  F.function = &gierull::gierull;
+  F.params = (void *)&gsl_params;
 
+  gsl_integration_qags(&F, -numbers::pi, numbers::pi, 0, 1e-7, 1000, w, &res, &err);
+
+  //cout << gierull::gierull(2.5, (void *) &gsl_params);
+  cout << "Integration Res: " << res << " Error: " << err << endl;
 
   cout << "---------------------------" << endl;
 

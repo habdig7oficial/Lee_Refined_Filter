@@ -11,7 +11,7 @@ void strideImg(Mat &image, Mat &padded_image, int padding){
 }
 
 template<typename T>
-Mat refinedFilter(Mat &image, int window, int type = CV_32F){
+Mat refinedFilter(Mat &image, int window, double tolerance = 0.001, int type = CV_32F){
 
   Mat debugImg;
   Mat debugChannel = Mat::ones(image.rows, image.cols, type);
