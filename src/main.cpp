@@ -52,7 +52,13 @@ int main(int argc, char *argv[]){
   
   cout << "Gierull Test:" << endl;
 
-  cout << gierull(1, 0.7, 0.0, 16);
+  gierull::Param gsl_params = {
+    .r = 0.7,
+    .theta = 0.0,
+    .L = 16
+  };
+
+  cout << gierull::gierull(2.5, (void *) &gsl_params);
 
 
   cout << "---------------------------" << endl;
