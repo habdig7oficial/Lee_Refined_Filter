@@ -6,3 +6,6 @@ compile:
 
 run: compile
 	./exec.elf
+
+leaks: compile
+	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)
