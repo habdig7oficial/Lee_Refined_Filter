@@ -60,24 +60,25 @@ double gierull(double x, double r, double theta, int L){
   /* This part is different from the R code check later if this is correct*/
   double sum4 = 0;
   double acc = 0;
-  int c = L - 1;
-  for(double i = (L - 1.5); i > 0; i--, c--){
-    // cout << c << " "<< i << " gammaratio: " << log(i) << " acc: " << acc << endl;
+  int c = 1;
+  for(double i = (L - 1.5); i > 0; i--, c++){
+    //cout << c << " "<< i << " gammaratio: " << log(i) << " acc: " << acc << endl;
 
-    sum4 += pow(-1, c + 1) * pow(-1, c - 1) *
-      exp(
+    sum4 += pow(-1, c + 1) * pow(-1, c - 1) * 
+    exp(
 	  L * log(1 - pow(r, 2))
-	  + gsl_sf_gamma(L - c) - gsl_sf_gamma(L)
+	  + gsl_sf_lngamma(L - c) - gsl_sf_lngamma(L)
 	  + acc
 	  + log(1 + (2 * c - 1) * pow(beta, 2))
 	  - (c + 1) * log(1 - pow(beta, 2))
 	  ) * 0.25 / numbers::pi;
 
-    cout << sum4 << endl;
+    cout << c << " " << sum4 << endl;
     acc += log(i);
   }
 
+
   cout << sum4 << endl;
-  return sum4;
+  return sum3;
 }
              
