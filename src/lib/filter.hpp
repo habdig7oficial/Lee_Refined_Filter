@@ -1,6 +1,12 @@
 #include "opencv2/opencv.hpp"  
 #include "vector"
 
+
+#include "gierull.hpp"
+#include "gsl/gsl_integration.h"
+
+#define TOLERANCE 0.01
+
 using namespace cv;
 using namespace std;
 
@@ -11,8 +17,12 @@ void strideImg(Mat &image, Mat &padded_image, int padding){
 }
 
 template<typename T>
-Mat refinedFilter(Mat &image, int window, double tolerance = 0.001, int type = CV_32F){
+Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi){
 
+  /* Check if window is inside image  */
+  int padding = window / 2;
+
+  /* Debug Layer */
   Mat debugImg;
   Mat debugChannel = Mat::ones(image.rows, image.cols, type);
   vector<Mat> debugVec;
@@ -21,9 +31,47 @@ Mat refinedFilter(Mat &image, int window, double tolerance = 0.001, int type = C
   
   Mat aux = Mat::ones(image.rows, image.cols, type);
 
+  cout << image.rows << " " << image.cols << " " << (image.rows - 2 * padding) * (image.cols - 2 * padding) << " " << padding << endl;
 
-  /* Check if window is inside image  */
-  int padding = window / 2;
+  double psi_xi = (-lower_limit + upper_limit) / 2;
+  double estimated_val, err;
+
+  cout << "psi_xi " << psi_xi << endl;
+
+  /* Equation */
+  
+  gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);
+
+  gierull::Param gsl_params = {
+    .r = 0.7,
+    .theta = 0.0,
+    .L = 16
+  };
+
+  
+  gsl_function F;
+  F.function = &gierull::gierull;
+  F.params = (void *)&gsl_params;
+
+  /*
+  cout << "Gierull Test:" << endl;
+  //cout << gierull::gierull(2.5, (void *) &gsl_params);
+  cout << "Integration Res: " << estimated_val << " Error: " << err << endl;
+
+  cout << "---------------------------" << endl;
+  */
+
+  gsl_integration_qags(&F, -psi_xi, psi_xi, 0, 1e-7, 1000, w, &estimated_val, &err);
+  for(int i = 1; i < (image.rows - 2 * padding) * (image.cols - 2 * padding); i++){
+    // cout << i << endl;
+    gsl_integration_qags(&F, -psi_xi, psi_xi, 0, 1e-7, 1000, w, &estimated_val, &err);
+    cout << "Integration Res: " << estimated_val << " Error: " << err << endl;
+    
+  }
+
+  return image;
+
+  /* Main Loop */
   for(int i = padding; i < image.rows - padding; i++){
     for(int j = padding; j < image.cols - padding; j++){
       T pixel = image.at<T>(i, j);
