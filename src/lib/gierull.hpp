@@ -62,7 +62,8 @@ namespace gierull {
 	  * log(1 - pow(beta, 2))
 	  - gsl_sf_lngamma(L)
 	  ) / pow(numbers::pi, 1.5);
-  
+
+    /*
     cout << "hello from gierrul" << endl;
     cout << "Beta " << beta << endl;
     cout << "Sum 1: " << sum1 << endl;
@@ -70,8 +71,8 @@ namespace gierull {
     cout << "Sum 3: " << sum3 << endl;
 
     cout << "vet: " << 0 << endl;
-
-    /* This part is different from the R code check later if this is correct*/
+    */
+    /* This part is different from the R code check later if this is correct : Appears correct*/
     double sum4 = 0;
     double acc = 0;
     int c = 1;
@@ -87,12 +88,12 @@ namespace gierull {
 	    - (c + 1) * log(1 - pow(beta, 2))
 	    ) * 0.25 / numbers::pi;
 
-      cout << c << " " << sum4 << endl;
+      //cout << c << " " << sum4 << endl;
       acc += log(i);
     }
 
 
-    cout << sum4 << endl;
+    //cout << sum4 << endl;
     return sum1 + sum2 + sum3 + sum4;
   }
              
