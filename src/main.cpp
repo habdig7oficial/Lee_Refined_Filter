@@ -1,9 +1,10 @@
 #include "iostream"
-#include "opencv2/opencv.hpp"  
 #include "string.h"
+#include "lib/filter.hpp"
+
+#include "lib/gierull.hpp"
 
 using namespace std;
-using namespace cv;
 
 struct config_struct {
   char *image_path;
@@ -13,23 +14,12 @@ struct config_struct {
 };
 
 
-template<typename T>
-Mat refinedFilter(Mat &image, int window){
-  int padding = window / 2;
-  for(int i = padding; i < image.rows - padding; i++){
-    for(int j = padding; j < image.cols - padding; j++){
-      T pixel = image.at<T>(i, j);
-      image.at<T>(i, j) = 1;
-      //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
-      cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
-    }
-  }
-  return image;
-}
-
-
 int main(int argc, char *argv[]){
 
+  /* Set prescision for the whole program  */
+  cout << fixed << setprecision(15); 
+
+  /* args  */
   struct config_struct config = {};
   
   for(int i = 0; i < argc; i++){
@@ -57,6 +47,25 @@ int main(int argc, char *argv[]){
   else if(config.window == 0){
     config.window = 11;
   }
+
+  /* Equation */
+  
+  cout << "Gierull Test:" << endl;
+
+  gierull::Param gsl_params = {
+    .r = 0.7,
+    .theta = 0.0,
+    .L = 16
+  };
+
+  cout << gierull::gierull(2.5, (void *) &gsl_params);
+
+
+  cout << "---------------------------" << endl;
+
+  return 0;
+  
+  /* Image manipulation */
   
   Mat image = imread(config.image_path, IMREAD_ANYDEPTH | IMREAD_GRAYSCALE);
   Mat coherence = imread(config.coherence_path, IMREAD_UNCHANGED );
@@ -65,8 +74,9 @@ int main(int argc, char *argv[]){
 
   cout << "Rows: " << image.rows << " Cols: " << image.cols << " Channels: " << image.channels() << " Depth: " << image.depth() << " Type: " << image.type()<< endl;
   cout << "Window is: " << (int) config.window << " Reflected padded is: " << padding << endl;
+
   Mat padded_image;
-  copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
+  strideImg(image, padded_image, padding);
 
   Mat filtered;
 
