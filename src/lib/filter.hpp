@@ -61,14 +61,28 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   cout << "---------------------------" << endl;
   */
 
-  gsl_integration_qags(&F, -psi_xi, psi_xi, 0, 1e-7, 1000, w, &estimated_val, &err);
-  for(int i = 1; i < (image.rows - 2 * padding) * (image.cols - 2 * padding); i++){
-    // cout << i << endl;
-    gsl_integration_qags(&F, -psi_xi, psi_xi, 0, 1e-7, 1000, w, &estimated_val, &err);
-    cout << "Integration Res: " << estimated_val << " Error: " << err << endl;
-    
+  //gsl_integration_qags(&F, -psi_xi, psi_xi, 0, 1e-7, 1000, w, &target_val, &err);
+
+  for(int j = padding; j < image.cols - padding; j++){
+    for(int i = padding; i < image.rows - padding; i++){
+      T pixel = image.at<T>(i, j);
+      gsl_integration_qags(&F, -pixel, pixel, 0, 1e-7, 1000, w, &estimated_val, &err);
+
+      double s = abs(estimated_val - xi);
+
+            
+      cout << "Pixel " << pixel << " Val - xi: " << s << " Estimated Val:  " << estimated_val << endl;
+      
+      if(s < TOLERANCE){
+	psi_xi = pixel;
+	cout << "NEW PSI_XI: " << psi_xi << endl;
+	return image;
+      }
+    }
   }
 
+  
+  
   return image;
 
   /* Main Loop */
