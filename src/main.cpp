@@ -2,6 +2,9 @@
 #include "string.h"
 #include "lib/filter.hpp"
 
+//#include "lib/gierull.hpp"
+//#include "gsl/gsl_integration.h"
+
 using namespace std;
 
 struct config_struct {
@@ -59,8 +62,18 @@ int main(int argc, char *argv[]){
     .L = 16
   };
 
-  
+  /*
+  gsl_function F;
+  F.function = &gierull::gierull;
+  F.params = (void *)&gsl_params;
 
+  gsl_integration_qags(&F, -numbers::pi, numbers::pi, 0, 1e-7, 1000, w, &res, &err);
+
+  //cout << gierull::gierull(2.5, (void *) &gsl_params);
+  cout << "Integration Res: " << res << " Error: " << err << endl;
+
+  cout << "---------------------------" << endl;
+  */
   
   /* Image manipulation */
   
