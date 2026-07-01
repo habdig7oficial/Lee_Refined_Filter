@@ -26,7 +26,7 @@ namespace gierull {
     int L;
   } Param;
 
-  double gierull(double x, void *ptr_args){
+double gierull(double x, void *ptr_args){
 
     Param *args = (Param *) ptr_args;
   

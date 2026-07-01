@@ -1,11 +1,21 @@
 # OpenCv and Gnu Scientific Library (gsl) must be installed
 
 CXX_FLAGS = `pkg-config --cflags --libs opencv4 gsl`
+
+
+R_TEST    := $(shell Rscript -e "cat(R.home('include'))")
+RCPP_TEST := $(shell Rscript -e "cat(system.file('include', package='Rcpp'))")
+R_LIBS_TEST   := $(shell Rscript -e "cat(R.home('lib'))")
+
+CXX_FLAGS_TEST = `pkg-config --cflags --libs opencv4 gsl catch2-with-main` # Catch2 for tests
+
 compile:
-	 g++ src/main.cpp -o exec.elf $(CXX_FLAGS) 
+	 g++ -std=c++20 src/main.cpp -o exec.elf $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
 
-leaks: compile
-	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)
+test:
+	g++ -std=c++20 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" -lR $(CXX_FLAGS_TEST) && ./test.elf
+#leaks: compile
+#	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)
