@@ -1,12 +1,14 @@
 #include "../../lib/gierull.hpp"
 #include "../config.hpp"
+#include "gsl/gsl_integration.h"
 
 using namespace std;
 using namespace Rcpp;
 using namespace gierull;
 
 
-TEST_CASE("Gierull point", "[point]"){
+TEST_CASE("Gierull integration", "[integration]"){
+  gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);   
   cout << fixed << setprecision(15); 
 
   char *argv[] = {(char *) "dummy"};
@@ -39,7 +41,7 @@ TEST_CASE("Gierull point", "[point]"){
     R.parseEval("r_ypoint = dFuncGierullEq7(point, param)");
 
     double r_ypoint = R.parseEval("r_ypoint");
-    double r_res = R.parseEval("integrate(dFuncGierullEq7, lower = -pi, point, subdivisions = 1000, param = param)$value");
+    double r_res = R.parseEval("integrate(dFuncGierullEq7, lower = -point, upper = point, subdivisions = 1000, param = param)$value");
 
     cout << "R point: " << r_ypoint << " | integral: " << r_res << endl;
 
@@ -48,13 +50,20 @@ TEST_CASE("Gierull point", "[point]"){
 
     double cpp_ypoint = gierull::gierull(point, (void *) &cpp_param);
 
-    cout << "C++ Result: " << cpp_ypoint << endl;
+    gsl_function F;
+    F.function = &gierull::gierull;
+    F.params = (void *)&cpp_param;
+    double cpp_res, err = 0;
 
-    cout << endl;
-  
+    gsl_integration_qags(&F, -point, point, 0, 1e-7, 1000, w, &cpp_res, &err);
+
+
+    cout << "C++ Result: " << cpp_ypoint << " | integral: " << cpp_res << endl << endl;
+
+    
+
     REQUIRE(abs(cpp_ypoint - r_ypoint) < TOLERANCE);
-
-    /* === INTEGRATION === */
-
-  }
+    REQUIRE(abs(cpp_res - r_res) < TOLERANCE);
+  }   
+  gsl_integration_workspace_free(w);
 }
