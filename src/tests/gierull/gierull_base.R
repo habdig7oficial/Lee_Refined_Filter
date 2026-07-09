@@ -3,6 +3,8 @@ dFuncGierullEq7 <- function(x, param){
   if (!is.numeric(param[3]) || param[3] %% 1 != 0) {
     stop("Please, set the number of looks to an integer value")
   }
+
+  #print(x)
   
   param[1]  <- abs(param[1])
   beta <- param[1] * cos(x - param[2])
@@ -40,5 +42,8 @@ dFuncGierullEq7 <- function(x, param){
                                                   - (i + 1) * log(1 - beta^2)) * 0.25 / pi
   }
   f <- soma1 + soma2 + soma3  + soma4
+
+
+  #print(f)
   return(f)
 }

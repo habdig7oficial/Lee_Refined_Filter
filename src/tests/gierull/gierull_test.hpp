@@ -7,6 +7,7 @@ using namespace gierull;
 
 
 TEST_CASE("Gierull point", "[point]"){
+  cout << fixed << setprecision(15); 
 
   char *argv[] = {(char *) "dummy"};
   
@@ -35,19 +36,25 @@ TEST_CASE("Gierull point", "[point]"){
     R["point"] = point;
     R["param"] = r_param;
 
-    double r_res = R.parseEval("dFuncGierullEq7(point, param)");
+    R.parseEval("r_ypoint = dFuncGierullEq7(point, param)");
 
-    cout << "R Result: " << r_res << endl;
+    double r_ypoint = R.parseEval("r_ypoint");
+    double r_res = R.parseEval("integrate(dFuncGierullEq7, lower = -pi, point, subdivisions = 1000, param = param)$value");
+
+    cout << "R point: " << r_ypoint << " | integral: " << r_res << endl;
 
 
-    /* === R TESTS === */
+    /* === C++ TESTS === */
 
-    double cpp_res = gierull::gierull(point, (void *) &cpp_param);
+    double cpp_ypoint = gierull::gierull(point, (void *) &cpp_param);
 
-    cout << "C++ Result: " << cpp_res << endl;
+    cout << "C++ Result: " << cpp_ypoint << endl;
 
     cout << endl;
   
-    REQUIRE(abs(cpp_res - r_res) < TOLERANCE);
+    REQUIRE(abs(cpp_ypoint - r_ypoint) < TOLERANCE);
+
+    /* === INTEGRATION === */
+
   }
 }
