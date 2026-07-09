@@ -20,6 +20,6 @@ run: compile
 	./exec.elf
 
 test:
-	g++ -std=c++20 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf --rng-seed 4181052344
+	g++ -std=c++20 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf # --rng-seed 4181052344
 #leaks: compile
 #	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)

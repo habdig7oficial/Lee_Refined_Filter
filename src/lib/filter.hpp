@@ -16,6 +16,11 @@ void strideImg(Mat &image, Mat &padded_image, int padding){
    copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
 }
 
+gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);
+double integrate(gsl_function F, double limit, double *target_val, double *err){
+  return gsl_integration_qags(&F, -limit, limit, 0, 1e-7, 1000, w, &target_val, &err);
+}
+
 template<typename T>
 Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi){
 
@@ -39,8 +44,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   cout << "psi_xi " << psi_xi << endl;
 
   /* Equation */
-  
-  gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);
 
   gierull::Param gsl_params = {
     .r = 0.7,
@@ -65,25 +68,21 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   for(int j = padding; j < image.cols - padding; j++){
     for(int i = padding; i < image.rows - padding; i++){
-      T pixel = image.at<T>(i, j);
-      gsl_integration_qags(&F, -pixel, pixel, 0, 1e-7, 1000, w, &estimated_val, &err);
+        T pixel = image.at<T>(i, j);
+        gsl_integration_qags(&F, -pixel, pixel, 0, 1e-7, 1000, w, &estimated_val, &err);
 
-      double s = abs(estimated_val - xi);
+        double s = abs(estimated_val - xi);
 
-            
-      cout << "Pixel " << pixel << " Val - xi: " << s << " Estimated Val:  " << estimated_val << endl;
-      
-      if(s < TOLERANCE){
-	psi_xi = pixel;
-	cout << "NEW PSI_XI: " << psi_xi << endl;
-	return image;
+              
+        cout << "Pixel " << pixel << " Val - xi: " << s << " Estimated Val:  " << estimated_val << endl;
+        
+        if(s < TOLERANCE){
+          psi_xi = pixel;
+          cout << "NEW PSI_XI: " << psi_xi << endl;
+        }
       }
     }
-  }
 
-  
-  
-  return image;
 
   /* Main Loop */
   for(int i = padding; i < image.rows - padding; i++){
