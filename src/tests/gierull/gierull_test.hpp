@@ -1,4 +1,4 @@
-#include "../../lib/gierull.hpp"
+
 #include "../config.hpp"
 #include "gsl/gsl_integration.h"
 
@@ -22,7 +22,7 @@ TEST_CASE("Gierull integration", "[integration]"){
     /* === Rand Params === */
 
     double point = distribution(rng);
-    Param cpp_param = {
+    gierull::Param cpp_param = {
       .r = 0,
       .theta = 0.7,
       .L = 16
@@ -55,15 +55,15 @@ TEST_CASE("Gierull integration", "[integration]"){
     F.params = (void *)&cpp_param;
     double cpp_res, err = 0;
 
-    gsl_integration_qags(&F, -point, point, 0, 1e-7, 1000, w, &cpp_res, &err);
-
+    //gsl_integration_qags(&F, -point, point, 0, 1e-7, 1000, w, &cpp_res, &err);
+    integrate(&F, point, &cpp_res, &err);
 
     cout << "C++ Result: " << cpp_ypoint << " | integral: " << cpp_res << endl << endl;
 
     
 
-    REQUIRE(abs(cpp_ypoint - r_ypoint) < TOLERANCE);
-    REQUIRE(abs(cpp_res - r_res) < TOLERANCE);
+    REQUIRE(abs(cpp_ypoint - r_ypoint) < EPSILON);
+    REQUIRE(abs(cpp_res - r_res) < EPSILON);
   }   
   gsl_integration_workspace_free(w);
 }
