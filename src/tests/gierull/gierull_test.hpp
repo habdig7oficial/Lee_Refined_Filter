@@ -1,5 +1,3 @@
-
-#include "../config.hpp"
 #include "gsl/gsl_integration.h"
 
 using namespace std;
@@ -7,13 +5,10 @@ using namespace Rcpp;
 using namespace gierull;
 
 
+extern unique_ptr<RInside> Rbind;
+
 TEST_CASE("Gierull integration", "[integration]"){
   gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);   
-  cout << fixed << setprecision(15); 
-
-  char *argv[] = {(char *) "dummy"};
-  
-  RInside R(1, argv);
 
   mt19937 rng(Catch::getSeed());
   uniform_real_distribution<double> distribution(-numbers::pi, numbers::pi);
@@ -31,17 +26,17 @@ TEST_CASE("Gierull integration", "[integration]"){
     cout << "Point = " << point << endl;
     
     /* === R TESTS === */ 
-    R.parseEvalQ("source(\"src/tests/gierull/gierull_base.R\")");
+    (*Rbind).parseEvalQ("source(\"src/tests/gierull/gierull_base.R\")");
     NumericVector r_param = NumericVector::create(cpp_param.r, cpp_param.theta, cpp_param.L);
 
 
-    R["point"] = point;
-    R["param"] = r_param;
+    (*Rbind)["point"] = point;
+    (*Rbind)["param"] = r_param;
 
-    R.parseEval("r_ypoint = dFuncGierullEq7(point, param)");
+    (*Rbind).parseEval("r_ypoint = dFuncGierullEq7(point, param)");
 
-    double r_ypoint = R.parseEval("r_ypoint");
-    double r_res = R.parseEval("integrate(dFuncGierullEq7, lower = -point, upper = point, subdivisions = 1000, param = param)$value");
+    double r_ypoint = (*Rbind).parseEval("r_ypoint");
+    double r_res = (*Rbind).parseEval("integrate(dFuncGierullEq7, lower = -point, upper = point, subdivisions = 1000, param = param)$value");
 
     cout << "R point: " << r_ypoint << " | integral: " << r_res << endl;
 
