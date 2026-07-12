@@ -38,7 +38,7 @@ TEST_CASE("Gierull integration", "[integration]"){
     double r_ypoint = (*Rbind).parseEval("r_ypoint");
     double r_res = (*Rbind).parseEval("integrate(dFuncGierullEq7, lower = -point, upper = point, subdivisions = 1000, param = param)$value");
 
-    cout << "R point: " << r_ypoint << " | integral: " << r_res << endl;
+    cout << "R point: " << r_ypoint << "\t| integral: " << r_res << endl;
 
 
     /* === C++ TESTS === */
@@ -53,7 +53,7 @@ TEST_CASE("Gierull integration", "[integration]"){
     //gsl_integration_qags(&F, -point, point, 0, 1e-7, 1000, w, &cpp_res, &err);
     integrate(&F, point, &cpp_res, &err);
 
-    cout << "C++ Result: " << cpp_ypoint << " | integral: " << cpp_res << endl << endl;
+    cout << "C++ Result: " << cpp_ypoint << "\t| integral: " << cpp_res << endl << endl;
 
     
 
