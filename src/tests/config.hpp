@@ -7,3 +7,4 @@
 #define EPSILON 1e-14
 #define REPETITION 10
 
+#define IMG "img/Simulated/phi_raster_noisy.tif"
