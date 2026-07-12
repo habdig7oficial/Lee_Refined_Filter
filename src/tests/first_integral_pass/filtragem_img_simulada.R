@@ -604,10 +604,9 @@ exec <- function(img, coherence_map){
   phi_raster_noisy <- raster(coherence_map)
   #phi_raster_noisy <- raster::as.matrix(phi_raster_noisy[1:100, 1:100, drop=FALSE])
   phi_raster_noisy <- raster::as.matrix(phi_raster_noisy)
-
-  return(phi_raster_noisy)
+  return(1)
   #aplicar o filtro
-  img_LInSARRFE <- LInSARRFE(phi_raster_noisy, map.coherence, param=c(r=0.7, theta=0, L=16), eth=0.01)
+  #img_LInSARRFE <- LInSARRFE(phi_raster_noisy, map.coherence, param=c(r=0.7, theta=0, L=16), eth=0.01)
     
   #plot
   #par(mfrow = c(1, 3))
