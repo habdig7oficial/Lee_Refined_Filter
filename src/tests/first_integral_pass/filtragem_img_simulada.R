@@ -1,3 +1,5 @@
+source("src/tests/gierull/gierull_base.R")
+
 LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
   
   if (dim(imageRaster)[1]<13 || dim(imageRaster)[1]<13) {
@@ -591,26 +593,28 @@ library(raster)
 library(circular)
 library(filters)
 
-# Aplicar o filtro
-map.coherence <- raster("map_coherence_gierull.tif")
-#map.coherence <- raster::as.matrix(map.coherence[1:100, 1:100, drop=FALSE])
-map.coherence <- as.matrix(map.coherence)
 
-#img com ruido
-phi_raster_noisy <- raster("phi_raster_noisy.tif")
-#phi_raster_noisy <- raster::as.matrix(phi_raster_noisy[1:100, 1:100, drop=FALSE])
-phi_raster_noisy <- raster::as.matrix(phi_raster_noisy)
+exec <- function(img, coherence_map){
+  # Aplicar o filtro
+  map.coherence <- raster(img)
+  #map.coherence <- raster::as.matrix(map.coherence[1:100, 1:100, drop=FALSE])
+  map.coherence <- as.matrix(map.coherence)
 
-#img sem ruido
-phi_raster <- raster("phi_raster.tif")
+  #img com ruido
+  phi_raster_noisy <- raster(coherence_map)
+  #phi_raster_noisy <- raster::as.matrix(phi_raster_noisy[1:100, 1:100, drop=FALSE])
+  phi_raster_noisy <- raster::as.matrix(phi_raster_noisy)
 
-#aplicar o filtro
-img_LInSARRFE <- LInSARRFE(phi_raster_noisy, map.coherence, param=c(r=0.7, theta=0, L=16), eth=0.01)
-   
-#plot
-par(mfrow = c(1, 3))
-par(bty = 'n') # remove a borda
-plot(rast(phi_raster),  main = "", legend = T, axes = FALSE, col = rainbow(256))
-plot(rast(phi_raster_noisy),  main = "", legend = T, axes = FALSE, col = rainbow(256))
-plot(rast(img_LInSARRFE),  main = "", legend = T, axes = FALSE, col = rainbow(256))
+  return(phi_raster_noisy)
+  #aplicar o filtro
+  img_LInSARRFE <- LInSARRFE(phi_raster_noisy, map.coherence, param=c(r=0.7, theta=0, L=16), eth=0.01)
+    
+  #plot
+  #par(mfrow = c(1, 3))
+  #par(bty = 'n') # remove a borda
+  #plot(rast(phi_raster),  main = "", legend = T, axes = FALSE, col = rainbow(256))
+  #plot(rast(phi_raster_noisy),  main = "", legend = T, axes = FALSE, col = rainbow(256))
+  #plot(rast(img_LInSARRFE),  main = "", legend = T, axes = FALSE, col = rainbow(256))
+
+}
 

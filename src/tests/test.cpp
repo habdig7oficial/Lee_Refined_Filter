@@ -8,6 +8,7 @@
 /* Tests */
 #include "gierull/gierull_test.hpp"
 #include "first_integral_pass/first_pass_test.hpp"
+#include "load_image/load_image.hpp"
 
 unique_ptr<RInside> Rbind;
 

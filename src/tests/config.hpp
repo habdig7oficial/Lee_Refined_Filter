@@ -8,3 +8,5 @@
 #define REPETITION 10
 
 #define IMG "img/Simulated/phi_raster_noisy.tif"
+#define COHERENCE "img/Simulated/map_coherence_gierull.tif"
+#define IMG_TYPE float
