@@ -589,7 +589,7 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
 library(terra)
 library(raster)
 library(circular)
-library(Filters)
+library(filters)
 
 # Aplicar o filtro
 map.coherence <- raster("map_coherence_gierull.tif")
