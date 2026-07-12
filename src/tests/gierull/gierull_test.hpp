@@ -13,27 +13,36 @@ TEST_CASE("Gierull integration", "[integration]"){
   mt19937 rng(Catch::getSeed());
   uniform_real_distribution<double> distribution(-numbers::pi, numbers::pi);
 
+  (*Rbind).parseEvalQ("source(\"src/tests/gierull/gierull_base.R\")");
+  (*Rbind).parseEvalQ("png(\"gierull_plot.png\", width = 800, height = 600)");
+  (*Rbind).parseEvalQ("x <- c()");
+  (*Rbind).parseEvalQ("y <- c()");
+
   for(int i = 0; i < REPETITION; i++){
     /* === Rand Params === */
 
     double point = distribution(rng);
     gierull::Param cpp_param = {
-      .r = 0,
-      .theta = 0.7,
+      .r = 0.7,
+      .theta = 0,
       .L = 16
     };
 
     cout << "Point = " << point << endl;
     
     /* === R TESTS === */ 
-    (*Rbind).parseEvalQ("source(\"src/tests/gierull/gierull_base.R\")");
+
+
     NumericVector r_param = NumericVector::create(cpp_param.r, cpp_param.theta, cpp_param.L);
 
 
     (*Rbind)["point"] = point;
     (*Rbind)["param"] = r_param;
 
+    (*Rbind).parseEvalQ("");
     (*Rbind).parseEval("r_ypoint = dFuncGierullEq7(point, param)");
+    (*Rbind).parseEval("x <- append(x, point)");
+    (*Rbind).parseEval("y <- append(y, r_ypoint)");
 
     double r_ypoint = (*Rbind).parseEval("r_ypoint");
     double r_res = (*Rbind).parseEval("integrate(dFuncGierullEq7, lower = -point, upper = point, subdivisions = 1000, param = param)$value");
@@ -61,4 +70,9 @@ TEST_CASE("Gierull integration", "[integration]"){
     REQUIRE(abs(cpp_res - r_res) < EPSILON);
   }   
   gsl_integration_workspace_free(w);
+  (*Rbind).parseEvalQ("sorted <- order(x)");
+  (*Rbind).parseEvalQ("x <- x[sorted]");
+  (*Rbind).parseEvalQ("y <- y[sorted]");
+  (*Rbind).parseEvalQ("plot(x, y, type = \"b\")");
+
 }
