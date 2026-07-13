@@ -41,11 +41,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   cout << image.rows << " " << image.cols << " " << (image.rows - 2 * padding) * (image.cols - 2 * padding) << " " << padding << endl;
 
-  double psi_xi = (-lower_limit + upper_limit) / 2;
-  double estimated_val, err;
-
-  cout << "psi_xi " << psi_xi << endl;
-
   /* Equation */
 
   gierull::Param gsl_params = {
@@ -59,40 +54,30 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   F.function = &gierull::gierull;
   F.params = (void *)&gsl_params;
 
-  /*
-  cout << "Gierull Test:" << endl;
-  //cout << gierull::gierull(2.5, (void *) &gsl_params);
-  cout << "Integration Res: " << estimated_val << " Error: " << err << endl;
+  /* Integral */
 
-  cout << "---------------------------" << endl;
-  */
+  double psi_epsilon = (abs(lower_limit) + upper_limit) / 2;
+  double estimated_val, err;
 
-  integrate(&F, psi_xi, &estimated_val, &err);
-  cout << "First estimated value: " << estimated_val << endl;
+  cout << "psi_epsilon: " << psi_epsilon << endl;
 
+  integrate(&F, psi_epsilon, &estimated_val, &err);
 
-  for(int i = padding; i < image.rows - padding; i++){  
-    for(int j = padding; j < image.cols - padding; j++){
+  /* Search the point where integral(x) = 0.9 */
 
-        T pixel = image.at<T>(i, j);
-        //gsl_integration_qags(&F, -pixel, pixel, 0, 1e-7, 1000, w, &estimated_val, &err);
+  
+  for(double i = 0; i < upper_limit; i += TOLERANCE){
+    integrate(&F, i, &estimated_val, &err);
 
-        integrate(&F, psi_xi, &estimated_val, &err);
-        double s = abs(estimated_val - xi);
-
-              
-        cout << "Pixel " << pixel << " Val - xi: " << s << " Estimated Val:  " << estimated_val << endl;
-        
-        if(s < TOLERANCE){
-          psi_xi = pixel;
-          cout << "NEW PSI_XI: " << psi_xi << endl;
-
-          debugChannel.at<T>(i, j) = 0;
-          break;
-        }
-      }
+    if(abs(estimated_val - xi) < TOLERANCE){
+        cout << "Found new x: " << i << endl; 
+        break;
     }
+
+    cout << "x: " << i << ", inegral: " << estimated_val << endl; 
+  }
     
+
 
   debugVec.push_back(debugChannel);
   debugVec.push_back(image);
