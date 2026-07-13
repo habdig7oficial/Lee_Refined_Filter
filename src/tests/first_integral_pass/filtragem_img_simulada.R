@@ -61,23 +61,34 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
   integral_func <- function(l) {
     integrate(dFuncGierullEq7, lower = -l, upper = l, subdivisions = 100, param = param)$value
   }
-  
-  integral <- xi
+
+  # Utilizes a linear search to discover a x point that is equal to xi = 0.9 or 90%
+
+  integral <- xi # 0.9 function parameter
   lower_limit <- -pi
   upper_limit <- pi
-  psi_epsilon <- (-lower_limit + upper_limit) / 2
-  estimated_value<-integral_func(psi_epsilon)
+  psi_epsilon <- (-lower_limit + upper_limit) / 2 # pi
+  estimated_value<-integral_func(psi_epsilon) #  1
   
+  print(estimated_value)
+
   tolerance <- 0.001
   dm <- seq(0,pi,0.001)
+
   for (d in 1:length(dm)) {
     estimated_value<-integral_func(dm[d])
+    
+    print(paste(dm, estimated_value))
+
     if(abs(estimated_value - integral) < tolerance){
       psi_epsilon <- dm[d]
+      print("BREAKING")
+      #print(psi_epsilon)
       break
     }
   }
-  
+  return(1)
+
   s <- 11
   margin <- (s+1)/2  # Calculate the size of the margin for the neighborhood/lines
   marginm1 <- margin-1  # Calculate the margin minus 1/columns
@@ -604,10 +615,11 @@ exec <- function(img, coherence_map){
   phi_raster_noisy <- raster(coherence_map)
   #phi_raster_noisy <- raster::as.matrix(phi_raster_noisy[1:100, 1:100, drop=FALSE])
   phi_raster_noisy <- raster::as.matrix(phi_raster_noisy)
-  return(1)
+
   #aplicar o filtro
-  #img_LInSARRFE <- LInSARRFE(phi_raster_noisy, map.coherence, param=c(r=0.7, theta=0, L=16), eth=0.01)
-    
+  img_LInSARRFE <- LInSARRFE(phi_raster_noisy, map.coherence, param=c(r=0.7, theta=0, L=16), eth=0.01)
+  return(1)
+
   #plot
   #par(mfrow = c(1, 3))
   #par(bty = 'n') # remove a borda

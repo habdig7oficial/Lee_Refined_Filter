@@ -5,7 +5,7 @@
 #include "gierull.hpp"
 #include "gsl/gsl_integration.h"
 
-#define TOLERANCE 0.01
+#define TOLERANCE 0.001
 
 using namespace cv;
 using namespace std;
@@ -17,9 +17,11 @@ void strideImg(Mat &image, Mat &padded_image, int padding){
 }
 
 gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);
-double integrate(gsl_function *F, double limit, double *target_val, double *err){
+int integrate(gsl_function *F, double limit, double *target_val, double *err){
   return gsl_integration_qags(F, -limit, limit, 0, 1e-7, 1000, w, target_val, err);
 }
+
+
 
 
 template<typename T>
@@ -65,13 +67,17 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   cout << "---------------------------" << endl;
   */
 
-  //gsl_integration_qags(&F, -psi_xi, psi_xi, 0, 1e-7, 1000, w, &target_val, &err);
+  integrate(&F, psi_xi, &estimated_val, &err);
+  cout << "First estimated value: " << estimated_val << endl;
+
+
 
   for(int j = padding; j < image.cols - padding; j++){
     for(int i = padding; i < image.rows - padding; i++){
         T pixel = image.at<T>(i, j);
         //gsl_integration_qags(&F, -pixel, pixel, 0, 1e-7, 1000, w, &estimated_val, &err);
 
+        integrate(&F, psi_xi, &estimated_val, &err);
         double s = abs(estimated_val - xi);
 
               
@@ -80,10 +86,20 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
         if(s < TOLERANCE){
           psi_xi = pixel;
           cout << "NEW PSI_XI: " << psi_xi << endl;
+
+          debugChannel.at<T>(i, j) = 0;
+          break;
         }
       }
     }
+    
 
+  debugVec.push_back(debugChannel);
+  debugVec.push_back(image);
+  debugVec.push_back(debugChannel);
+  merge(debugVec, debugImg);
+
+  return debugImg;
 
   /* Main Loop */
   for(int i = padding; i < image.rows - padding; i++){
