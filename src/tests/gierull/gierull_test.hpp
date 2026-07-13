@@ -14,7 +14,6 @@ TEST_CASE("Gierull integration", "[integration]"){
   uniform_real_distribution<double> distribution(-numbers::pi, numbers::pi);
 
   (*Rbind).parseEvalQ("source(\"src/tests/gierull/gierull_base.R\")");
-  (*Rbind).parseEvalQ("png(\"gierull_plot.png\", width = 800, height = 600)");
   (*Rbind).parseEvalQ("x <- c()");
   (*Rbind).parseEvalQ("y <- c()");
 
