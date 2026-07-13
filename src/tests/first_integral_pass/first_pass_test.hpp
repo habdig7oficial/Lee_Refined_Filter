@@ -4,5 +4,5 @@ TEST_CASE("First integral pass", "[first_pass]"){
     (*Rbind)["img"] = IMG;
     (*Rbind)["coherence"] = COHERENCE;
 
-    (*Rbind).parseEval("exec(img, coherence)");
+    double value = (*Rbind).parseEval("exec(img, coherence)");
 }
