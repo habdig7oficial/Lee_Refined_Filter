@@ -76,15 +76,17 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
   tolerance <- 0.001
   dm <- seq(0,pi,0.001)
 
+  # Makes linear search to find Search the where integral(x) = 0.9 
   for (d in 1:length(dm)) {
     estimated_value<-integral_func(dm[d])
     
     print(paste(dm, estimated_value))
 
+
     if(abs(estimated_value - integral) < tolerance){
       psi_epsilon <- dm[d]
       print("BREAKING")
-      #print(psi_epsilon)
+      print(psi_epsilon)
       break
     }
   }
@@ -92,6 +94,8 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
   end <- Sys.time()
 
   print(bg - end)
+
+  print(psi_epsilon)
 
   return(1)
 

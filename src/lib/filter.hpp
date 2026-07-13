@@ -59,14 +59,15 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   double psi_epsilon = (abs(lower_limit) + upper_limit) / 2;
   double estimated_val, err;
 
-  cout << "psi_epsilon: " << psi_epsilon << endl;
 
   integrate(&F, psi_epsilon, &estimated_val, &err);
 
+  cout << "psi_epsilon: " << psi_epsilon << "integral " << estimated_val << endl;
+
   /* Search the point where integral(x) = 0.9 */
 
-  
-  for(double i = 0; i < upper_limit; i += TOLERANCE){
+  int j = 0;
+  for(double i = 0; i < upper_limit; i += TOLERANCE, j++){
     integrate(&F, i, &estimated_val, &err);
 
     if(abs(estimated_val - xi) < TOLERANCE){
@@ -74,9 +75,9 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
         break;
     }
 
-    cout << "x: " << i << ", inegral: " << estimated_val << endl; 
+    cout << "x: " << i << ", integral: " << estimated_val << endl; 
   }
-    
+  cout << "Increments: " << j << endl;
 
 
   debugVec.push_back(debugChannel);
