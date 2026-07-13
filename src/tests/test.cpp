@@ -18,7 +18,7 @@ int main( int argc, char* argv[] ) {
 
     Rbind = make_unique<RInside>(argc, argv);
 
-    //(*Rbind).parseEvalQ("source(\"src/tests/install_libs.R\")");
+    (*Rbind).parseEvalQ("png(\"gierull_plot.png\", width = 800, height = 600)");
 
     int result = Catch::Session().run( argc, argv );
 
