@@ -71,9 +71,9 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   cout << "First estimated value: " << estimated_val << endl;
 
 
+  for(int i = padding; i < image.rows - padding; i++){  
+    for(int j = padding; j < image.cols - padding; j++){
 
-  for(int j = padding; j < image.cols - padding; j++){
-    for(int i = padding; i < image.rows - padding; i++){
         T pixel = image.at<T>(i, j);
         //gsl_integration_qags(&F, -pixel, pixel, 0, 1e-7, 1000, w, &estimated_val, &err);
 

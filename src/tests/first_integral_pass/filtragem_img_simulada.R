@@ -64,6 +64,7 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
 
   # Utilizes a linear search to discover a x point that is equal to xi = 0.9 or 90%
 
+  bg <- Sys.time()
   integral <- xi # 0.9 function parameter
   lower_limit <- -pi
   upper_limit <- pi
@@ -87,6 +88,11 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
       break
     }
   }
+
+  end <- Sys.time()
+
+  print(bg - end)
+
   return(1)
 
   s <- 11
