@@ -5,7 +5,7 @@
 #include "gierull.hpp"
 #include "gsl/gsl_integration.h"
 
-#define TOLERANCE 0.001
+#define TOLERANCE 1e-9
 
 using namespace cv;
 using namespace std;
@@ -66,18 +66,22 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   /* Search the point where integral(x) = 0.9 */
 
+  double inc = psi_epsilon / 2;
   int j = 0;
-  for(double i = 0; i < upper_limit; i += TOLERANCE, j++){
+  for(double i = 0; true; (estimated_val < xi)? (i += inc) : (i -= inc), j++){
     integrate(&F, i, &estimated_val, &err);
 
     if(abs(estimated_val - xi) < TOLERANCE){
+        psi_epsilon = i;
         cout << "Found new x: " << i << endl; 
         break;
     }
 
     cout << "x: " << i << ", integral: " << estimated_val << endl; 
+    inc /= 2;
   }
   cout << "Increments: " << j << endl;
+  cout << "psi_epsilon: " << psi_epsilon << "integral " << estimated_val << endl;
 
 
   debugVec.push_back(debugChannel);
