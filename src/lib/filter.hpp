@@ -57,13 +57,16 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   F.params = (void *)&gsl_params;
 
   /* Integral */
-  /* Search the point where integral(x) = 0.9 */
+  /* 
+  Search the point where integral(x) = 0.9, 
+  the original R code uses linear search witch uses more (310 for simulated img) checks,
+  the revised C++ code uses binary serch (bissection method) that uses far less (29)
+  */
 
   double estimated_val, err;
   double high = upper_limit, low = lower_limit, mid;
 
   int i;
-
   for(i = 0; i < MAX_ITERATIONS; (estimated_val < xi)? (low = mid) : (high = mid), i++){
     mid = low + (high - low) / 2;
     integrate(&F, mid, &estimated_val, &err);
