@@ -1,9 +1,9 @@
 TEST_CASE("First integral pass", "[window_cut]"){
-    (*Rbind).parseEvalQ("source(\"src/tests/first_integral_pass/filtragem_img_simulada.R\")");
+    (*Rbind).parseEvalQ("source(\"src/tests/window_cut/window_cut.R\")");
 
     mt19937 rng(Catch::getSeed());
     uniform_real_distribution<double> distribution(0, 1);
-    
+
     double rand = 0.9;
 
     (*Rbind)["img"] = IMG;
