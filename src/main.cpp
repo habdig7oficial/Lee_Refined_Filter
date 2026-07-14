@@ -53,7 +53,7 @@ int main(int argc, char *argv[]){
   
   cout << "Gierull Test:" << endl;
 
-  gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);
+  gsl_integration_workspace *w = gsl_integration_workspace_alloc(1'000);
 
   double res, err;
   gierull::Param gsl_params = {
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]){
   F.function = &gierull::gierull;
   F.params = (void *)&gsl_params;
 
-  gsl_integration_qags(&F, -numbers::pi, numbers::pi, 0, 1e-7, 1000, w, &res, &err);
+  gsl_integration_qags(&F, -numbers::pi, numbers::pi, 0, 1e-7, 1'000, w, &res, &err);
 
   //cout << gierull::gierull(2.5, (void *) &gsl_params);
   cout << "Integration Res: " << res << " Error: " << err << endl;
