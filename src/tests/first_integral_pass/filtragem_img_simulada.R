@@ -1,6 +1,7 @@
 source("src/tests/gierull/gierull_base.R")
 
-v <- 0.001
+places <- 3
+v <- 10 ** -places
 LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
   
   if (dim(imageRaster)[1]<13 || dim(imageRaster)[1]<13) {
