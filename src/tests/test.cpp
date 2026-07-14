@@ -21,7 +21,7 @@ int main( int argc, char* argv[] ) {
 
     int result = Catch::Session().run( argc, argv );
 
-    cout << __cplusplus << endl;
+    cout << "C++ version: " << __cplusplus << endl;
 
     return result;
 }
