@@ -98,8 +98,6 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
 
   print(bg - end)
 
-  return(psi_epsilon)
-
   s <- 11
   margin <- (s+1)/2  # Calculate the size of the margin for the neighborhood/lines
   marginm1 <- margin-1  # Calculate the margin minus 1/columns
@@ -350,7 +348,10 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
       
       window_selected<-all_windows[[pos_window_end_angle]]
       angle_selected<-window_angle[pos_window_end_angle]
-      
+
+      print(window1)
+
+      return(1)
       
       if(max(Mod(averages))<eth){
         w <- 1 / sqrt((1:13 - 6)^2 + (1:13 - 6)^2)

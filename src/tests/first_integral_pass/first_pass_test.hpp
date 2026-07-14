@@ -15,10 +15,14 @@ TEST_CASE("First integral pass", "[first_pass]"){
     mt19937 rng(Catch::getSeed());
     uniform_real_distribution<double> distribution(0, 1);
     
-
+    double rand;
     /* Run less tests because R it's to slow */
-    for(int i = 0; i < 2; i++){
-        double rand = distribution(rng);
+    for(int i = 0; i < pow(MAX_ITERATIONS, 1 / 4); i++){
+        /* In first interation use fixed 0.9 that is the targer value used in R */
+        if(i == 0)
+            rand = 0.9;
+        else
+            rand = distribution(rng);
 
         (*Rbind)["img"] = IMG;
         (*Rbind)["coherence"] = COHERENCE;
