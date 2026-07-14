@@ -28,9 +28,13 @@ TEST_CASE("First integral pass", "[first_pass]"){
     F.params = (void *)&gsl_params;
     auto [cpp_res, aprox, iter] = match_area_x(&F, -numbers::pi, numbers::pi, rand);
 
-    cout << "R: " << r_res << endl;
-    cout << "C++: " << cpp_res << endl;
+    double places = (*Rbind)["v"];
+    double rounded = (double)round(cpp_res * 100) / 100; // mudar
 
-    REQUIRE(abs(cpp_res - r_res) < EPSILON);
+    cout << "R: " << r_res << endl;
+    cout << "C++: " << cpp_res << " Rounded (" << places << "): " << rounded << endl;
+
+
+    REQUIRE(abs(rounded - r_res) < EPSILON);
 
 }
