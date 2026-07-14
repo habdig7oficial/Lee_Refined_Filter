@@ -14,12 +14,16 @@ RINSIDE_LDF_TEST := $(shell Rscript -e "RInside:::LdFlags()")
 CXX_FLAGS_TEST = `pkg-config --cflags --libs opencv4 gsl catch2` # Catch2 for tests
 
 compile:
-	 g++ -std=c++20 src/main.cpp -o exec.elf $(CXX_FLAGS) 
+	 g++ -std=c++14 src/main.cpp -o exec.elf $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
 
-test:
-	g++ -std=c++20 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[integration]","[first_pass]" #--rng-seed 3908993432
+test_cpp20:
+	g++ -std=c++20 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf  #--rng-seed 3908993432
+
+test: test_cpp20
+
+
 #leaks: compile
 #	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)

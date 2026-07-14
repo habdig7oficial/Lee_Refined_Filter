@@ -56,7 +56,16 @@ TEST_CASE("Gierull integration", "[integration]"){
     gsl_function F;
     F.function = &gierull::gierull;
     F.params = (void *)&cpp_param;
-    auto [cpp_res, err] = integrate(&F, point);
+
+    double cpp_res, err;
+    #ifdef HAS_TUPLE
+        tuple<double, double, int> t = integrate(&F, point);
+        cpp_res = get<0>(t);
+        err = get<1>(t);
+    #else
+        integrate(&F, point, &cpp_res, &err);
+    #endif
+
 
     //gsl_integration_qags(&F, -point, point, 0, 1e-7, 1000, w, &cpp_res, &err);
     //integrate(&F, point, &cpp_res, &err);

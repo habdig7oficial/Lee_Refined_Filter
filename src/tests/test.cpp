@@ -12,7 +12,7 @@
 
 unique_ptr<RInside> Rbind;
 
-int main( int argc, char* argv[] ) {
+int main(int argc, char* argv[]) {
     cout << fixed << setprecision(15); 
 
     Rbind = make_unique<RInside>(argc, argv);
@@ -21,7 +21,7 @@ int main( int argc, char* argv[] ) {
 
     int result = Catch::Session().run( argc, argv );
 
-    cout << __cplusplus << endl;
+    cout << "Tested with C++: " << __cplusplus << endl;
 
     return result;
 }

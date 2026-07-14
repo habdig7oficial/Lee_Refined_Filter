@@ -45,5 +45,6 @@ dFuncGierullEq7 <- function(x, param){
 
 
   #print(f)
+
   return(f)
 }

@@ -18,16 +18,34 @@ void strideImg(Mat &image, Mat &padded_image, int padding){
    copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
 }
 
+/* Check if compiler has tuple feature */
+#ifdef __has_include 
+  #if __has_include(<tuple>)
+    #include "tuple"
+    #define HAS_TUPLE false
+  #endif
+#endif
+
 gsl_integration_workspace *w = gsl_integration_workspace_alloc(1'000);
-tuple<double, double> integrate(gsl_function *F, double limit){
-  double target_val, err;
-  gsl_integration_qags(F, -limit, limit, 0, 1e-7, 1'000, w, &target_val, &err);
-  return {target_val, err};
-}
+#ifdef HAS_TUPLE
+  tuple<double, double, int> integrate(gsl_function *F, double limit){
+    double target_val, err;
+    int success = gsl_integration_qags(F, -limit, limit, 0, 1e-7, 1'000, w, &target_val, &err);
+    return {target_val, err, success};
+  }
+#else
+  int integrate(gsl_function *F, double limit, double *target_val, double *err){
+    return gsl_integration_qags(F, -limit, limit, 0, 1e-7, 1'000, w, target_val, err);
+  }
+#endif
 
 
 /**/
+#if HAS_TUPLE
 tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, double upper_limit, double xi, int max_iter = MAX_ITERATIONS){
+#else
+void match_area_x(gsl_function *F, double lower_limit, double upper_limit, double xi, int max_iter = MAX_ITERATIONS, double *res, double *est, double *iter){
+#endif
   /* Integral */
   /* 
   Search the point where integral(x) = 0.9, 
@@ -38,15 +56,30 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
   double estimated_val, err;
   double high = upper_limit, low = lower_limit, mid;
 
+  #ifdef HAS_TUPLE
+      tuple<double, double, int> t = integrate(F, mid);
+      estimated_val = get<0>(t);
+      err = get<1>(t);
+  #else
+      integrate(F, mid, &estimated_val, &err);
+  #endif
+
   int i;
   for(i = 0; i < max_iter; (estimated_val < xi)? (low = mid) : (high = mid), i++){
     mid = low + (high - low) / 2;
-    tuple<double, double> t = integrate(F, mid);
-    estimated_val = get<0>(t);
-    err = get<1>(t);
+
+    #ifdef HAS_TUPLE
+      tuple<double, double, int> t = integrate(F, mid);
+      estimated_val = get<0>(t);
+      err = get<1>(t);
+    #else
+      integrate(F, mid, &estimated_val, &err);
+    #endif
 
     if(isinf(estimated_val) || isnan(estimated_val)){
-      string msg = std::format("Integrated {} value is invalid! ", estimated_val);
+      #if(__cplusplus >= 202002L)
+        string msg = std::format("Integrated {} value is invalid! ", estimated_val);
+      #endif
       throw runtime_error(msg);
     }
 
@@ -97,7 +130,12 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   F.params = (void *)&gsl_params;
 
 
-  auto [res, aprox, iter] = match_area_x(&F, lower_limit, upper_limit, xi, MAX_ITERATIONS);
+  #ifdef HAS_TUPLE
+      tuple<double, double, int> t = match_area_x(&F, lower_limit, upper_limit, xi, MAX_ITERATIONS);
+      double res = get<0>(t);
+      double aprox = get<1>(t);
+      double iter = get<2>(t);
+  #else
 
   cout << "Increments: " << iter << endl;
   cout << "psi_epsilon: " << res << " integral " << aprox << endl;
