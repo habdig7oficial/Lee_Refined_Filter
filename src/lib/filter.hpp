@@ -1,11 +1,13 @@
 #include "opencv2/opencv.hpp"  
 #include "vector"
 
+#include "format"
 
 #include "gierull.hpp"
 #include "gsl/gsl_integration.h"
 
 #define TOLERANCE 1e-9
+#define MAX_ITERATIONS 9'999
 
 using namespace cv;
 using namespace std;
@@ -55,33 +57,37 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   F.params = (void *)&gsl_params;
 
   /* Integral */
-
-  double psi_epsilon = (abs(lower_limit) + upper_limit) / 2;
-  double estimated_val, err;
-
-
-  integrate(&F, psi_epsilon, &estimated_val, &err);
-
-  cout << "psi_epsilon: " << psi_epsilon << "integral " << estimated_val << endl;
-
   /* Search the point where integral(x) = 0.9 */
 
-  double inc = psi_epsilon / 2;
-  int j = 0;
-  for(double i = 0; true; (estimated_val < xi)? (i += inc) : (i -= inc), j++){
-    integrate(&F, i, &estimated_val, &err);
+  double estimated_val, err;
+  double high = upper_limit, low = lower_limit, mid;
+
+  int i;
+
+  for(i = 0; i < MAX_ITERATIONS; (estimated_val < xi)? (low = mid) : (high = mid), i++){
+    mid = low + (high - low) / 2;
+    integrate(&F, mid, &estimated_val, &err);
+
+    if(isinf(estimated_val) || isnan(estimated_val)){
+      string msg = std::format("Integrated {} value is invalid! ", estimated_val);
+      throw runtime_error(msg);
+    }
 
     if(abs(estimated_val - xi) < TOLERANCE){
-        psi_epsilon = i;
-        cout << "Found new x: " << i << endl; 
+        cout << "Found new x: " << mid << endl; 
         break;
     }
 
-    cout << "x: " << i << ", integral: " << estimated_val << endl; 
-    inc /= 2;
+    cout << i << ") x: " << mid << ", integral: " << estimated_val << " high: " << high << " low: " << low << " mid: " << mid << endl; 
+
   }
-  cout << "Increments: " << j << endl;
-  cout << "psi_epsilon: " << psi_epsilon << "integral " << estimated_val << endl;
+
+  if(i == MAX_ITERATIONS){
+    cout << "MAX Iterations: Value will not be exact, MAX_ITERATIONS =" << MAX_ITERATIONS << endl;
+  }
+
+  cout << "Increments: " << i << endl;
+  cout << "psi_epsilon: " << mid << "integral " << estimated_val << endl;
 
 
   debugVec.push_back(debugChannel);
