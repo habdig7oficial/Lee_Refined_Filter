@@ -6,7 +6,7 @@
 #include "gierull.hpp"
 #include "gsl/gsl_integration.h"
 
-#define TOLERANCE 1e-15
+#define TOLERANCE 1e-9
 #define MAX_ITERATIONS 9'999
 
 using namespace cv;
@@ -101,8 +101,7 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   cout << "Increments: " << iter << endl;
   cout << "psi_epsilon: " << res << " integral " << aprox << endl;
-
-
+  
   debugVec.push_back(debugChannel);
   debugVec.push_back(image);
   debugVec.push_back(debugChannel);

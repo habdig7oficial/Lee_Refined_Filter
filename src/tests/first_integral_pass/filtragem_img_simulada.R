@@ -1,5 +1,6 @@
 source("src/tests/gierull/gierull_base.R")
 
+v <- 0.001
 LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
   
   if (dim(imageRaster)[1]<13 || dim(imageRaster)[1]<13) {
@@ -73,8 +74,9 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
   
   print(estimated_value)
 
-  tolerance <- 0.001
-  dm <- seq(0,pi,0.001)
+  
+  tolerance <- v
+  dm <- seq(0,pi, v)
 
   # Makes linear search to find Search the where integral(x) = 0.9 
   for (d in 1:length(dm)) {
