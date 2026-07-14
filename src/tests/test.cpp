@@ -13,7 +13,6 @@
 unique_ptr<RInside> Rbind;
 
 int main( int argc, char* argv[] ) {
-
     cout << fixed << setprecision(15); 
 
     Rbind = make_unique<RInside>(argc, argv);
@@ -21,6 +20,8 @@ int main( int argc, char* argv[] ) {
     (*Rbind).parseEvalQ("png(\"gierull_plot.png\", width = 800, height = 600)");
 
     int result = Catch::Session().run( argc, argv );
+
+    cout << __cplusplus << endl;
 
     return result;
 }
