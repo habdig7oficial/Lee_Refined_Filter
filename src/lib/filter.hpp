@@ -6,7 +6,7 @@
 #include "gierull.hpp"
 #include "gsl/gsl_integration.h"
 
-#define TOLERANCE 1e-9
+#define TOLERANCE 1e-15
 #define MAX_ITERATIONS 9'999
 
 using namespace cv;
@@ -26,7 +26,7 @@ tuple<double, double> integrate(gsl_function *F, double limit){
 }
 
 
-/**/
+
 tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, double upper_limit, double xi, int max_iter = MAX_ITERATIONS){
   /* Integral */
   /* 
