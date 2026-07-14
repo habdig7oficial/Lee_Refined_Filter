@@ -17,7 +17,7 @@ TEST_CASE("Gierull integration", "[integration]"){
   (*Rbind).parseEvalQ("x <- c()");
   (*Rbind).parseEvalQ("y <- c()");
 
-  for(int i = 0; i < REPETITION; i++){
+  for(int i = 0; i < REPETITIONS; i++){
     /* === Rand Params === */
 
     double point = distribution(rng);
