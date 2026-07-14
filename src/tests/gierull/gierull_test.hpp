@@ -56,10 +56,10 @@ TEST_CASE("Gierull integration", "[integration]"){
     gsl_function F;
     F.function = &gierull::gierull;
     F.params = (void *)&cpp_param;
-    double cpp_res, err = 0;
+    auto [cpp_res, err] = integrate(&F, point);
 
     //gsl_integration_qags(&F, -point, point, 0, 1e-7, 1000, w, &cpp_res, &err);
-    integrate(&F, point, &cpp_res, &err);
+    //integrate(&F, point, &cpp_res, &err);
 
     cout << "C++ Result: " << cpp_ypoint << "\t| integral: " << cpp_res << endl << endl;
 
