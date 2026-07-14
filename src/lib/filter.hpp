@@ -101,13 +101,14 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   cout << "Increments: " << iter << endl;
   cout << "psi_epsilon: " << res << " integral " << aprox << endl;
-  
+
+  /*
   debugVec.push_back(debugChannel);
   debugVec.push_back(image);
   debugVec.push_back(debugChannel);
   merge(debugVec, debugImg);
 
-  return debugImg;
+  return debugImg;*/
 
   /* Main Loop */
   for(int i = padding; i < image.rows - padding; i++){
