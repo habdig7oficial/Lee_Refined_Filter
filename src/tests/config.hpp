@@ -5,7 +5,7 @@
 #include "../lib/filter.hpp"
 
 #define EPSILON 1e-9
-#define REPETITION 100
+#define REPETITIONS 100
 
 #define IMG "img/Simulated/phi_raster_noisy.tif"
 #define COHERENCE "img/Simulated/map_coherence_gierull.tif"
