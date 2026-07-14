@@ -18,16 +18,56 @@ void strideImg(Mat &image, Mat &padded_image, int padding){
    copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
 }
 
-gsl_integration_workspace *w = gsl_integration_workspace_alloc(1000);
-int integrate(gsl_function *F, double limit, double *target_val, double *err){
-  return gsl_integration_qags(F, -limit, limit, 0, 1e-7, 1000, w, target_val, err);
+gsl_integration_workspace *w = gsl_integration_workspace_alloc(1'000);
+tuple<double, double> integrate(gsl_function *F, double limit){
+  double target_val, err;
+  gsl_integration_qags(F, -limit, limit, 0, 1e-7, 1'000, w, &target_val, &err);
+  return {target_val, err};
 }
 
 
+/**/
+tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, double upper_limit, double xi, int max_iter = MAX_ITERATIONS){
+  /* Integral */
+  /* 
+  Search the point where integral(x) = 0.9, 
+  the original R code uses linear search witch uses more (310 for simulated img) checks,
+  the revised C++ code uses binary serch (bissection method) that uses far less
+  */
+
+  double estimated_val, err;
+  double high = upper_limit, low = lower_limit, mid;
+
+  int i;
+  for(i = 0; i < max_iter; (estimated_val < xi)? (low = mid) : (high = mid), i++){
+    mid = low + (high - low) / 2;
+    tuple<double, double> t = integrate(F, mid);
+    estimated_val = get<0>(t);
+    err = get<1>(t);
+
+    if(isinf(estimated_val) || isnan(estimated_val)){
+      string msg = std::format("Integrated {} value is invalid! ", estimated_val);
+      throw runtime_error(msg);
+    }
+
+    if(abs(estimated_val - xi) < TOLERANCE){
+        cout << "Found new x: " << mid << endl; 
+        break;
+    }
+
+    cout << i << ") x: " << mid << ", integral: " << estimated_val << " high: " << high << " low: " << low << " mid: " << mid << endl; 
+
+  }
+
+  if(i == max_iter){
+    cout << "MAX Iterations: Value will not be exact, MAX_ITERATIONS = " << max_iter << endl;
+  }
+  return {mid, estimated_val, i};
+}
 
 
 template<typename T>
-Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi){
+Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi, int max_iter = MAX_ITERATIONS){
 
   /* Check if window is inside image  */
   int padding = window / 2;
@@ -56,41 +96,11 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   F.function = &gierull::gierull;
   F.params = (void *)&gsl_params;
 
-  /* Integral */
-  /* 
-  Search the point where integral(x) = 0.9, 
-  the original R code uses linear search witch uses more (310 for simulated img) checks,
-  the revised C++ code uses binary serch (bissection method) that uses far less (29)
-  */
 
-  double estimated_val, err;
-  double high = upper_limit, low = lower_limit, mid;
+  auto [res, aprox, iter] = match_area_x(&F, lower_limit, upper_limit, xi, MAX_ITERATIONS);
 
-  int i;
-  for(i = 0; i < MAX_ITERATIONS; (estimated_val < xi)? (low = mid) : (high = mid), i++){
-    mid = low + (high - low) / 2;
-    integrate(&F, mid, &estimated_val, &err);
-
-    if(isinf(estimated_val) || isnan(estimated_val)){
-      string msg = std::format("Integrated {} value is invalid! ", estimated_val);
-      throw runtime_error(msg);
-    }
-
-    if(abs(estimated_val - xi) < TOLERANCE){
-        cout << "Found new x: " << mid << endl; 
-        break;
-    }
-
-    cout << i << ") x: " << mid << ", integral: " << estimated_val << " high: " << high << " low: " << low << " mid: " << mid << endl; 
-
-  }
-
-  if(i == MAX_ITERATIONS){
-    cout << "MAX Iterations: Value will not be exact, MAX_ITERATIONS =" << MAX_ITERATIONS << endl;
-  }
-
-  cout << "Increments: " << i << endl;
-  cout << "psi_epsilon: " << mid << "integral " << estimated_val << endl;
+  cout << "Increments: " << iter << endl;
+  cout << "psi_epsilon: " << res << " integral " << aprox << endl;
 
 
   debugVec.push_back(debugChannel);
