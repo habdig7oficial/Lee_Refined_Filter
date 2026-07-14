@@ -95,9 +95,7 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
 
   print(bg - end)
 
-  print(psi_epsilon)
-
-  return(1)
+  return(psi_epsilon)
 
   s <- 11
   margin <- (s+1)/2  # Calculate the size of the margin for the neighborhood/lines
@@ -615,7 +613,7 @@ library(circular)
 library(filters)
 
 
-exec <- function(img, coherence_map){
+exec <- function(img, coherence_map, xi = 0.9){
   # Aplicar o filtro
   map.coherence <- raster(img)
   #map.coherence <- raster::as.matrix(map.coherence[1:100, 1:100, drop=FALSE])
@@ -627,8 +625,8 @@ exec <- function(img, coherence_map){
   phi_raster_noisy <- raster::as.matrix(phi_raster_noisy)
 
   #aplicar o filtro
-  img_LInSARRFE <- LInSARRFE(phi_raster_noisy, map.coherence, param=c(r=0.7, theta=0, L=16), eth=0.01)
-  return(1)
+  img_LInSARRFE <- LInSARRFE(phi_raster_noisy, map.coherence, param=c(r=0.7, theta=0, L=16), eth=0.01, xi = xi)
+  return(img_LInSARRFE)
 
   #plot
   #par(mfrow = c(1, 3))
