@@ -347,7 +347,7 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
       pos_window_end_angle<-which.max(Mod(averages))
       
       window_selected<-all_windows[[pos_window_end_angle]]
-      angle_selected<-window_angle[pos_window_end_angle]
+      angle_seleted<-window_angle[pos_window_end_angle]
 
       print(window2)
       print(averages[1])
