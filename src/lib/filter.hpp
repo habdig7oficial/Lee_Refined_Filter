@@ -109,20 +109,25 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   debugVec.push_back(debugChannel);
   merge(debugVec, debugImg);
 
-  
+  /*
   for(auto window : all_windows){
       cout << window << endl;
 
       double acc;
 
-      window.traverse([&acc, &image, padding](char rx, char ry, bool scope){
-        //cout << "rx: " << (int)rx << " ry: " << (int)ry << " x: " << x << " y: " << y << " tx: " << x - rx << " ty: " << y - ry << " acc: " << endl;
-        cout << image.ptr<T>(padding - ry) << endl;
+      window.traverse_inverse([&acc, &image, padding](char rx, char ry, bool scope){
+        cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; //<< " x: " << x << " y: " << y << " tx: " << x - rx << " ty: " << y - ry << " acc: " << endl;
+        //cout << image.ptr<T>(padding - ry) << endl;
         acc++;
       });
 
       break;
-  }
+  }*/
+
+      window1.traverse_inverse([&image, padding](char rx, char ry, bool scope){
+        cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; //<< " x: " << x << " y: " << y << " tx: " << x - rx << " ty: " << y - ry << " acc: " << endl;
+        //cout << image.ptr<T>(padding - ry) << endl;
+      });
       
     return debugImg;
 

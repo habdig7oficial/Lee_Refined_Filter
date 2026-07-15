@@ -6,8 +6,13 @@
 using namespace std;
 using Point = pair<char, char>;
 
-#define ORIGINAL true
-#define INVERTED false
+#define SIDE_A true
+#define SIDE_B false
+
+
+#define NOT_ROTATED true
+#define ROTATED false
+
 
 class MagicPoints {
     public:
@@ -21,20 +26,59 @@ class MagicPoints {
 
     /* 
         Lambda type should be:
-            char (relative x), char (relative y), auto* (for acc), cv::Mat matrix, int x, int y
+            char (relative x), char (relative y), bool scope(inverted or original)
     */
     template<typename Lambda>
     void traverse(Lambda lambda){
         for(Point spoint : special_first_column){
             cout << "Special: ";
-            lambda(spoint.first, spoint.second, ORIGINAL);
+            lambda(spoint.first, spoint.second, SIDE_A);
         }
 
         for(Point point : relative_coordinates){
-            cout << "Original: ";
-            lambda(point.first, point.second, ORIGINAL);
-            cout << "Inverted: ";
-            lambda(-point.first, -point.second, INVERTED);
+            cout << "SIDE_A: ";
+            lambda(point.first, point.second, SIDE_A);
+            cout << "SIDE_B: ";
+            lambda(-point.first, -point.second, SIDE_B);
+        }
+        
+    }
+
+    template<typename Lambda>
+    void traverse_inverse(Lambda lambda){
+        for(Point spoint : special_first_column){
+            cout << "Side A Special: ";
+            lambda(spoint.second, spoint.first, SIDE_A);
+        }
+
+        for(Point point : relative_coordinates){
+            cout << "Side A: ";
+            lambda(point.second, point.first, SIDE_A);
+            cout << "Side B: ";
+            lambda(-point.second, -point.first, SIDE_B);
+        }
+        
+    }
+
+    template<typename Lambda>
+    void traverse_both(Lambda lambda){
+        for(Point spoint : special_first_column){
+            cout << "Side A Special: ";
+            lambda(spoint.first, spoint.second, SIDE_A, NOT_ROTATED);
+            cout << "Side B Special: ";
+            lambda(spoint.second, spoint.first, SIDE_A, ROTATED);
+        }
+
+        for(Point point : relative_coordinates){
+            cout << "SIDE_A: ";
+            lambda(point.first, point.second, SIDE_A, NOT_ROTATED);
+            cout << "SIDE_B: ";
+            lambda(-point.first, -point.second, SIDE_B, NOT_ROTATED);
+
+            cout << "SIDE_A: ";
+            lambda(point.second, point.first, SIDE_A, ROTATED);
+            cout << "SIDE_B: ";
+            lambda(-point.second, -point.first, SIDE_B, ROTATED);
         }
         
     }
@@ -58,8 +102,10 @@ auto myLambda = [](int x) {
     std::cout << "Value: " << x << std::endl; 
 };
 
+// ok
 MagicPoints window0(
     vector<Point>{
+        {0, 1},
         {1, 1}, {1, 0}, {1, -1},
         {2, 1}, {2, 0}, {2, -1},
         {3, 1}, {3, 0}, {3, -1},
@@ -68,17 +114,18 @@ MagicPoints window0(
 
     }, 
     vector<Point>{
-        {0, 1}, {0, 0}
+        {0, 0}
     }
 );
 
+
 MagicPoints window1(
     vector<Point>{
-        {1, 1}, {1, 0}, {1, -1},
+        {1, 1}, {1, 0},
         {2, 2}, {2, 1}, {2, 0},
         {3, 2}, {3, 1}, {3, 0},
         {4, 2}, {4, 1}, {4, 0},
-        {5, 2}, {5, 1}, {5, 0}
+        {5, 2}, {5, 1}, {5, 0}, 
     }, 
     vector<Point>{
         {0, 1}, {0, 0}
