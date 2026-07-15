@@ -6,6 +6,9 @@
 using namespace std;
 using Point = pair<char, char>;
 
+#define ORIGINAL true
+#define INVERTED false
+
 class MagicPoints {
     public:
         vector<Point>relative_coordinates;
@@ -16,20 +19,24 @@ class MagicPoints {
         this -> special_first_column = special_first_column;
     }
 
+    /* 
+        Lambda type should be:
+            char (relative x), char (relative y), auto* (for acc), cv::Mat matrix, int x, int y
+    */
     template<typename Lambda>
-    auto traverse(Lambda lambda){
+    void traverse(Lambda lambda){
         for(Point spoint : special_first_column){
             cout << "Special: ";
-            lambda(spoint.first, spoint.second);
+            lambda(spoint.first, spoint.second, ORIGINAL);
         }
 
         for(Point point : relative_coordinates){
             cout << "Original: ";
-            lambda(point.first, point.second);
+            lambda(point.first, point.second, ORIGINAL);
             cout << "Inverted: ";
-            lambda(-point.first, -point.second);
+            lambda(-point.first, -point.second, INVERTED);
         }
-        return 1;
+        
     }
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){

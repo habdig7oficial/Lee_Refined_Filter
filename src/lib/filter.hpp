@@ -109,20 +109,24 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   debugVec.push_back(debugChannel);
   merge(debugVec, debugImg);
 
-  /*
+  
   for(auto window : all_windows){
       cout << window << endl;
 
-      auto a = window.traverse([](char x, char y){
-        cout << (int)x << (int)y << endl;
-        return 1;
+      double acc;
+
+      window.traverse([&acc, &image, padding](char rx, char ry, bool scope){
+        //cout << "rx: " << (int)rx << " ry: " << (int)ry << " x: " << x << " y: " << y << " tx: " << x - rx << " ty: " << y - ry << " acc: " << endl;
+        cout << image.ptr<T>(padding - ry) << endl;
+        acc++;
       });
-      cout << a << endl;
+
       break;
-  }*/
+  }
+      
+    return debugImg;
 
 
-  return debugImg;
 
   /* Main Loop */
   for(int i = padding; i < image.rows - padding; i++){
@@ -158,7 +162,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
       debugVec.clear();
 
-
       T total = 0;
       for(int wi = i - padding; wi < i + padding; wi++){
         for(int wj = j - padding; wj < j + padding; wj++){
@@ -175,11 +178,11 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
     }
   }
-  /*
+  
     debugVec.push_back(debugChannel);
     debugVec.push_back(image);
     debugVec.push_back(debugChannel);
-    merge(debugVec, debugImg);*/
+    merge(debugVec, debugImg);
 
   gsl_integration_workspace_free(w);
   return debugImg;
