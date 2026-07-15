@@ -147,4 +147,19 @@ MagicPoints window2(
     }
 );
 
+MagicPoints window3(
+    vector<Point>{
+        {0, 1}, {-1, 1}, 
+        {1, 1}, {1, 0},
+        {2, 2}, {2, 1}, {2, 0},
+        {3, 2}, {3, 1},
+        {4, 3}, {4, 2}, {4, 1},
+        {5, 4}, {5, 3}, {5, 2}
+    }, 
+    vector<Point>{
+        {0, 0}
+    }
+);
+
+
 vector<MagicPoints> all_windows = {window0, window1, window2};
