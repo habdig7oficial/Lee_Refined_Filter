@@ -135,6 +135,7 @@ MagicPoints window1(
 
 MagicPoints window2(
     vector<Point>{
+        {0, 1},
         {1, 1}, {1, 0}, {1, -1},
         {2, 2}, {2, 1}, {2, 0},
         {3, 2}, {3, 1},
@@ -142,7 +143,7 @@ MagicPoints window2(
         {5, 3}, {5, 2}, {5, 1}   
     }, 
     vector<Point>{
-        {0, 1}, {0, 0}
+        {0, 0}
     }
 );
 
