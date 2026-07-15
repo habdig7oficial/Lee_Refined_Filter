@@ -4,6 +4,7 @@
 #include "format"
 
 #include "gierull.hpp"
+#include "magic_points.hpp"
 #include "gsl/gsl_integration.h"
 
 #define TOLERANCE 1e-9
@@ -102,13 +103,26 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   cout << "Increments: " << iter << endl;
   cout << "psi_epsilon: " << res << " integral " << aprox << endl;
 
-  /*
+  
   debugVec.push_back(debugChannel);
   debugVec.push_back(image);
   debugVec.push_back(debugChannel);
   merge(debugVec, debugImg);
 
-  return debugImg;*/
+  /*
+  for(auto window : all_windows){
+      cout << window << endl;
+
+      auto a = window.traverse([](char x, char y){
+        cout << (int)x << (int)y << endl;
+        return 1;
+      });
+      cout << a << endl;
+      break;
+  }*/
+
+
+  return debugImg;
 
   /* Main Loop */
   for(int i = padding; i < image.rows - padding; i++){
@@ -147,10 +161,10 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
       T total = 0;
       for(int wi = i - padding; wi < i + padding; wi++){
-	for(int wj = j - padding; wj < j + padding; wj++){
-	  total += image.at<T>(wi, wi);
-	  cout << "\t (" << wi << " ," << wj << ") =" << total << " "  << image.at<T>(i - padding, j) << endl;
-	}
+        for(int wj = j - padding; wj < j + padding; wj++){
+          total += image.at<T>(wi, wi);
+          cout << "\t (" << wi << " ," << wj << ") =" << total << " "  << image.at<T>(i - padding, j) << endl;
+        }
       }
 
       T mean = (total / window);
