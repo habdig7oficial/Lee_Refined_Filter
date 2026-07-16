@@ -1,7 +1,8 @@
 TEST_CASE("First integral pass", "[magic_points]"){
     (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))");
     
-    window5.traverse_both([](char rx, char ry, bool scope, bool rotated){
+    window6.traverse([](char rx, char ry, bool scope){
+        bool rotated = true;
         if(rotated == NOT_ROTATED){
             (*Rbind)["rx"] = (int)rx;
             (*Rbind)["ry"] = (int)ry;
