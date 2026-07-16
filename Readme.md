@@ -31,6 +31,9 @@ use fold method to pass across less points
 
 ## Indentified errors
 
-The 8th window in the article was wrong, it should mirror the 18th window
+The 8th window in the article was wrong, it should mirror the 18th window, 1 pixel left 
+The 18th window in the article is assymetric
+
+The 17th window in the article was wrong, it should mirror the 17th window, solution add one pixel
 
 The 2th window in the code was also wrong, it should be one square in y lower.
