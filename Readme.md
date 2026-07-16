@@ -27,3 +27,10 @@ isso pode ser utizado tambem para economizar memoria, o importante é saber o x,
 
 use binary search instead of linear search
 use fold method to pass across less points
+
+
+## Indentified errors
+
+The 8th window in the article was wrong, it should mirror the 18th window
+
+The 2th window in the code was also wrong, it should be one square in y lower.

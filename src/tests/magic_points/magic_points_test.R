@@ -8,12 +8,13 @@ window1[5:7,1:11]<- TRUE
 
 
 #2
+# This window was wrong is all one square down in y
 window2 <- matrix(FALSE, nrow = size, ncol = size)
-window2[7,1:4]  <- TRUE
-window2[6,1:7]  <- TRUE
-window2[5,1:11] <- TRUE
-window2[4,5:11] <- TRUE
-window2[3,8:11] <- TRUE
+window2[8,1:4]  <- TRUE
+window2[7,1:7]  <- TRUE
+window2[6,1:11] <- TRUE
+window2[5,5:11] <- TRUE
+window2[4,8:11] <- TRUE
 
 #3
 window3 <- matrix(FALSE, nrow = size, ncol = size)
@@ -75,31 +76,33 @@ window7[3,7:9]  <- TRUE
 window7[2,8:10] <- TRUE
 window7[1,9:11] <- TRUE
 #8
+# Potencially wrong, this point was asymmetrical
 window8 <- matrix(FALSE, nrow = size, ncol = size)
 window8[11,2:4] <- TRUE
 window8[10,3:5] <- TRUE
 window8[9,4:5]  <- TRUE
 window8[8,4:5]  <- TRUE
 window8[7,4:6]  <- TRUE
-window8[6,5:8]  <- TRUE
+window8[6,4:8]  <- TRUE # This point
 window8[5,6:8]  <- TRUE
 window8[4,7:8]  <- TRUE
 window8[3,7:8]  <- TRUE
 window8[2,7:9]  <- TRUE
 window8[1,8:10] <- TRUE
 #9
+# this matrix was also wrong because it follow the article
 window9 <- matrix(FALSE, nrow = size, ncol = size)
 window9[11,3:5] <- TRUE
-window9[10,5:7] <- TRUE
-window9[9,5:7]  <- TRUE
-window9[8,6:7]  <- TRUE
-window9[7,6:7]  <- TRUE
-window9[6,6:8]  <- TRUE
-window9[5,7:8]  <- TRUE
-window9[4,7:8]  <- TRUE
-window9[3,7:9]  <- TRUE
-window9[2,7:9]  <- TRUE 
-window9[1,8:10] <- TRUE 
+window9[10,4:6] <- TRUE
+window9[9,4:6]  <- TRUE
+window9[8,5:6]  <- TRUE
+window9[7,5:6]  <- TRUE
+window9[6,5:7]  <- TRUE
+window9[5,6:7]  <- TRUE
+window9[4,6:7]  <- TRUE
+window9[3,6:8]  <- TRUE
+window9[2,6:8]  <- TRUE 
+window9[1,7:9] <- TRUE 
 #10
 window10 <- matrix(FALSE, nrow = size, ncol = size)
 window10[11,4:6] <- TRUE 
