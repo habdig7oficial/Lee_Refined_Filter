@@ -48,14 +48,14 @@ class MagicPoints {
     void traverse_inverse(Lambda lambda){
         for(Point spoint : special_first_column){
             cout << "Side A Special: ";
-            lambda(spoint.second, spoint.first, SIDE_A);
+            lambda(-spoint.second, spoint.first, SIDE_A);
         }
 
         for(Point point : relative_coordinates){
             cout << "Side A: ";
-            lambda(point.second, point.first, SIDE_A);
+            lambda(-point.second, point.first, SIDE_A);
             cout << "Side B: ";
-            lambda(-point.second, -point.first, SIDE_B);
+            lambda(point.second, -point.first, SIDE_B);
         }
         
     }
@@ -66,7 +66,7 @@ class MagicPoints {
             cout << "Side A Special: ";
             lambda(spoint.first, spoint.second, SIDE_A, NOT_ROTATED);
             cout << "Side B Special: ";
-            lambda(spoint.second, spoint.first, SIDE_A, ROTATED);
+            lambda(-spoint.second, spoint.first, SIDE_A, ROTATED);
         }
 
         for(Point point : relative_coordinates){
@@ -75,10 +75,10 @@ class MagicPoints {
             cout << "SIDE_B: ";
             lambda(-point.first, -point.second, SIDE_B, NOT_ROTATED);
 
-            cout << "SIDE_A: ";
-            lambda(point.second, point.first, SIDE_A, ROTATED);
-            cout << "SIDE_B: ";
-            lambda(-point.second, -point.first, SIDE_B, ROTATED);
+            cout << "Side A: ";
+            lambda(-point.second, point.first, SIDE_A);
+            cout << "Side B: ";
+            lambda(point.second, -point.first, SIDE_B);
         }
         
     }
@@ -182,7 +182,7 @@ MagicPoints window5(
         {2, 3}, {2, 2}, {2, 1},
         {3, 4}, {3, 3}, {3, 2},
         {4, 5}, {4, 4}, {4, 3},
-        {5, 5}, {5, 4}, 
+        {5, 5}, {5, 4}
 
     }, 
     vector<Point>{
