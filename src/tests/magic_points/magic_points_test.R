@@ -209,10 +209,11 @@ window18[4,1:6]  <- TRUE
 window18[3,1:2]  <- TRUE 
 window18[2,1]  <- TRUE 
 #19
+# This is also not symmetric
 window19 <- matrix(FALSE, nrow = size, ncol = size)
 window19[9,11]  <- TRUE
 window19[8,9:11]  <- TRUE 
-window19[7,5:11]  <- TRUE 
+window19[7,6:11]  <- TRUE # Another asymmetrical point
 window19[6,2:10]  <- TRUE
 window19[5,1:6]  <- TRUE
 window19[4,1:3]  <- TRUE
