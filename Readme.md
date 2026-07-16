@@ -22,3 +22,8 @@ isso pode ser utizado tambem para economizar memoria, o importante é saber o x,
 
 8 pi / 20 esta errado ele deve ser simetrico em cima e embaixo com 2 e 2
 ```
+
+## Major changes
+
+use binary search instead of linear search
+use fold method to pass across less points

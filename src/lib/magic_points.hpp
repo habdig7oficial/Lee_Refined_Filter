@@ -180,15 +180,23 @@ MagicPoints window7(
     }
 );
 
-MagicPoints window9(
+MagicPoints window8(
     vector<Point>{
-        {0, 1},
-        {1, 4}, {1, 3}, {1, 2}, {1, 1}, {1, 0},
-        {2, 5}, {2, 4}, {2, 3}, {2, 2}, {2, 1}, {2, 0},
-        {3, 5}, {3, 4},
-        {4, 5}
+        {0, 4}, {0, 3}, {0, 2}, {0, 1},
+        {1, 5}, {1, 4}, {1, 3}, {1, 2}, {1, 1}, {1, 0},
+        {2, 5}, {2, 4}, {2, 3},
+        {3, 5}
     }
 );
 
 
-vector<MagicPoints> all_windows = {window0, window1, window2, window3, window4, window5, window6, window7, window9, window9};
+MagicPoints window9(
+    vector<Point>{
+        {0, 5}, {0, 4}, {0, 3}, {0, 2}, {0, 1},
+        {1, 5}, {1, 4}, {1, 3}, {1, 2}, {1, 1}, {1, 0}, {1, -1}, 
+        {2, 5}, {2, 4}, {2, 3}
+    }
+);
+
+
+vector<MagicPoints> all_windows = {window0, window1, window2, window3, window4, window5, window6, window7, window8, window9};

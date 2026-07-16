@@ -3,8 +3,8 @@ TEST_CASE("First integral pass", "[magic_points]"){
     (*Rbind).parseEvalQ("par(mfrow = c(2, 5))");
     for(MagicPoints window : all_windows){
         (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))");
-        window.traverse_both([](char rx, char ry, bool scope, bool rotated){
-            //bool rotated = true;
+        window.traverse([](char rx, char ry, bool scope){
+            bool rotated = true;
             if(rotated == NOT_ROTATED){
                 (*Rbind)["rx"] = (int)rx;
                 (*Rbind)["ry"] = (int)ry;
