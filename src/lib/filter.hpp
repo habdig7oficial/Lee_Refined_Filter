@@ -70,15 +70,21 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
 /* image, image x point, image y point, correspodent window */
 template <typename T>
 double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints& window){
-  complex<T> acc(0, 0);
-  window.traverse_both([&image, &tx, &ty, &window, &acc](char rx, char ry, bool scope, bool is_rotated){
+
+  double complex_sum_sin, real_sum_cos;
+
+  window.traverse_both([&image, &tx, &ty, &window, &complex_sum_sin, &real_sum_cos](char rx, char ry, bool scope, bool is_rotated){
       /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
       T pixel (*(image.ptr<T>(ty - ry) + (tx + rx)));
-    
-      acc += exp(1i * (double)pixel);
 
-      cout << acc << endl;
+      complex_sum_sin += sin(pixel);
+      real_sum_cos += cos(pixel);
   });
+
+  cout << window.size() << endl;
+  double res = atan2(complex_sum_sin, real_sum_cos);
+  cout << res << endl;
+  cout << res / (11 * 11) << endl;
   return 1;
 }
 
