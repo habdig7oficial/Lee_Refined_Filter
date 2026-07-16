@@ -19,9 +19,6 @@ int main( int argc, char* argv[] ) {
 
     Rbind = make_unique<RInside>(argc, argv);
 
-    (*Rbind).parseEvalQ("png(\"gierull_plot.png\", width = 1920, height = 1080)");
-    (*Rbind).parseEvalQ("par(mfrow = c(1, 2))");
-
     int result = Catch::Session().run( argc, argv );
 
     cout << "C++ version: " << __cplusplus << endl;

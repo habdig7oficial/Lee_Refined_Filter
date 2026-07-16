@@ -1,27 +1,27 @@
 TEST_CASE("First integral pass", "[magic_points]"){
-    (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))");
-    
-    window7.traverse([](char rx, char ry, bool scope){
-        bool rotated = true;
-        if(rotated == NOT_ROTATED){
-            (*Rbind)["rx"] = (int)rx;
-            (*Rbind)["ry"] = (int)ry;
-            (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
-            cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; 
-        }
-        else{
-            (*Rbind)["rx"] = (int)rx;
-            (*Rbind)["ry"] = (int)ry;
-            (*Rbind).parseEvalQ("points(rx, ry, pch = 16, col=\"blue\", cex = 3)");
-            cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; 
-        }
-    });
+    (*Rbind).parseEvalQ("png(\"magic_point.png\", width = 1920, height = 1080)");
+    (*Rbind).parseEvalQ("par(mfrow = c(2, 5))");
+    for(MagicPoints window : all_windows){
+        (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))");
+        window.traverse_both([](char rx, char ry, bool scope, bool rotated){
+            //bool rotated = true;
+            if(rotated == NOT_ROTATED){
+                (*Rbind)["rx"] = (int)rx;
+                (*Rbind)["ry"] = (int)ry;
+                (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
+                cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; 
+            }
+            else{
+                (*Rbind)["rx"] = (int)rx;
+                (*Rbind)["ry"] = (int)ry;
+                (*Rbind).parseEvalQ("points(rx, ry, pch = 16, col=\"blue\", cex = 3)");
+                cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; 
+            }
+        });
 
-
-
-
-    (*Rbind).parseEvalQ("axis(side = 1, at = seq(-5, 5, by = 1))");
-    (*Rbind).parseEvalQ("axis(side = 2, at = seq(-5, 5, by = 1))");
-    (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)");
+        (*Rbind).parseEvalQ("axis(side = 1, at = seq(-5, 5, by = 1))");
+        (*Rbind).parseEvalQ("axis(side = 2, at = seq(-5, 5, by = 1))");
+        (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)");
+    }
     
 }
