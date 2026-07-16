@@ -13,6 +13,10 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
   
   calculate_mean_complex <- function(window) {
     complex_values <- exp(1i * window)
+    print("SUM")
+    print(sum(complex_values == 1))
+    print(sum(complex_values != 1))
+    print("---")
     mean_complex <- mean(complex_values)
     mean_phase <- Arg(mean_complex)
     return(mean_phase)
@@ -349,10 +353,8 @@ LInSARRFE<-function(imageRaster, coherence_map, param, eth, xi=0.9){
       window_selected<-all_windows[[pos_window_end_angle]]
       angle_seleted<-window_angle[pos_window_end_angle]
 
-      print(window1)
-      print(averages[1])
 
-      print(exp(1i * window2))
+      print(averages[1])
 
       print("end")
       return(1)
