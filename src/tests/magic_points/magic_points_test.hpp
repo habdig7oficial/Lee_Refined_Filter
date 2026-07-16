@@ -1,15 +1,19 @@
 TEST_CASE("First integral pass", "[magic_points]"){
     (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))");
     
-    window5.traverse_inverse([](char rx, char ry, bool scope){
-        if(scope == SIDE_A || true){
+    window5.traverse_both([](char rx, char ry, bool scope, bool rotated){
+        if(rotated == NOT_ROTATED){
             (*Rbind)["rx"] = (int)rx;
             (*Rbind)["ry"] = (int)ry;
             (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
             cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; 
         }
-        else
-            cout << endl;
+        else{
+            (*Rbind)["rx"] = (int)rx;
+            (*Rbind)["ry"] = (int)ry;
+            (*Rbind).parseEvalQ("points(rx, ry, pch = 16, col=\"blue\", cex = 3)");
+            cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; 
+        }
     });
 
 
