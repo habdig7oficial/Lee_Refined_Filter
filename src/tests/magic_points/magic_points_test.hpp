@@ -22,6 +22,7 @@ TEST_CASE("First integral pass", "[magic_points]"){
             (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
             cout << "rx: " << (int)rx + side << " ry: " << (int)ry + side << "\tR value: " << m(ry + side, rx + side) << endl;
             /* acess is column major */
+            INFO(i << " - (" << (int)rx << ", " << (int)ry << ")\n" << m);
             REQUIRE(m(ry + side, rx + side));
             m(ry + side, rx + side) = !m(ry + side, rx + side);
             //cout << endl << m << endl;
