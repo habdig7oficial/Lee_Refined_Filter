@@ -17,9 +17,13 @@ using Point = pair<char, char>;
 class MagicPoints {
     public:
         vector<Point>relative_coordinates;
+        int side, area;
 
-    MagicPoints(vector<Point> relative_coordinates){
+    MagicPoints(vector<Point> relative_coordinates, int side){
         this -> relative_coordinates = relative_coordinates;
+        this -> side = side;
+
+        this -> area = this -> side * this -> side;
     }
 
     /* 
@@ -46,9 +50,9 @@ class MagicPoints {
         lambda(0, 0, SIDE_A);
 
         for(Point point : this -> relative_coordinates){
-            cout << "Side A: ";
+            cout << "SIDE_A: ";
             lambda(-point.second, point.first, SIDE_A);
-            cout << "Side B: ";
+            cout << "SIDE_B: ";
             lambda(point.second, -point.first, SIDE_B);
         }
         
@@ -62,22 +66,25 @@ class MagicPoints {
         lambda(0, 0, SIDE_A, ROTATED);
 
         for(Point point : this -> relative_coordinates){
-            cout << "SIDE_A: ";
+            cout << "SIDE_A NOT_ROTATED: ";
             lambda(point.first, point.second, SIDE_A, NOT_ROTATED);
-            cout << "SIDE_B: ";
+            cout << "SIDE_B NOT_ROTATED: ";
             lambda(-point.first, -point.second, SIDE_B, NOT_ROTATED);
 
-            cout << "Side A: ";
+            cout << "SIDE_A ROTATED: ";
             lambda(-point.second, point.first, SIDE_A, ROTATED);
-            cout << "Side B: ";
+            cout << "SIDE_A ROTATED: ";
             lambda(point.second, -point.first, SIDE_B, ROTATED);
         }
         
     }
 
-    size_t size() const{
-        return this -> relative_coordinates.size() + 1; /* Point (0,0) is not counted */
+    size_t size() const {
+        return this -> relative_coordinates.size() * 2 + 1; /* Point (0,0) is not counted and the used points is folded */
     }
+
+    int get_side() const { return this -> side; }
+    int get_area() const { return this -> area; }
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
         os << "Magic Points: [";
@@ -102,8 +109,8 @@ MagicPoints window0(
         {3, 1}, {3, 0}, {3, -1},
         {4, 1}, {4, 0}, {4, -1},
         {5, 1}, {5, 0}, {5, -1}
-
-    }
+    }, 
+    11
 );
 
 
@@ -115,7 +122,8 @@ MagicPoints window1(
         {3, 2}, {3, 1}, {3, 0},
         {4, 2}, {4, 1}, {4, 0},
         {5, 2}, {5, 1}, {5, 0}, 
-    }
+    },   
+    11
 );
 
 MagicPoints window2(
@@ -126,7 +134,8 @@ MagicPoints window2(
         {3, 2}, {3, 1},
         {4, 3}, {4, 2}, {4, 1},
         {5, 3}, {5, 2}, {5, 1}
-    }
+    },  
+    11
 );
 
 MagicPoints window3(
@@ -137,7 +146,8 @@ MagicPoints window3(
         {3, 2}, {3, 1},
         {4, 3}, {4, 2}, {4, 1},
         {5, 4}, {5, 3}, {5, 2}
-    }
+    },    
+    11
 );
 
 MagicPoints window4(
@@ -148,7 +158,8 @@ MagicPoints window4(
         {3, 3}, {3, 2}, {3, 1},
         {4, 4}, {4, 3}, {4, 2},
         {5, 5}, {5, 4}, {5, 3}
-    }
+    },
+    11
 );
 
 MagicPoints window5(
@@ -159,8 +170,8 @@ MagicPoints window5(
         {3, 4}, {3, 3}, {3, 2},
         {4, 5}, {4, 4}, {4, 3},
         {5, 5}, {5, 4}
-
-    }
+    },
+    11
 );
 
 MagicPoints window6(
@@ -171,7 +182,8 @@ MagicPoints window6(
         {3, 5}, {3, 4}, {3, 3}, {3, 2}, {3, 1},
         {4, 5}, {4, 4},
         {5, 5}
-    }
+    },
+    11
 );
 
 MagicPoints window7(
@@ -181,7 +193,8 @@ MagicPoints window7(
         {2, 5}, {2, 4}, {2, 3}, {2, 2}, {2, 1}, {2, 0},
         {3, 5}, {3, 4},
         {4, 5}
-    }
+    }, 
+    11
 );
 
 MagicPoints window8(
@@ -190,7 +203,8 @@ MagicPoints window8(
         {1, 5}, {1, 4}, {1, 3}, {1, 2}, {1, 1}, {1, 0},
         {2, 5}, {2, 4}, {2, 3},
         {3, 5}
-    }
+    },
+    11
 );
 
 
@@ -199,8 +213,9 @@ MagicPoints window9(
         {0, 5}, {0, 4}, {0, 3}, {0, 2}, {0, 1},
         {1, 5}, {1, 4}, {1, 3}, {1, 2}, {1, 1}, {1, 0}, {1, -1}, 
         {2, 5}, {2, 4}, {2, 3}
-    }
+    },
+    11
 );
 
 
-vector<MagicPoints> all_windows = {window0, window1, window2, window3, window4, window5, window6, window7, window8, window9};
+vector<MagicPoints> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
