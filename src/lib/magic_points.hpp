@@ -75,6 +75,10 @@ class MagicPoints {
         
     }
 
+    size_t size() const{
+        return this -> relative_coordinates.size() + 1; /* Point (0,0) is not counted */
+    }
+
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
         os << "Magic Points: [";
         for(Point point : magic_points.relative_coordinates){
