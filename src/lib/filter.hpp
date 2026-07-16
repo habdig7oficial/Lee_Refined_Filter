@@ -6,6 +6,7 @@
 #include "gierull.hpp"
 #include "magic_points.hpp"
 #include "gsl/gsl_integration.h"
+#include "complex"
 
 #define TOLERANCE 1e-9
 #define MAX_ITERATIONS 9'999
@@ -66,6 +67,20 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
   return {mid, estimated_val, i};
 }
 
+/* image, image x point, image y point, correspodent window */
+template <typename T>
+double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints& window){
+  complex<T> acc(0, 0);
+  window.traverse_both([&image, &tx, &ty, &window, &acc](char rx, char ry, bool scope, bool is_rotated){
+      /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
+      T pixel (*(image.ptr<T>(ty - ry) + (tx + rx)));
+    
+      acc += exp(1i * (double)pixel);
+
+      cout << acc << endl;
+  });
+  return 1;
+}
 
 template<typename T>
 Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi, int max_iter = MAX_ITERATIONS){
@@ -102,13 +117,16 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   cout << "Increments: " << iter << endl;
   cout << "psi_epsilon: " << res << " integral " << aprox << endl;
-
+  
   
   debugVec.push_back(debugChannel);
   debugVec.push_back(image);
   debugVec.push_back(debugChannel);
   merge(debugVec, debugImg);
 
+  calc_mean_complex<T>(image, padding, padding, window0);
+
+  return debugImg;
   /*
   for(auto window : all_windows){
       cout << window << endl;
@@ -123,14 +141,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
       break;
   }*/
-
-      window1.traverse_inverse([&image, padding](char rx, char ry, bool scope){
-        cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; //<< " x: " << x << " y: " << y << " tx: " << x - rx << " ty: " << y - ry << " acc: " << endl;
-        //cout << image.ptr<T>(padding - ry) << endl;
-      });
-      
-    return debugImg;
-
 
 
   /* Main Loop */

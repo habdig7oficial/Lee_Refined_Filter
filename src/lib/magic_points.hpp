@@ -31,7 +31,7 @@ class MagicPoints {
         cout << "Side A Special: ";
         lambda(0, 0, SIDE_A);
 
-        for(Point point : relative_coordinates){
+        for(Point point : this -> relative_coordinates){
             cout << "SIDE_A: ";
             lambda(point.first, point.second, SIDE_A);
             cout << "SIDE_B: ";
@@ -45,7 +45,7 @@ class MagicPoints {
         cout << "Side A Special: ";
         lambda(0, 0, SIDE_A);
 
-        for(Point point : relative_coordinates){
+        for(Point point : this -> relative_coordinates){
             cout << "Side A: ";
             lambda(-point.second, point.first, SIDE_A);
             cout << "Side B: ";
@@ -61,7 +61,7 @@ class MagicPoints {
         cout << "Side B Special: ";
         lambda(0, 0, SIDE_A, ROTATED);
 
-        for(Point point : relative_coordinates){
+        for(Point point : this -> relative_coordinates){
             cout << "SIDE_A: ";
             lambda(point.first, point.second, SIDE_A, NOT_ROTATED);
             cout << "SIDE_B: ";
