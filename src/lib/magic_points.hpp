@@ -17,11 +17,9 @@ using Point = pair<char, char>;
 class MagicPoints {
     public:
         vector<Point>relative_coordinates;
-        vector<Point> special_first_column;
 
-    MagicPoints(vector<Point> relative_coordinates, vector<Point> special_first_column){
+    MagicPoints(vector<Point> relative_coordinates){
         this -> relative_coordinates = relative_coordinates;
-        this -> special_first_column = special_first_column;
     }
 
     /* 
@@ -30,10 +28,8 @@ class MagicPoints {
     */
     template<typename Lambda>
     void traverse(Lambda lambda){
-        for(Point spoint : special_first_column){
-            cout << "Special: ";
-            lambda(spoint.first, spoint.second, SIDE_A);
-        }
+        cout << "Side A Special: ";
+        lambda(0, 0, SIDE_A);
 
         for(Point point : relative_coordinates){
             cout << "SIDE_A: ";
@@ -46,10 +42,8 @@ class MagicPoints {
 
     template<typename Lambda>
     void traverse_inverse(Lambda lambda){
-        for(Point spoint : special_first_column){
-            cout << "Side A Special: ";
-            lambda(-spoint.second, spoint.first, SIDE_A);
-        }
+        cout << "Side A Special: ";
+        lambda(0, 0, SIDE_A);
 
         for(Point point : relative_coordinates){
             cout << "Side A: ";
@@ -62,12 +56,10 @@ class MagicPoints {
 
     template<typename Lambda>
     void traverse_both(Lambda lambda){
-        for(Point spoint : special_first_column){
-            cout << "Side A Special: ";
-            lambda(spoint.first, spoint.second, SIDE_A, NOT_ROTATED);
-            cout << "Side B Special: ";
-            lambda(-spoint.second, spoint.first, SIDE_A, ROTATED);
-        }
+        cout << "Side A Special: ";
+        lambda(0, 0, SIDE_A, NOT_ROTATED);
+        cout << "Side B Special: ";
+        lambda(0, 0, SIDE_A, ROTATED);
 
         for(Point point : relative_coordinates){
             cout << "SIDE_A: ";
@@ -76,19 +68,15 @@ class MagicPoints {
             lambda(-point.first, -point.second, SIDE_B, NOT_ROTATED);
 
             cout << "Side A: ";
-            lambda(-point.second, point.first, SIDE_A);
+            lambda(-point.second, point.first, SIDE_A, ROTATED);
             cout << "Side B: ";
-            lambda(point.second, -point.first, SIDE_B);
+            lambda(point.second, -point.first, SIDE_B, ROTATED);
         }
         
     }
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
-
         os << "Magic Points: [";
-        for(Point point : magic_points.special_first_column){
-            os << "("<< (int) point.first << ", " << (int) point.second << "),";
-        }
         for(Point point : magic_points.relative_coordinates){
             os << "("<< (int) point.first << ", " << (int) point.second << "),";
         }
@@ -102,7 +90,6 @@ auto myLambda = [](int x) {
     std::cout << "Value: " << x << std::endl; 
 };
 
-// ok
 MagicPoints window0(
     vector<Point>{
         {0, 1},
@@ -112,9 +99,6 @@ MagicPoints window0(
         {4, 1}, {4, 0}, {4, -1},
         {5, 1}, {5, 0}, {5, -1}
 
-    }, 
-    vector<Point>{
-        {0, 0}
     }
 );
 
@@ -127,9 +111,6 @@ MagicPoints window1(
         {3, 2}, {3, 1}, {3, 0},
         {4, 2}, {4, 1}, {4, 0},
         {5, 2}, {5, 1}, {5, 0}, 
-    }, 
-    vector<Point>{
-        {0, 0}
     }
 );
 
@@ -141,9 +122,6 @@ MagicPoints window2(
         {3, 2}, {3, 1},
         {4, 3}, {4, 2}, {4, 1},
         {5, 3}, {5, 2}, {5, 1}   
-    }, 
-    vector<Point>{
-        {0, 0}
     }
 );
 
@@ -155,9 +133,6 @@ MagicPoints window3(
         {3, 2}, {3, 1},
         {4, 3}, {4, 2}, {4, 1},
         {5, 4}, {5, 3}, {5, 2}
-    }, 
-    vector<Point>{
-        {0, 0}
     }
 );
 
@@ -169,9 +144,6 @@ MagicPoints window4(
         {3, 3}, {3, 2}, {3, 1},
         {4, 4}, {4, 3}, {4, 2},
         {5, 5}, {5, 4}, {5, 3}
-    }, 
-    vector<Point>{
-        {0, 0}
     }
 );
 
@@ -184,11 +156,8 @@ MagicPoints window5(
         {4, 5}, {4, 4}, {4, 3},
         {5, 5}, {5, 4}
 
-    }, 
-    vector<Point>{
-        {0, 0}
     }
 );
 
 
-vector<MagicPoints> all_windows = {window0, window1, window2};
+vector<MagicPoints> all_windows = {window0, window1, window2, window3, window4, window5};
