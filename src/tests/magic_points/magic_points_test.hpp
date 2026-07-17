@@ -1,3 +1,16 @@
+
+template <typename Tuple>
+bool validate_windows(const Tuple& t){
+
+    auto& [...elements] = t;
+
+    template for(auto e : t){
+
+    }
+
+    return true;
+}
+
 TEST_CASE("First integral pass", "[magic_points]"){
     (*Rbind).parseEvalQ("source(\"src/tests/magic_points/magic_points_test.R\")");
     (*Rbind).parseEvalQ("png(\"magic_point.png\", width = 1920, height = 1080)");
@@ -15,29 +28,14 @@ TEST_CASE("First integral pass", "[magic_points]"){
         (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))");
         LogicalMatrix m = (*Rbind).parseEval("all_windows[[i]]");
         LogicalMatrix m2 = (*Rbind).parseEval("all_windows[[j]]");
-
-        std::apply([](const auto&... args) {
-            ((args -> traverse([](char rx, char ry, bool scope){
-                /* Makes the relative position absolute */
-                (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
-
-                cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << "\tR value: " << m(side - ry, rx + side) << endl;
-                
-                //(*Rbind).parseEvalQ("print(all_windows[i])");
-
-                /* acess is column major */
-                INFO(i << " - (" << (int)rx << ", " << (int)ry << "), (" << side - ry << ", " << side - ry << ")\n" << m);
-                REQUIRE(m(side - ry, rx + side));
-                m(side - ry, rx + side) = !m(side - ry, rx + side);
-            })), ...); 
-        }, all_windows);
-        //auto *t = dynamic_cast<MagicPoints*>(&p);
-
+     
         (*Rbind).parseEvalQ("axis(side = 1, at = seq(-5, 5, by = 1))");
         (*Rbind).parseEvalQ("axis(side = 2, at = seq(-5, 5, by = 1))");
         (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)");
         //(*Rbind).parseEvalQ("print(all_windows[i])");
 
+            
+        cout << "Compiler: " << __clang_major__ << endl;
         break;
 
         bool has_left = (*Rbind).parseEval("any(all_windows[[i]] == TRUE)");
@@ -51,8 +49,7 @@ TEST_CASE("First integral pass", "[magic_points]"){
         REQUIRE(!has_left2);
         cout << "------------------------------------------------------------------------" << endl;
     }
-    
-    
+
 }
 
 /* 
@@ -71,6 +68,10 @@ TEST_CASE("First integral pass", "[magic_points]"){
                 cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; 
             }
         });
+[&m, &m2, side, i, second_half]
 
+args -> traverse([](char rx, char ry, bool scope){
+                cout << rx << endl;
+            })
 */
 
