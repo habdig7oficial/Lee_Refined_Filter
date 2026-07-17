@@ -3,7 +3,8 @@
 #include "array"
 #include "utility"
 
-#include "variant" // see if is necessary larter
+#include "span"
+#include "optimization.hpp" 
 
 using namespace std;
 using Point = pair<char, char>;
@@ -44,7 +45,6 @@ class MagicPoints {
         cout << "SIDE_B: ";
         for(const Point& point : this -> relative_coordinates)
             lambda(-point.first, -point.second, SIDE_B);
-        
     }
 
 
@@ -98,6 +98,14 @@ class MagicPoints {
         os << "]" << endl;
 
         return os;
+    }
+
+    operator span<const Point>() const{
+        return span<const Point>(relative_coordinates.data(), relative_coordinates.size());
+    }
+
+    operator span<Point>() const{
+        return span<Point>(relative_coordinates.data(), relative_coordinates.size());
     }
 };
 
@@ -221,5 +229,5 @@ MagicPoints window9(
 
 //using AllMagicPoints = variant<MagicPoints<14>, MagicPoints<15>, MagicPoints<16>, MagicPoints<18>>;
 
-//array<AllMagicPoints, 10> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
-
+//array<span<const MagicPoints>, 10> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
+array<span<const Point>, 2> a = {window0, window1};
