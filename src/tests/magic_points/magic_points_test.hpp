@@ -8,8 +8,7 @@ TEST_CASE("First integral pass", "[magic_points]"){
 
     int second_half = (*Rbind).parseEval("length(all_windows) / 2");
     
-    for(int i = 0; i < all_windows.size(); i++){
-        span<Point> window = all_windows[i];
+    for(int i = 0; i < all_windows_size; i++){
         (*Rbind)["i"] = i + 1;
         (*Rbind)["j"] = i + 1 + second_half;
 
@@ -17,43 +16,20 @@ TEST_CASE("First integral pass", "[magic_points]"){
         LogicalMatrix m = (*Rbind).parseEval("all_windows[[i]]");
         LogicalMatrix m2 = (*Rbind).parseEval("all_windows[[j]]");
 
-        window.traverse_both([&m, &m2, side, i, second_half](char rx, char ry, bool scope, bool rotated){
-            (*Rbind)["rx"] = (int)rx;
-            (*Rbind)["ry"] = (int)ry;
+        std::apply([](const auto&... args) {
+            ((args -> traverse([](char rx, char ry, bool scope){
 
-            if(rotated == NOT_ROTATED){
-                /* Makes the relative position absolute */
-                //(*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
-
-                //cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << "\tR value: " << m(side - ry, rx + side) << endl;
                 
-                //(*Rbind).parseEvalQ("print(all_windows[i])");
-
-                /* acess is column major */
-                INFO(i << " - (" << (int)rx << ", " << (int)ry << "), (" << side - ry << ", " << side - ry << ")\n" << m);
-                REQUIRE(m(side - ry, rx + side));
-                m(side - ry, rx + side) = !m(side - ry, rx + side);
-            }
-            else {
-                (*Rbind).parseEvalQ("points(rx, ry, pch = 16, col=\"blue\", cex = 3)");
-
-                cout << i + second_half << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << "\tR value: " << m(side - ry, rx + side) << endl;
-                (*Rbind).parseEvalQ("print(all_windows[j])");
-
-                /* acess is column major */
-                INFO(i << " - (" << (int)rx << ", " << (int)ry << "), (" << side - ry << ", " << side - ry << ")\n" << m2);
-                REQUIRE(m2(side - ry, rx + side));
-                m2(side - ry, rx + side) = !m2(side - ry, rx + side);
-            }
-
-            //cout << endl << m << endl;
-        });
+            })), ...); 
+        }, all_windows);
+        //auto *t = dynamic_cast<MagicPoints*>(&p);
 
         (*Rbind).parseEvalQ("axis(side = 1, at = seq(-5, 5, by = 1))");
         (*Rbind).parseEvalQ("axis(side = 2, at = seq(-5, 5, by = 1))");
         (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)");
         //(*Rbind).parseEvalQ("print(all_windows[i])");
 
+        break;
 
         bool has_left = (*Rbind).parseEval("any(all_windows[[i]] == TRUE)");
         cout << "Has Left: " << has_left << endl;
@@ -88,3 +64,4 @@ TEST_CASE("First integral pass", "[magic_points]"){
         });
 
 */
+

@@ -19,7 +19,13 @@ compile:
 run: compile
 	./exec.elf
 
-test:
-	g++ -march=native -std=c++20 -ftree-vectorize src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[window_cut]"  #--rng-seed 3908993432
+testO0:
+	g++ -std=c++20 -O0 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[magic_points]"  #--rng-seed 3908993432
+
+testO3:
+	g++ -std=c++20 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf  #--rng-seed 3908993432
+
+test: testO0 testO3
+
 #leaks: compile
 #	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)
