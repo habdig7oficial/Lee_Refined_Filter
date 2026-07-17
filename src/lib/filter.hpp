@@ -69,23 +69,25 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
 
 /* image, image x point, image y point, correspodent window */
 template <typename T, size_t N>
-double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window){
+double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, bool is_reverse){
   complex<T> acc(0, 0);
 
   int window_size = window.get_area();
 
-  window.traverse_both([&image, &tx, &ty, &window, &acc](char rx, char ry, bool scope, bool is_rotated){
-      /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
-      T pixel (*(image.ptr<T>(ty - ry) + (tx + rx)));
-    
-      acc += exp(1i * (double)pixel);
+  auto lambda = [&image, &tx, &ty, &window, &acc](char rx, char ry, bool scope){
+        /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
+        T pixel (*(image.ptr<T>(ty - ry) + (tx + rx)));
+      
+        acc += exp(1i * (double)pixel);
 
-      cout << acc << endl;
-  });
+        cout << acc << endl;
+  };
 
-  cout << "Complex sum: " << acc << endl;
-  cout << window_size << endl;
-  cout << window_size - (window_size - window.size()) << endl;
+  if(!is_reverse)
+    window.traverse(lambda);
+  else 
+    window.traverse_inverse(lambda);
+
   return 1;
 }
 
@@ -131,7 +133,7 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   debugVec.push_back(debugChannel);
   merge(debugVec, debugImg);
 
-  calc_mean_complex<T>(image, padding, padding, window0);
+  calc_mean_complex<T>(image, padding, padding, window0, true);
 
   return debugImg;
   /*

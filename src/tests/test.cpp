@@ -11,6 +11,7 @@
 #include "load_image/load_image.hpp"
 #include "window_cut/window_cut.hpp"
 #include "magic_points/magic_points_test.hpp"
+#include "calc_mean_complex/calc_mean_complex_test.hpp"
 
 unique_ptr<RInside> Rbind;
 
