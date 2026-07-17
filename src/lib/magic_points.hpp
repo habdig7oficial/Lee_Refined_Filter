@@ -3,7 +3,7 @@
 #include "array"
 #include "utility"
 
-#include "span"
+#include "tuple"
 #include "optimization.hpp" 
 
 using namespace std;
@@ -99,7 +99,9 @@ class MagicPoints {
 
         return os;
     }
-
+    /*
+    
+    
     operator span<const Point>() const{
         return span<const Point>(relative_coordinates.data(), relative_coordinates.size());
     }
@@ -107,6 +109,7 @@ class MagicPoints {
     operator span<Point>() const{
         return span<Point>(relative_coordinates.data(), relative_coordinates.size());
     }
+        */
 };
 
 auto sorting_lambda = [](const Point& a, const Point &b){
@@ -237,5 +240,5 @@ MagicPoints window9(
 
 //using AllMagicPoints = variant<MagicPoints<14>, MagicPoints<15>, MagicPoints<16>, MagicPoints<18>>;
 
-array<span<const Point>, 10> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
-
+auto all_windows = make_tuple(&window0, &window1);
+constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
