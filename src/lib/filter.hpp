@@ -67,12 +67,12 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
   return {mid, estimated_val, i};
 }
 
-/* image, image x point, image y point, correspodent window */
+/* image, image x point, image y point, correspodent window, direction */
 template <typename T, size_t N>
 double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, bool is_reverse){
-  complex<T> acc(0, 0);
+  complex<T> acc(0, 0), mean(0, 0);
 
-  int window_size = window.get_area();
+  complex<T> window_area(window.get_area(), 0);
 
   auto lambda = [&image, &tx, &ty, &window, &acc](char rx, char ry, bool scope){
         /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
@@ -87,6 +87,17 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
     window.traverse(lambda);
   else 
     window.traverse_inverse(lambda);
+
+  cout << "Pre-correction: " << acc << endl;
+
+  // the exp(1 * 0) on the null cels makes 1 that can be decuced without passing
+  acc += window.unused();
+  mean = acc / window_area;
+  double res = arg(mean);
+
+  cout << "Final Sum: " << acc << endl;
+  cout << "Mean: " << mean << endl;
+  cout << "Agument: " << res << endl;
 
   return 1;
 }
