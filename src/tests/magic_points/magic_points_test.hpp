@@ -1,7 +1,7 @@
 TEST_CASE("First integral pass", "[magic_points]"){
     (*Rbind).parseEvalQ("source(\"src/tests/magic_points/magic_points_test.R\")");
-    (*Rbind).parseEvalQ("png(\"magic_point.png\", width = 1920, height = 1080)");
-    (*Rbind).parseEvalQ("par(mfrow = c(2, 5))");
+    (*Rbind).parseEvalQ("png(\"magic_point.png\", width = 3500, height = 1080)");
+    (*Rbind).parseEvalQ("par(mfrow = c(2, 10))");
 
     int size = (*Rbind)["size"];
     int side = size / 2;
@@ -57,7 +57,7 @@ TEST_CASE("First integral pass", "[magic_points]"){
                 (*Rbind).parseEvalQ("axis(side = 1, at = seq(-5, 5, by = 1))");
                 (*Rbind).parseEvalQ("axis(side = 2, at = seq(-5, 5, by = 1))");
                 
-                (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
+                (*Rbind).parseEvalQ("points(rx, ry, pch = 16, col=\"blue\", cex = 3)");
                         
                 cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << endl;
 
