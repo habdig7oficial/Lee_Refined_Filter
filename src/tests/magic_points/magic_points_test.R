@@ -226,7 +226,7 @@ window20[6,1:11]  <- TRUE
 window20[5,1:7]  <- TRUE
 window20[4,1:3]  <- TRUE 
 
-all_windows<-list(
+first_half<-list(
     window1, 
     window2, 
     window3, 
@@ -236,6 +236,18 @@ all_windows<-list(
     window7, 
     window8, 
     window9, 
-    window10, 
+    window10
+)
+
+second_half<-list(
     window11, 
-    window12, window13, window14, window15, window16, window17, window18, window19, window20)
+    window12,
+    window13,
+    window14,
+    window15, 
+    window16, 
+    window17, 
+    window18, 
+    window19, 
+    window20
+)
