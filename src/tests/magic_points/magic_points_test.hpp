@@ -18,8 +18,17 @@ TEST_CASE("First integral pass", "[magic_points]"){
 
         std::apply([](const auto&... args) {
             ((args -> traverse([](char rx, char ry, bool scope){
+                /* Makes the relative position absolute */
+                (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
 
+                cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << "\tR value: " << m(side - ry, rx + side) << endl;
                 
+                //(*Rbind).parseEvalQ("print(all_windows[i])");
+
+                /* acess is column major */
+                INFO(i << " - (" << (int)rx << ", " << (int)ry << "), (" << side - ry << ", " << side - ry << ")\n" << m);
+                REQUIRE(m(side - ry, rx + side));
+                m(side - ry, rx + side) = !m(side - ry, rx + side);
             })), ...); 
         }, all_windows);
         //auto *t = dynamic_cast<MagicPoints*>(&p);
