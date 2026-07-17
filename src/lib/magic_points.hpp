@@ -1,7 +1,9 @@
 /* Hardcoded 11x11 window, create a function that generates this later */
 
-#include "vector"
+#include "array"
 #include "utility"
+
+#include "variant" // see if is necessary larter
 
 using namespace std;
 using Point = pair<char, char>;
@@ -14,15 +16,15 @@ using Point = pair<char, char>;
 #define ROTATED false
 
 
+template <size_t N>
 class MagicPoints {
-    public:
-        vector<Point>relative_coordinates;
+    private:
+        const array<Point, N>relative_coordinates;
         int side, area;
 
-    MagicPoints(vector<Point> relative_coordinates, int side){
-        this -> relative_coordinates = relative_coordinates;
+    public:
+    MagicPoints(const array<Point, N>& relative_coordinates, int side) : relative_coordinates(relative_coordinates){
         this -> side = side;
-
         this -> area = this -> side * this -> side;
     }
 
@@ -97,125 +99,125 @@ class MagicPoints {
     }
 };
 
-auto myLambda = [](int x) { 
-    std::cout << "Value: " << x << std::endl; 
-};
 
 MagicPoints window0(
-    vector<Point>{
-        {0, 1},
-        {1, 1}, {1, 0}, {1, -1},
-        {2, 1}, {2, 0}, {2, -1},
-        {3, 1}, {3, 0}, {3, -1},
-        {4, 1}, {4, 0}, {4, -1},
-        {5, 1}, {5, 0}, {5, -1}
+    array<Point, 16>{
+        Point{0, 1}, 
+        Point{1, 1}, Point{1, 0}, Point{1, -1},
+        Point{2, 1}, Point{2, 0}, Point{2, -1},
+        Point{3, 1}, Point{3, 0}, Point{3, -1},
+        Point{4, 1}, Point{4, 0}, Point{4, -1},
+        Point{5, 1}, Point{5, 0}, Point{5, -1}
     }, 
     11
 );
 
 
 MagicPoints window1(
-    vector<Point>{
-        {1, -1}, {0, 1},
-        {1, 1}, {1, 0},
-        {2, 2}, {2, 1}, {2, 0},
-        {3, 2}, {3, 1}, {3, 0},
-        {4, 2}, {4, 1}, {4, 0},
-        {5, 2}, {5, 1}, {5, 0}, 
+    array<Point, 16>{
+        Point{1, -1}, Point{0, 1},
+        Point{1, 1}, Point{1, 0},
+        Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 2}, Point{3, 1}, Point{3, 0},
+        Point{4, 2}, Point{4, 1}, Point{4, 0},
+        Point{5, 2}, Point{5, 1}, Point{5, 0}, 
     },   
     11
 );
 
 MagicPoints window2(
-    vector<Point>{
-        {0, 1},
-        {1, 1}, {1, 0}, {1, -1},
-        {2, 2}, {2, 1}, {2, 0},
-        {3, 2}, {3, 1},
-        {4, 3}, {4, 2}, {4, 1},
-        {5, 3}, {5, 2}, {5, 1}
+    array<Point, 15>{
+        Point{0, 1},
+        Point{1, 1}, Point{1, 0}, Point{1, -1},
+        Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 2}, Point{3, 1},
+        Point{4, 3}, Point{4, 2}, Point{4, 1},
+        Point{5, 3}, Point{5, 2}, Point{5, 1}
     },  
     11
 );
 
 MagicPoints window3(
-    vector<Point>{
-        {0, 1}, {-1, 1}, 
-        {1, 1}, {1, 0},
-        {2, 2}, {2, 1}, {2, 0},
-        {3, 2}, {3, 1},
-        {4, 3}, {4, 2}, {4, 1},
-        {5, 4}, {5, 3}, {5, 2}
+    array<Point, 15>{
+        Point{0, 1}, Point{-1, 1}, 
+        Point{1, 1}, Point{1, 0},
+        Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 2}, Point{3, 1},
+        Point{4, 3}, Point{4, 2}, Point{4, 1},
+        Point{5, 4}, Point{5, 3}, Point{5, 2}
     },    
     11
 );
 
 MagicPoints window4(
-    vector<Point>{
-        {0, 1}, 
-        {1, 1}, {1, 0}, {1, -1},
-        {2, 2}, {2, 1}, {2, 0},
-        {3, 3}, {3, 2}, {3, 1},
-        {4, 4}, {4, 3}, {4, 2},
-        {5, 5}, {5, 4}, {5, 3}
+    array<Point, 16>{
+        Point{0, 1}, 
+        Point{1, 1}, Point{1, 0}, Point{1, -1},
+        Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 3}, Point{3, 2}, Point{3, 1},
+        Point{4, 4}, Point{4, 3}, Point{4, 2},
+        Point{5, 5}, Point{5, 4}, Point{5, 3}
     },
     11
 );
 
 MagicPoints window5(
-    vector<Point>{
-        {0, 1},
-        {1, 1}, {1, 0}, {1, 2}, 
-        {2, 3}, {2, 2}, {2, 1},
-        {3, 4}, {3, 3}, {3, 2},
-        {4, 5}, {4, 4}, {4, 3},
-        {5, 5}, {5, 4}
+    array<Point, 15>{
+        Point{0, 1},
+        Point{1, 1}, Point{1, 0}, Point{1, 2}, 
+        Point{2, 3}, Point{2, 2}, Point{2, 1},
+        Point{3, 4}, Point{3, 3}, Point{3, 2},
+        Point{4, 5}, Point{4, 4}, Point{4, 3},
+        Point{5, 5}, Point{5, 4}
     },
     11
 );
 
 MagicPoints window6(
-    vector<Point>{
-        {0, 1},
-        {1, 3}, {1, 2}, {1, 1}, {1, 0},
-        {2, 4}, {2, 3}, {2, 2}, {2, 1}, {2, 0},
-        {3, 5}, {3, 4}, {3, 3}, {3, 2}, {3, 1},
-        {4, 5}, {4, 4},
-        {5, 5}
+    array<Point, 18>{
+        Point{0, 1},
+        Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
+        Point{2, 4}, Point{2, 3}, Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 5}, Point{3, 4}, Point{3, 3}, Point{3, 2}, Point{3, 1},
+        Point{4, 5}, Point{4, 4},
+        Point{5, 5}
     },
     11
 );
 
 MagicPoints window7(
-    vector<Point>{
-        {0, 1},
-        {1, 4}, {1, 3}, {1, 2}, {1, 1}, {1, 0},
-        {2, 5}, {2, 4}, {2, 3}, {2, 2}, {2, 1}, {2, 0},
-        {3, 5}, {3, 4},
-        {4, 5}
+    array<Point, 15>{
+        Point{0, 1},
+        Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
+        Point{2, 5}, Point{2, 4}, Point{2, 3}, Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 5}, Point{3, 4},
+        Point{4, 5}
     }, 
     11
 );
 
 MagicPoints window8(
-    vector<Point>{
-        {0, 4}, {0, 3}, {0, 2}, {0, 1},
-        {1, 5}, {1, 4}, {1, 3}, {1, 2}, {1, 1}, {1, 0},
-        {2, 5}, {2, 4}, {2, 3},
-        {3, 5}
+    array<Point, 14>{
+        Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
+        Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
+        Point{2, 5}, Point{2, 4}, Point{2, 3},
+        Point{3, 5}
     },
     11
 );
 
 
 MagicPoints window9(
-    vector<Point>{
-        {0, 5}, {0, 4}, {0, 3}, {0, 2}, {0, 1},
-        {1, 5}, {1, 4}, {1, 3}, {1, 2}, {1, 1}, {1, 0}, {1, -1}, 
-        {2, 5}, {2, 4}, {2, 3}
+    array<Point,15>{
+        Point{0, 5}, Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
+        Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
+        Point{2, 5}, Point{2, 4}, Point{2, 3}
     },
     11
 );
 
 
-vector<MagicPoints> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
+//using AllMagicPoints = variant<MagicPoints<14>, MagicPoints<15>, MagicPoints<16>, MagicPoints<18>>;
+
+//array<AllMagicPoints, 10> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
+

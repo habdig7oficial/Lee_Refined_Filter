@@ -68,8 +68,8 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
 }
 
 /* image, image x point, image y point, correspodent window */
-template <typename T>
-double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints& window){
+template <typename T, size_t N>
+double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window){
   complex<T> acc(0, 0);
 
   int window_size = window.get_area();
