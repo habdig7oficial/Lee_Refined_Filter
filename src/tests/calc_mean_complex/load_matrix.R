@@ -1,9 +1,9 @@
 calculate_mean_complex <- function(window) {
     complex_values <- exp(1i * window)
     print("COMPLEX")
-    print(complex_values)
-    print(sum(Im(complex_values)))
+    #print(complex_values)
     mean_complex <- mean(complex_values)
+    print(mean_complex)
     mean_phase <- Arg(mean_complex)
     return(mean_phase)
 }
@@ -90,4 +90,5 @@ all_windows<-list(
     window9, 
     window10, 
     window11, 
-    window12, window13, window14, window15, window16, window17, window18, window19, window20)
+    window12, 
+    window13, window14, window15, window16, window17, window18, window19, window20)
