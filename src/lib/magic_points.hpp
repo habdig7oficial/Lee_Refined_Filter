@@ -237,7 +237,7 @@ MagicPoints window9(
     11
 );
 
-auto all_windows = make_tuple(&window0, &window1);
+auto all_windows = tie(window0, window1);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
 //array<MagicPointsWrapper, 10> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
