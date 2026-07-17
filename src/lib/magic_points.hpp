@@ -192,45 +192,45 @@ MagicPoints window5(
 );
 
 MagicPoints window6(
-    array<Point, 18>{
+    sort_compile_time(array<Point, 18>{
         Point{0, 1},
         Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
         Point{2, 4}, Point{2, 3}, Point{2, 2}, Point{2, 1}, Point{2, 0},
         Point{3, 5}, Point{3, 4}, Point{3, 3}, Point{3, 2}, Point{3, 1},
         Point{4, 5}, Point{4, 4},
         Point{5, 5}
-    },
+    }, sorting_lambda),
     11
 );
 
 MagicPoints window7(
-    array<Point, 15>{
+    sort_compile_time(array<Point, 15>{
         Point{0, 1},
         Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
         Point{2, 5}, Point{2, 4}, Point{2, 3}, Point{2, 2}, Point{2, 1}, Point{2, 0},
         Point{3, 5}, Point{3, 4},
         Point{4, 5}
-    }, 
+    }, sorting_lambda), 
     11
 );
 
 MagicPoints window8(
-    array<Point, 14>{
+    sort_compile_time(array<Point, 14>{
         Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
         Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
         Point{2, 5}, Point{2, 4}, Point{2, 3},
         Point{3, 5}
-    },
+    }, sorting_lambda),
     11
 );
 
 
 MagicPoints window9(
-    array<Point,15>{
+    sort_compile_time(array<Point,15>{
         Point{0, 5}, Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
         Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
         Point{2, 5}, Point{2, 4}, Point{2, 3}
-    },
+    }, sorting_lambda),
     11
 );
 
