@@ -1,5 +1,6 @@
 # OpenCv and Gnu Scientific Library (gsl) must be installed
 
+CXX = clang++
 CXX_FLAGS = `pkg-config --cflags --libs opencv4 gsl`
 
 
@@ -14,18 +15,21 @@ RINSIDE_LDF_TEST := $(shell Rscript -e "RInside:::LdFlags()")
 CXX_FLAGS_TEST = `pkg-config --cflags --libs opencv4 gsl catch2` # Catch2 for tests
 
 compile:
-	 g++ -march=native -std=c++20 src/main.cpp -o exec.elf $(CXX_FLAGS) 
+	 $(CXX) -march=native -std=c++26 src/main.cpp -o exec.elf $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
 
 testO0:
-	g++ -std=c++20 -O0 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[magic_points]"  #--rng-seed 3908993432
+	$(CXX) -std=c++26 -O0 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[magic_points]" #--rng-seed 3908993432
 
 testO3:
-	g++ -std=c++20 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf  #--rng-seed 3908993432
+	$(CXX) -std=c++26 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf  #--rng-seed 3908993432
 
 test: testO0 testO3
 
+
+version: 
+	$(CXX) --version
 #leaks: compile
 #	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)
