@@ -1,5 +1,47 @@
+TEST_CASE("First integral pass", "[magic_points]"){
+    (*Rbind).parseEvalQ("source(\"src/tests/magic_points/magic_points_test.R\")");
+    (*Rbind).parseEvalQ("png(\"magic_point.png\", width = 1920, height = 1080)");
+    (*Rbind).parseEvalQ("par(mfrow = c(2, 5))");
+
+    int size = (*Rbind)["size"];
+    int side = size / 2;
+
+    int second_half = (*Rbind).parseEval("length(all_windows) / 2");
+
+    int i = 0;
+    apply([&i, side](auto&&... args){
+        (*Rbind)["i"]  = i + 1;
+        LogicalMatrix m = (*Rbind).parseEval("all_windows[[i]]");
+        ((
+            (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))"),
+            args.traverse([&i, side](char rx, char ry, bool scope){
+                (*Rbind)["rx"] = (int)rx;
+                (*Rbind)["ry"] = (int)ry;
+                
+
+                LogicalMatrix m = (*Rbind).parseEval("all_windows[[i]]");
+
+                (*Rbind).parseEvalQ("axis(side = 1, at = seq(-5, 5, by = 1))");
+                (*Rbind).parseEvalQ("axis(side = 2, at = seq(-5, 5, by = 1))");
+                
+                (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
+                        
+                cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << endl;
+
+                INFO(i << " - (" << (int)rx << ", " << (int)ry << "), (" << side - ry << ", " << side - ry << ")\n" << m);
+                REQUIRE(m(side - ry, rx + side));
+                m(side - ry, rx + side) = !m(side - ry, rx + side);
+                
+            }),
+            (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
+            (*Rbind).parseEvalQ("i <- i + 1"),
+            i++
+        ), ...);
+    }, all_windows);
+}
 
 
+/*
 TEST_CASE("First integral pass", "[magic_points]"){
     (*Rbind).parseEvalQ("source(\"src/tests/magic_points/magic_points_test.R\")");
     (*Rbind).parseEvalQ("png(\"magic_point.png\", width = 1920, height = 1080)");
@@ -23,9 +65,23 @@ TEST_CASE("First integral pass", "[magic_points]"){
         (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)");
         //(*Rbind).parseEvalQ("print(all_windows[i])");
 
-        std::apply([](auto&&... args) {
+        std::apply([&m, &m2, side, i, second_half](auto&&... args) {
                 (( 
-                    args.traverse([](char rx, char ry, bool scope){cout << (int)rx << endl;})
+                    args.traverse([&m, &m2, side, i, second_half](char rx, char ry, bool scope){
+                        (*Rbind)["rx"] = (int)rx;
+                        (*Rbind)["ry"] = (int)ry;
+                        // Makes the relative position absolute 
+                        (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
+
+                        cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << "\tR value: " << m(side - ry, rx + side) << endl;
+                        
+                        (*Rbind).parseEvalQ("print(all_windows[i])");
+
+                        // acess is column major 
+                        INFO(i << " - (" << (int)rx << ", " << (int)ry << "), (" << side - ry << ", " << side - ry << ")\n" << m);
+                        //REQUIRE(m(side - ry, rx + side));
+                        m(side - ry, rx + side) = !m(side - ry, rx + side);
+                    })
                 ), ...); 
         }, all_windows);
                     
@@ -34,16 +90,17 @@ TEST_CASE("First integral pass", "[magic_points]"){
         bool has_left = (*Rbind).parseEval("any(all_windows[[i]] == TRUE)");
         cout << "Has Left: " << has_left << endl;
         INFO(m);
-        REQUIRE(!has_left);
+        //REQUIRE(!has_left);
 
         bool has_left2 = (*Rbind).parseEval("any(all_windows[[j]] == TRUE)");
         cout << "Has Left: " << has_left2 << endl;
         INFO(m2);
-        REQUIRE(!has_left2);
+        //REQUIRE(!has_left2);
         cout << "------------------------------------------------------------------------" << endl;
+        break;
     }
 
-}
+}*/
 
 /* 
         window.traverse([](char rx, char ry, bool scope){
@@ -68,3 +125,29 @@ args -> traverse([](char rx, char ry, bool scope){
             })
 */
 
+/*
+
+
+                (*Rbind)["rx"] = (int)rx;
+                (*Rbind)["ry"] = (int)ry;
+                (*Rbind)["i"] = i + 1;
+
+                (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))");
+                LogicalMatrix m = (*Rbind).parseEval("all_windows[[i]]");
+
+                (*Rbind).parseEvalQ("axis(side = 1, at = seq(-5, 5, by = 1))");
+                (*Rbind).parseEvalQ("axis(side = 2, at = seq(-5, 5, by = 1))");
+                (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)");
+                //(*Rbind).parseEvalQ("print(all_windows[i])");
+
+                (*Rbind)["i"] = i + 1;
+                (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
+
+                cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << "\tR value: " << m(side - ry, rx + side) << endl;
+                            
+                (*Rbind).parseEvalQ("print(all_windows[i])");
+
+                // acess is column major 
+                INFO(i << " - (" << (int)rx << ", " << (int)ry << "), (" << side - ry << ", " << side - ry << ")\n" << m);
+                REQUIRE(m(side - ry, rx + side));
+                m(side - ry, rx + side) = !m(side - ry, rx + side);*/

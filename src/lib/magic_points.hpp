@@ -99,17 +99,6 @@ class MagicPoints {
 
         return os;
     }
-    /*
-    
-    
-    operator span<const Point>() const{
-        return span<const Point>(relative_coordinates.data(), relative_coordinates.size());
-    }
-
-    operator span<Point>() const{
-        return span<Point>(relative_coordinates.data(), relative_coordinates.size());
-    }
-        */
 };
 
 auto sorting_lambda = [](const Point& a, const Point &b){
@@ -237,7 +226,7 @@ MagicPoints window9(
     11
 );
 
-auto all_windows = tie(window0, window1);
+auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
 //array<MagicPointsWrapper, 10> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
