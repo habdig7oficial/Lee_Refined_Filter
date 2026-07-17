@@ -14,12 +14,18 @@ RINSIDE_LDF_TEST := $(shell Rscript -e "RInside:::LdFlags()")
 CXX_FLAGS_TEST = `pkg-config --cflags --libs opencv4 gsl catch2` # Catch2 for tests
 
 compile:
-	 g++ -std=c++20 src/main.cpp -o exec.elf $(CXX_FLAGS) 
+	 g++ -O3 -std=c++20 src/main.cpp -o exec.elf $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
 
-test:
-	g++ -std=c++20 -ftree-vectorize src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[window_cut]"  #--rng-seed 3908993432
+testO0:
+	g++ -std=c++20 -O0 src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[window_cut]"  #--rng-seed 3908993432
+
+testO3:
+	g++ -std=c++20 -O3 src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf  #--rng-seed 3908993432
+
+test: testO0 testO3
+
 #leaks: compile
 #	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)

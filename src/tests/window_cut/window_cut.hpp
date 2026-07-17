@@ -1,4 +1,4 @@
-TEST_CASE("First integral pass", "[window_cut]"){
+TEST_CASE("Window cut", "[window_cut]"){
     (*Rbind).parseEvalQ("source(\"src/tests/window_cut/window_cut.R\")");
 
     mt19937 rng(Catch::getSeed());

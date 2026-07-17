@@ -72,20 +72,20 @@ template <typename T>
 double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints& window){
   complex<T> acc(0, 0);
 
-  int window_size = window.get_area();
-
   window.traverse_both([&image, &tx, &ty, &window, &acc](char rx, char ry, bool scope, bool is_rotated){
       /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
       T pixel (*(image.ptr<T>(ty - ry) + (tx + rx)));
     
       acc += exp(1i * (double)pixel);
-
-      cout << acc << endl;
+      cout << pixel << endl;
   });
 
   cout << "Complex sum: " << acc << endl;
-  cout << window_size << endl;
-  cout << window_size - (window_size - window.size()) << endl;
+  cout << window.get_area() << endl;
+  cout << window.unused() << endl;
+
+  acc += window.unused();
+  cout << "Complex sum: " << acc << endl;
   return 1;
 }
 
@@ -131,7 +131,9 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   debugVec.push_back(debugChannel);
   merge(debugVec, debugImg);
 
-  calc_mean_complex<T>(image, padding, padding, window0);
+  cv::Mat test1(11, 11, CV_32FC1, cv::Scalar(0.6));
+  calc_mean_complex<T>(test1, 5, 5, window0);
+  //calc_mean_complex<T>(image, padding + 6, padding + 6, window0);
 
   return debugImg;
   /*

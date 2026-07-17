@@ -83,6 +83,10 @@ class MagicPoints {
         return this -> relative_coordinates.size() * 2 + 1; /* Point (0,0) is not counted and the used points is folded */
     }
 
+    int unused() const {
+        return this -> area - this -> size();
+    }
+    
     int get_side() const { return this -> side; }
     int get_area() const { return this -> area; }
 

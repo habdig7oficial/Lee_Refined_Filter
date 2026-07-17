@@ -1,4 +1,4 @@
-TEST_CASE("First integral pass", "[load_image]"){
+TEST_CASE("Load Image", "[load_image]"){
     (*Rbind).parseEvalQ("source(\"src/tests/load_image/load_image.R\")");
 
     (*Rbind)["img"] = IMG;

@@ -1,4 +1,4 @@
-TEST_CASE("First integral pass", "[magic_points]"){
+TEST_CASE("Sub-window points", "[magic_points]"){
     (*Rbind).parseEvalQ("source(\"src/tests/magic_points/magic_points_test.R\")");
     (*Rbind).parseEvalQ("png(\"magic_point.png\", width = 1920, height = 1080)");
     (*Rbind).parseEvalQ("par(mfrow = c(2, 5))");
