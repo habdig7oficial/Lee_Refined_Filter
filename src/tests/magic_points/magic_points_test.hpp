@@ -9,7 +9,7 @@ TEST_CASE("First integral pass", "[magic_points]"){
     int second_half = (*Rbind).parseEval("length(all_windows) / 2");
     
     for(int i = 0; i < all_windows.size(); i++){
-        MagicPoints window = all_windows[i];
+        span<Point> window = all_windows[i];
         (*Rbind)["i"] = i + 1;
         (*Rbind)["j"] = i + 1 + second_half;
 
