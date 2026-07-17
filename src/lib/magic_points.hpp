@@ -37,27 +37,29 @@ class MagicPoints {
         cout << "Side A Special: ";
         lambda(0, 0, SIDE_A);
 
-        for(Point point : this -> relative_coordinates){
-            cout << "SIDE_A: ";
+        cout << "SIDE_A: ";
+        for(const Point& point : this -> relative_coordinates)
             lambda(point.first, point.second, SIDE_A);
-            cout << "SIDE_B: ";
+
+        cout << "SIDE_B: ";
+        for(const Point& point : this -> relative_coordinates)
             lambda(-point.first, -point.second, SIDE_B);
-        }
         
     }
+
 
     template<typename Lambda>
     void traverse_inverse(Lambda lambda){
         cout << "Side A Special: ";
         lambda(0, 0, SIDE_A);
-
-        for(Point point : this -> relative_coordinates){
-            cout << "SIDE_A: ";
+    
+        cout << "SIDE_A: ";
+        for(const Point& point : this -> relative_coordinates)
             lambda(-point.second, point.first, SIDE_A);
-            cout << "SIDE_B: ";
-            lambda(point.second, -point.first, SIDE_B);
-        }
         
+        cout << "SIDE_B: ";
+        for(const Point& point : this -> relative_coordinates)
+            lambda(point.second, -point.first, SIDE_B);
     }
 
     template<typename Lambda>
@@ -67,7 +69,7 @@ class MagicPoints {
         cout << "Side B Special: ";
         lambda(0, 0, SIDE_A, ROTATED);
 
-        for(Point point : this -> relative_coordinates){
+        for(const Point& point : this -> relative_coordinates){
             cout << "SIDE_A NOT_ROTATED: ";
             lambda(point.first, point.second, SIDE_A, NOT_ROTATED);
             cout << "SIDE_B NOT_ROTATED: ";
@@ -90,7 +92,7 @@ class MagicPoints {
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
         os << "Magic Points: [";
-        for(Point point : magic_points.relative_coordinates){
+        for(const Point& point : magic_points.relative_coordinates){
             os << "("<< (int) point.first << ", " << (int) point.second << "),";
         }
         os << "]" << endl;
