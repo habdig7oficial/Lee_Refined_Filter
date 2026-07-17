@@ -1,15 +1,4 @@
 
-template <typename Tuple>
-bool validate_windows(const Tuple& t){
-
-    auto& [...elements] = t;
-
-    template for(auto e : t){
-
-    }
-
-    return true;
-}
 
 TEST_CASE("First integral pass", "[magic_points]"){
     (*Rbind).parseEvalQ("source(\"src/tests/magic_points/magic_points_test.R\")");
@@ -34,9 +23,13 @@ TEST_CASE("First integral pass", "[magic_points]"){
         (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)");
         //(*Rbind).parseEvalQ("print(all_windows[i])");
 
-            
-        cout << "Compiler: " << __clang_major__ << endl;
-        break;
+        std::apply([](auto&&... args) {
+                (( 
+                    args.traverse([](char rx, char ry, bool scope){cout << (int)rx << endl;})
+                ), ...); 
+        }, all_windows);
+                    
+
 
         bool has_left = (*Rbind).parseEval("any(all_windows[[i]] == TRUE)");
         cout << "Has Left: " << has_left << endl;
