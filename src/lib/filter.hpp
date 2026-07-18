@@ -80,12 +80,12 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
       
         acc += exp(1i * (double)pixel);
 
-        cout << "(" << (int)rx << ", " << (int)ry << ") = " << (double)pixel << endl;
+        //cout << "(" << (int)rx << ", " << (int)ry << ") = " << (double)pixel << endl;
 
         //cout << acc << endl;
   };
 
-  if(!is_reverse)
+  if(is_reverse == NOT_ROTATED)
     window.traverse(lambda);
   else 
     window.traverse_inverse(lambda);
