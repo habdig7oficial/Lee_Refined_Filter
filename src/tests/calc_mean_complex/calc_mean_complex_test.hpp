@@ -1,4 +1,10 @@
-
+void err(bool t, double cpp, double r){
+    if(!t){
+        INFO("C++: " << cpp << " R: " << r);
+        REQUIRE(0);
+    }
+        
+}
 
 TEST_CASE("Mean Complex win0", "[mean_complex]"){
     (*Rbind).parseEvalQ("source(\"src/tests/calc_mean_complex/calculate_mean_complex.R\")");
@@ -34,25 +40,45 @@ TEST_CASE("Mean Complex win0", "[mean_complex]"){
         //(*Rbind).parseEvalQ("print(all_windows)");
         //(*Rbind).parseEvalQ("print(calculate_mean_complex(window1))");
 
+        bool flag;
         int j = 0;
-        apply([&j, &test](auto&&... args){
+        apply([&j, &test, &flag](auto&&... args){
             double r_res, cpp_res;
             ((
                 (*Rbind)["j"] = j + 1,
-                //(*Rbind).parseEvalQ("print(matrix)"),
+                cout << "matrix" << endl,
+                (*Rbind).parseEvalQ("print(matrix)"),
                 
                 r_res = (*Rbind).parseEval("calculate_mean_complex(all_windows[[j]])"), 
-                cpp_res = calc_mean_complex<double>(test, 5, 5, args, true),
+                cpp_res = calc_mean_complex<double>(test, 5, 5, args, NOT_ROTATED),
 
                 cout << j << ") R complex_avg: " << r_res << endl,
                 cout << j << ") C++ complex_avg: " << cpp_res << endl,
+                flag = (cpp_res - r_res) < EPSILON,
+                err(flag, cpp_res, r_res),
                 j++
             ), ...);
         }, all_windows);
 
         cout << "..................." << endl;
         
+        apply([&j, &test, &flag](auto&&... args){
+            double r_res, cpp_res;
+            ((
+                (*Rbind)["j"] = j + 1,
+                cout << "matrix" << endl,
+                (*Rbind).parseEvalQ("print(matrix)"),
+                
+                r_res = (*Rbind).parseEval("calculate_mean_complex(all_windows[[j]])"), 
+                cpp_res = calc_mean_complex<double>(test, 5, 5, args, ROTATED),
 
+                cout << j << ") R complex_avg: " << r_res << endl,
+                cout << j << ") C++ complex_avg: " << cpp_res << endl,
+                flag = (cpp_res - r_res) < EPSILON,
+                err(flag, cpp_res, r_res),
+                j++
+            ), ...);
+        }, all_windows);
 
 
         
