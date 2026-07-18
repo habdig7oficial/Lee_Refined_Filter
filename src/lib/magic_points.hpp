@@ -35,14 +35,14 @@ class MagicPoints {
     */
     template<typename Lambda>
     void traverse(Lambda lambda){
-        cout << "Side A Special: ";
+        // cout << "Side A Special: ";
         lambda(0, 0, SIDE_A);
 
-        cout << "SIDE_A: ";
+        // cout << "SIDE_A: ";
         for(const Point& point : this -> relative_coordinates)
             lambda(point.first, point.second, SIDE_A);
 
-        cout << "SIDE_B: ";
+        // cout << "SIDE_B: ";
         for(const Point& point : this -> relative_coordinates)
             lambda(-point.first, -point.second, SIDE_B);
     }
@@ -50,34 +50,34 @@ class MagicPoints {
 
     template<typename Lambda>
     void traverse_inverse(Lambda lambda){
-        cout << "Side A Special: ";
+        // cout << "Side A Special: ";
         lambda(0, 0, SIDE_A);
     
-        cout << "SIDE_A: ";
+        // cout << "SIDE_A: ";
         for(const Point& point : this -> relative_coordinates)
             lambda(-point.second, point.first, SIDE_A);
         
-        cout << "SIDE_B: ";
+        // cout << "SIDE_B: ";
         for(const Point& point : this -> relative_coordinates)
             lambda(point.second, -point.first, SIDE_B);
     }
 
     template<typename Lambda>
     void traverse_both(Lambda lambda){
-        cout << "Side A Special: ";
+        // cout << "Side A Special: ";
         lambda(0, 0, SIDE_A, NOT_ROTATED);
-        cout << "Side B Special: ";
+        // cout << "Side B Special: ";
         lambda(0, 0, SIDE_A, ROTATED);
 
         for(const Point& point : this -> relative_coordinates){
-            cout << "SIDE_A NOT_ROTATED: ";
+            // cout << "SIDE_A NOT_ROTATED: ";
             lambda(point.first, point.second, SIDE_A, NOT_ROTATED);
-            cout << "SIDE_B NOT_ROTATED: ";
+            // cout << "SIDE_B NOT_ROTATED: ";
             lambda(-point.first, -point.second, SIDE_B, NOT_ROTATED);
 
-            cout << "SIDE_A ROTATED: ";
+            // cout << "SIDE_A ROTATED: ";
             lambda(-point.second, point.first, SIDE_A, ROTATED);
-            cout << "SIDE_A ROTATED: ";
+            // cout << "SIDE_A ROTATED: ";
             lambda(point.second, -point.first, SIDE_B, ROTATED);
         }
         

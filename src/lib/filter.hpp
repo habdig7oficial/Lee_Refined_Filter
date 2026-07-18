@@ -80,7 +80,9 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
       
         acc += exp(1i * (double)pixel);
 
-        cout << acc << endl;
+        cout << "(" << (int)rx << ", " << (int)ry << ") = " << (double)pixel << endl;
+
+        //cout << acc << endl;
   };
 
   if(!is_reverse)
@@ -88,18 +90,18 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
   else 
     window.traverse_inverse(lambda);
 
-  cout << "Pre-correction: " << acc << endl;
+  //cout << "Pre-correction: " << acc << endl;
 
   // the exp(1 * 0) on the null cels makes 1 that can be decuced without passing
   acc += window.unused();
   mean = acc / window_area;
   double res = arg(mean);
 
-  cout << "Final Sum: " << acc << endl;
-  cout << "Mean: " << mean << endl;
-  cout << "Agument: " << res << endl;
+  //cout << "Final Sum: " << acc << endl;
+  //cout << "Mean: " << mean << endl;
+  //cout << "Agument: " << res << endl;
 
-  return 1;
+  return res;
 }
 
 template<typename T>
