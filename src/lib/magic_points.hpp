@@ -23,9 +23,11 @@ class MagicPoints {
     private:
         const array<Point, N>relative_coordinates;
         int side, area;
+        int win_number;
 
     public:
-    MagicPoints(const array<Point, N>& relative_coordinates, int side) : relative_coordinates(relative_coordinates){
+    MagicPoints(int win_number, const array<Point, N>& relative_coordinates, int side) : relative_coordinates(relative_coordinates){
+        this -> win_number = win_number;
         this -> side = side;
         this -> area = this -> side * this -> side;
     }
@@ -71,6 +73,20 @@ class MagicPoints {
             lambda(point.second, -point.first, SIDE_B);
     }
 
+    /* Numbers of matrixes tiles before complete a half spin */
+    int dimension() const {
+        return 2 * (this -> side - 1);
+    }
+
+    double angle() const {
+        return this -> win_number * numbers::pi / this -> dimension();
+    }
+
+    /* Angle of the mirror image */
+    double angle_inverse() const {
+        return this -> get_mirror_num() * numbers::pi / this -> dimension();
+    }
+
     size_t size() const {
         return this -> relative_coordinates.size() * 2 + 1; /* Point (0,0) is not counted and the used points is folded */
     }
@@ -79,8 +95,10 @@ class MagicPoints {
         return this -> area - this -> size(); 
     }
 
-    int get_side() const { return this -> side; }
-    int get_area() const { return this -> area; }
+    int get_side()       const { return this -> side; }
+    int get_area()       const { return this -> area; }
+    int get_win_num()    const { return this -> win_number; }
+    int get_mirror_num() const { return this -> win_number + (int)(this -> dimension() / 2);}
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
         os << "Magic Points: [";
@@ -103,6 +121,7 @@ auto sorting_lambda = [](const Point& a, const Point &b){
 
 
 MagicPoints window0(
+    0,
     sort_compile_time(array<Point, 16>{
         Point{0, 1}, 
         Point{1, 1}, Point{1, 0}, Point{1, -1},
@@ -116,6 +135,7 @@ MagicPoints window0(
 
 
 MagicPoints window1(
+    1,
     sort_compile_time(array<Point, 16>{
         Point{1, -1}, Point{0, 1},
         Point{1, 1}, Point{1, 0},
@@ -128,6 +148,7 @@ MagicPoints window1(
 );
 
 MagicPoints window2(
+    2,
     sort_compile_time(array<Point, 15>{
         Point{0, 1},
         Point{1, 1}, Point{1, 0}, Point{1, -1},
@@ -140,6 +161,7 @@ MagicPoints window2(
 );
 
 MagicPoints window3(
+    3,
     sort_compile_time(array<Point, 15>{
         Point{0, 1}, Point{-1, 1}, 
         Point{1, 1}, Point{1, 0},
@@ -152,6 +174,7 @@ MagicPoints window3(
 );
 
 MagicPoints window4(
+    4,
     sort_compile_time(array<Point, 16>{
         Point{0, 1}, 
         Point{1, 1}, Point{1, 0}, Point{1, -1},
@@ -164,6 +187,7 @@ MagicPoints window4(
 );
 
 MagicPoints window5(
+    5,
     sort_compile_time(array<Point, 15>{
         Point{0, 1},
         Point{1, 1}, Point{1, 0}, Point{1, 2}, 
@@ -176,6 +200,7 @@ MagicPoints window5(
 );
 
 MagicPoints window6(
+    6,
     sort_compile_time(array<Point, 18>{
         Point{0, 1},
         Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
@@ -188,6 +213,7 @@ MagicPoints window6(
 );
 
 MagicPoints window7(
+    7,
     sort_compile_time(array<Point, 15>{
         Point{0, 1},
         Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
@@ -199,6 +225,7 @@ MagicPoints window7(
 );
 
 MagicPoints window8(
+    8,
     sort_compile_time(array<Point, 14>{
         Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
         Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
@@ -210,6 +237,7 @@ MagicPoints window8(
 
 
 MagicPoints window9(
+    9,
     sort_compile_time(array<Point,15>{
         Point{0, 5}, Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
         Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
