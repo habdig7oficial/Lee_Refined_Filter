@@ -1,5 +1,5 @@
 #include "opencv2/opencv.hpp"  
-#include "vector"
+
 
 #include "format"
 
@@ -142,6 +142,12 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   calc_mean_complex<T>(image, padding, padding, window0, true);
 
+  debugVec.push_back(debugChannel);
+  debugVec.push_back(image);
+  debugVec.push_back(debugChannel);
+  merge(debugVec, debugImg);
+
+  return debugImg;
 
   /* Main Loop */
   for(int i = padding; i < image.rows - padding; i++){
