@@ -33,7 +33,7 @@ tuple<double, double> integrate(gsl_function *F, double limit){
 
 
 
-tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, double upper_limit, double xi, int max_iter = MAX_ITERATIONS){
+tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, double upper_limit, double xi, double eth = 0.01, int max_iter = MAX_ITERATIONS){
   /* Integral */
   /* 
   Search the point where integral(x) = 0.9, 
@@ -170,6 +170,11 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       cout << "Max Mean: " << max_mean << endl;
       cout << "Select win: " << select_win << endl;
 
+      if(max_mean < eth){
+        cout << "Is not smooth enought " << endl;
+      }
+      else 
+        cout << "Smooth!" << endl;
     }
   }
   
