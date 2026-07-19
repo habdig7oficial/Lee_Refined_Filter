@@ -9,11 +9,14 @@
 #include "gsl/gsl_integration.h"
 #include "complex"
 
+#include "optimization.hpp"
+
 #define TOLERANCE 1e-9
 #define MAX_ITERATIONS 9'999
 
 using namespace cv;
 using namespace std;
+using namespace env;
 
 
 /* Reflect the border of the image to apply the Lee filter on the edge of the image */
@@ -58,7 +61,8 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
         break;
     }
 
-    cout << i << ") x: " << mid << ", integral: " << estimated_val << " high: " << high << " low: " << low << " mid: " << mid << endl; 
+    if constexpr(dev_mode)
+      cout << i << ") x: " << mid << ", integral: " << estimated_val << " high: " << high << " low: " << low << " mid: " << mid << endl; 
 
   }
 
@@ -95,7 +99,6 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
   double mean = atan2(sin_complex, cos_real);
  
   cout << "Final mean: " << mean << endl;
-
 
   return mean;
 }
@@ -136,29 +139,8 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   cout << "Increments: " << iter << endl;
   cout << "psi_epsilon: " << res << " integral " << aprox << endl;
   
-  
-  debugVec.push_back(debugChannel);
-  debugVec.push_back(image);
-  debugVec.push_back(debugChannel);
-  merge(debugVec, debugImg);
 
   calc_mean_complex<T>(image, padding, padding, window0, true);
-
-  return debugImg;
-  /*
-  for(auto window : all_windows){
-      cout << window << endl;
-
-      double acc;
-
-      window.traverse_inverse([&acc, &image, padding](char rx, char ry, bool scope){
-        cout << "rx: " << (int)rx << " ry: " << (int)ry << endl; //<< " x: " << x << " y: " << y << " tx: " << x - rx << " ty: " << y - ry << " acc: " << endl;
-        //cout << image.ptr<T>(padding - ry) << endl;
-        acc++;
-      });
-
-      break;
-  }*/
 
 
   /* Main Loop */

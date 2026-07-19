@@ -3,11 +3,7 @@
 #include "lib/filter.hpp"
 
 
-#if NDEBUG
-  constexpr bool dev_mode = true;
-#else 
-  constexpr bool dev_mode = false;
-#endif
+
 
 using namespace std;
 
