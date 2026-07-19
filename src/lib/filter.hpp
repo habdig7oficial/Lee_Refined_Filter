@@ -80,7 +80,7 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
       
         acc += exp(1i * (double)pixel);
 
-        //cout << "(" << (int)rx << ", " << (int)ry << ") = " << (double)pixel << endl;
+##
 
         //cout << acc << endl;
   };
