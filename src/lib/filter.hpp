@@ -94,7 +94,7 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
 
   double mean = atan2(sin_complex, cos_real);
  
-  cout << "Final mean: " << endl;
+  cout << "Final mean: " << mean << endl;
 
 
   return mean;
