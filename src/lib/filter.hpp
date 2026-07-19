@@ -21,7 +21,7 @@ using namespace env;
 
 /* Reflect the border of the image to apply the Lee filter on the edge of the image */
 void strideImg(Mat &image, Mat &padded_image, int padding){
-   copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
+  copyMakeBorder(image, padded_image, padding, padding, padding, padding, BORDER_REFLECT);
 }
 
 gsl_integration_workspace *w = gsl_integration_workspace_alloc(1'000);
@@ -109,15 +109,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   /* Check if window is inside image  */
   int padding = window / 2;
 
-  /* Debug Layer */
-  Mat debugImg;
-  Mat debugChannel = Mat::ones(image.rows, image.cols, type);
-  vector<Mat> debugVec;
-
-  T left, right, top, down, center;
-  
-  Mat aux = Mat::ones(image.rows, image.cols, type);
-
   cout << image.rows << " " << image.cols << " " << (image.rows - 2 * padding) * (image.cols - 2 * padding) << " " << padding << endl;
 
   /* Equation */
@@ -138,74 +129,39 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   cout << "Increments: " << iter << endl;
   cout << "psi_epsilon: " << res << " integral " << aprox << endl;
-  
 
-  calc_mean_complex<T>(image, padding, padding, window0, true);
-
-  debugVec.push_back(debugChannel);
-  debugVec.push_back(image);
-  debugVec.push_back(debugChannel);
-  merge(debugVec, debugImg);
-
-  return debugImg;
 
   /* Main Loop */
-  for(int i = padding; i < image.rows - padding; i++){
-    for(int j = padding; j < image.cols - padding; j++){
-      T pixel = image.at<T>(i, j);
-      
-      left = debugChannel.at<T>(i - padding, j);
-      right = debugChannel.at<T>(i + padding, j);
-      top = debugChannel.at<T>(i, j - padding);
-      down = debugChannel.at<T>(i, j + padding);
-      center = debugChannel.at<T>(i, j);
+  for(int j = padding; j < image.cols - padding; j++){
+    for(int i = padding; i < image.rows - padding; i++){
+      double max_mean;
 
-      debugChannel.at<T>(i - padding, j) = 
-	debugChannel.at<T>(i + padding, j) = 
-	debugChannel.at<T>(i, j - padding) = 
-	debugChannel.at<T>(i, j + padding) =
-	debugChannel.at<T>(i, j) = 0;
+      apply([&max_mean, &image, i, j](auto&&... args){
+        double aux;
+          ((
+            aux = calc_mean_complex<double>(image, i, j, args, NOT_ROTATED),
+            (void)[aux, &args](){
+              if constexpr(dev_mode)
+                cout << args.get_win_num() << ") " << aux << endl;
+            }
+          ), ...);
+      }, all_windows);
 
-      
-      debugVec.push_back(debugChannel);
-      debugVec.push_back(image);
-      debugVec.push_back(debugChannel);
-      
-      merge(debugVec, debugImg);
-      imshow("Making sliding window", debugImg);
-      waitKey(1);
-
-      debugChannel.at<T>(i - padding, j) = left;
-      debugChannel.at<T>(i + padding, j) = right;
-      debugChannel.at<T>(i, j - padding) = top;
-      debugChannel.at<T>(i, j + padding) = down;
-      debugChannel.at<T>(i, j) = center;
-
-      debugVec.clear();
-
-      T total = 0;
-      for(int wi = i - padding; wi < i + padding; wi++){
-        for(int wj = j - padding; wj < j + padding; wj++){
-          total += image.at<T>(wi, wi);
-          cout << "\t (" << wi << " ," << wj << ") =" << total << " "  << image.at<T>(i - padding, j) << endl;
-        }
-      }
-
-      T mean = (total / window);
-      
-      cout << "Sum: " << total << ", Avg: " << mean << endl;
-      
-      //image.at<Vec3b>(i, j) *= image.at<Vec3b>(i, j);
-      cout << "Row: " << i << " Col: " << j << " ( " << (T)pixel << " ) "<< endl;
+      apply([&max_mean, &image, i, j](auto&&... args){
+          double aux;
+          ((
+            aux = calc_mean_complex<double>(image, i, j, args, ROTATED),
+            (void)[aux, &args](){
+            if constexpr(dev_mode)
+                cout << args.get_mirror_num() << ") " << aux << endl;
+            }
+          ), ...);
+      }, all_windows);
+    
     }
   }
   
-    debugVec.push_back(debugChannel);
-    debugVec.push_back(image);
-    debugVec.push_back(debugChannel);
-    merge(debugVec, debugImg);
-
   gsl_integration_workspace_free(w);
-  return debugImg;
+  return image;
 }
 

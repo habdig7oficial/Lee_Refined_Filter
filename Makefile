@@ -18,7 +18,7 @@ compile:
 	 $(CXX) -march=native -std=c++20 src/main.cpp -o exec.elf $(CXX_FLAGS) 
 
 release: 
-	$(CXX) -march=native -std=c++20 -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
+	$(CXX) -march=native -O3 -std=c++20 -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
