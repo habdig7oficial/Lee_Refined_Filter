@@ -71,17 +71,20 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
 template <typename T, size_t N>
 double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, bool is_reverse){
   complex<T> acc(0, 0), mean(0, 0);
+  double sin_complex = 0, cos_real = 0;
 
   complex<T> window_area(window.get_area(), 0);
 
-  auto lambda = [&image, &tx, &ty, &window, &acc](char rx, char ry, bool scope){
+  auto lambda = [&image, &tx, &ty, &window, &acc, &sin_complex, &cos_real](char rx, char ry, bool scope){
         /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
         T pixel (*(image.ptr<T>(ty - ry) + (tx + rx)));
       
         acc += exp(1i * (double)pixel);
+        sin_complex += sin((double)pixel);
+        cos_real += cos((double) pixel);
 
-##
-
+        
+        //cout << "Cos Sum: " << cos_real << endl;
         //cout << acc << endl;
   };
 
@@ -91,15 +94,24 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
     window.traverse_inverse(lambda);
 
   //cout << "Pre-correction: " << acc << endl;
+  cout << "Cos Sum: " << cos_real << endl;
 
   // the exp(1 * 0) on the null cels makes 1 that can be decuced without passing
   acc += window.unused();
+  cos_real += window.unused() * cos(0);
+
+
+
   mean = acc / window_area;
+  sin_complex /= window.get_area();
+  cos_real /= window.get_area();
+  
   double res = arg(mean);
 
   //cout << "Final Sum: " << acc << endl;
   //cout << "Mean: " << mean << endl;
   //cout << "Agument: " << res << endl;
+
 
   return res;
 }
