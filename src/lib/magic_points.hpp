@@ -1,4 +1,4 @@
-/* Hardcoded 11x11 window, create a function that generates this later */
+/* Hardcoded DIMENSIONxDIMENSION window, create a function that generates this later */
 
 #include "array"
 #include "utility"
@@ -9,6 +9,8 @@
 using namespace std;
 using namespace env;
 using Point = pair<char, char>;
+
+#define DIMENSION 11
 
 #define SIDE_A true
 #define SIDE_B false
@@ -130,7 +132,7 @@ MagicPoints window0(
         Point{4, 1}, Point{4, 0}, Point{4, -1},
         Point{5, 1}, Point{5, 0}, Point{5, -1}
     }, sorting_lambda),
-    11
+    DIMENSION
 );
 
 
@@ -144,7 +146,7 @@ MagicPoints window1(
         Point{4, 2}, Point{4, 1}, Point{4, 0},
         Point{5, 2}, Point{5, 1}, Point{5, 0}, 
     }, sorting_lambda),   
-    11
+    DIMENSION
 );
 
 MagicPoints window2(
@@ -157,7 +159,7 @@ MagicPoints window2(
         Point{4, 3}, Point{4, 2}, Point{4, 1},
         Point{5, 3}, Point{5, 2}, Point{5, 1}
     }, sorting_lambda),  
-    11
+    DIMENSION
 );
 
 MagicPoints window3(
@@ -170,7 +172,7 @@ MagicPoints window3(
         Point{4, 3}, Point{4, 2}, Point{4, 1},
         Point{5, 4}, Point{5, 3}, Point{5, 2}
     }, sorting_lambda),    
-    11
+    DIMENSION
 );
 
 MagicPoints window4(
@@ -183,7 +185,7 @@ MagicPoints window4(
         Point{4, 4}, Point{4, 3}, Point{4, 2},
         Point{5, 5}, Point{5, 4}, Point{5, 3}
     }, sorting_lambda),
-    11
+    DIMENSION
 );
 
 MagicPoints window5(
@@ -196,7 +198,7 @@ MagicPoints window5(
         Point{4, 5}, Point{4, 4}, Point{4, 3},
         Point{5, 5}, Point{5, 4}
     }, sorting_lambda),
-    11
+    DIMENSION
 );
 
 MagicPoints window6(
@@ -209,7 +211,7 @@ MagicPoints window6(
         Point{4, 5}, Point{4, 4},
         Point{5, 5}
     }, sorting_lambda),
-    11
+    DIMENSION
 );
 
 MagicPoints window7(
@@ -221,7 +223,7 @@ MagicPoints window7(
         Point{3, 5}, Point{3, 4},
         Point{4, 5}
     }, sorting_lambda), 
-    11
+    DIMENSION
 );
 
 MagicPoints window8(
@@ -232,7 +234,7 @@ MagicPoints window8(
         Point{2, 5}, Point{2, 4}, Point{2, 3},
         Point{3, 5}
     }, sorting_lambda),
-    11
+    DIMENSION
 );
 
 
@@ -243,7 +245,7 @@ MagicPoints window9(
         Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
         Point{2, 5}, Point{2, 4}, Point{2, 3}
     }, sorting_lambda),
-    11
+    DIMENSION
 );
 
 auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
