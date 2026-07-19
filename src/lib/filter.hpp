@@ -3,6 +3,7 @@
 
 #include "format"
 
+#include "cmath"
 #include "gierull.hpp"
 #include "magic_points.hpp"
 #include "gsl/gsl_integration.h"
@@ -70,22 +71,13 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
 /* image, image x point, image y point, correspodent window, direction */
 template <typename T, size_t N>
 double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, bool is_reverse){
-  complex<T> acc(0, 0), mean(0, 0);
   double sin_complex = 0, cos_real = 0;
-
-  complex<T> window_area(window.get_area(), 0);
-
-  auto lambda = [&image, &tx, &ty, &window, &acc, &sin_complex, &cos_real](char rx, char ry, bool scope){
+  auto lambda = [&image, &tx, &ty, &window, &sin_complex, &cos_real](char rx, char ry, bool scope){
         /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
         T pixel (*(image.ptr<T>(ty - ry) + (tx + rx)));
-      
-        acc += exp(1i * (double)pixel);
+
         sin_complex += sin((double)pixel);
         cos_real += cos((double) pixel);
-
-        
-        //cout << "Cos Sum: " << cos_real << endl;
-        //cout << acc << endl;
   };
 
   if(is_reverse == NOT_ROTATED)
@@ -93,27 +85,19 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
   else 
     window.traverse_inverse(lambda);
 
-  //cout << "Pre-correction: " << acc << endl;
-  cout << "Cos Sum: " << cos_real << endl;
-
-  // the exp(1 * 0) on the null cels makes 1 that can be decuced without passing
-  acc += window.unused();
+  // the cos(0) on the null cels makes 0 that can be decuced without passing
   cos_real += window.unused() * cos(0);
 
-
-
-  mean = acc / window_area;
+  /* Mean of sin and cos */
   sin_complex /= window.get_area();
   cos_real /= window.get_area();
-  
-  double res = arg(mean);
 
-  //cout << "Final Sum: " << acc << endl;
-  //cout << "Mean: " << mean << endl;
-  //cout << "Agument: " << res << endl;
+  double mean = atan2(sin_complex, cos_real);
+ 
+  cout << "Final mean: " << endl;
 
 
-  return res;
+  return mean;
 }
 
 template<typename T>

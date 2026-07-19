@@ -54,7 +54,7 @@ TEST_CASE("Mean Complex win0", "[mean_complex]"){
 
                 cout << j << ") R complex_avg: " << r_res << endl,
                 cout << j << ") C++ complex_avg: " << cpp_res << endl,
-                flag = (cpp_res - r_res) < EPSILON,
+                flag = abs(cpp_res - r_res) < EPSILON,
                 err(flag, cpp_res, r_res),
                 j++
             ), ...);
@@ -74,7 +74,7 @@ TEST_CASE("Mean Complex win0", "[mean_complex]"){
 
                 cout << j << ") R complex_avg: " << r_res << endl,
                 cout << j << ") C++ complex_avg: " << cpp_res << endl,
-                flag = (cpp_res - r_res) < EPSILON,
+                flag = abs(cpp_res - r_res) < EPSILON,
                 err(flag, cpp_res, r_res),
                 j++
             ), ...);
