@@ -152,7 +152,7 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
           ((
             aux = calc_mean_complex<double>(image, i, j, args, ROTATED),
             (void)[aux, &args](){
-            if constexpr(dev_mode)
+              if constexpr(dev_mode)
                 cout << args.get_mirror_num() << ") " << aux << endl;
             }
           ), ...);
