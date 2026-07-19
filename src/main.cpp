@@ -2,10 +2,11 @@
 #include "string.h"
 #include "lib/filter.hpp"
 
-
+#include "lib/optimization.hpp"
 
 
 using namespace std;
+using namespace env;
 
 struct config_struct {
   char *image_path;
@@ -109,11 +110,16 @@ int main(int argc, char *argv[]){
       return 1;
   }
 
-  imshow("Original Image", image);
-  imshow("Coherence Image", coherence);
-  imshow("Reflected Image", padded_image);
-  imshow("Filtered Image", filtered);
-  waitKey(0);
+  if constexpr(dev_mode){
+    imshow("Original Image", image);
+    waitKey(0);
+    imshow("Coherence Image", coherence);
+    waitKey(0);
+    imshow("Reflected Image", padded_image);
+    waitKey(0);
+    imshow("Filtered Image", filtered);
+    waitKey(0);
+  }
 
 
   bool saved = imwrite("./output.tiff", filtered);
