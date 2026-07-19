@@ -5,7 +5,7 @@ make compile && ./exec.elf --image img/Simulated/phi_raster_noisy.tif --coherenc
 
 # Run with:
 ```
-make release && ./prod_binary --image img/Simulated/phi_raster_noisy.tif --coherence img/Simulated/map_coherence_gierull.tif
+make release && time ./prod_binary --image img/Simulated/phi_raster_noisy.tif --coherence img/Simulated/map_coherence_gierull.tif
 ```
 
 

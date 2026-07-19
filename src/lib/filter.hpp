@@ -134,30 +134,42 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   /* Main Loop */
   for(int j = padding; j < image.cols - padding; j++){
     for(int i = padding; i < image.rows - padding; i++){
-      double max_mean;
+      double max_mean = 0;
+      int select_win;
 
-      apply([&max_mean, &image, i, j](auto&&... args){
-        double aux;
+      apply([&max_mean, &image, i, j, &select_win](auto&&... win){
+        double aux ;
           ((
-            aux = calc_mean_complex<double>(image, i, j, args, NOT_ROTATED),
-            (void)[aux, &args](){
+            aux = calc_mean_complex<double>(image, i, j, win, NOT_ROTATED),
+            (void)[aux, &win, &max_mean, &select_win](){
+              if(abs(aux) > max_mean){
+                max_mean = aux;
+                select_win = win.get_win_num();
+              }
               if constexpr(dev_mode)
-                cout << args.get_win_num() << ") " << aux << endl;
-            }
+                cout << win.get_win_num() << ") " << aux << endl;
+            }()
           ), ...);
       }, all_windows);
 
-      apply([&max_mean, &image, i, j](auto&&... args){
+      apply([&max_mean, &image, i, j, &select_win](auto&&... win){
           double aux;
           ((
-            aux = calc_mean_complex<double>(image, i, j, args, ROTATED),
-            (void)[aux, &args](){
+            aux = calc_mean_complex<double>(image, i, j, win, ROTATED),
+            (void)[aux, &win, &max_mean, &select_win](){
+              if(abs(aux) > max_mean){
+                max_mean = aux;
+                select_win = win.get_mirror_num();
+              }
               if constexpr(dev_mode)
-                cout << args.get_mirror_num() << ") " << aux << endl;
-            }
+                cout << win.get_mirror_num() << ") " << aux << endl;
+            }()
           ), ...);
       }, all_windows);
     
+      cout << "Max Mean: " << max_mean << endl;
+      cout << "Select win: " << select_win << endl;
+
     }
   }
   
