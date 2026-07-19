@@ -15,21 +15,27 @@ RINSIDE_LDF_TEST := $(shell Rscript -e "RInside:::LdFlags()")
 CXX_FLAGS_TEST = `pkg-config --cflags --libs opencv4 gsl catch2` # Catch2 for tests
 
 compile:
-	 $(CXX) -march=native -std=c++26 src/main.cpp -o exec.elf $(CXX_FLAGS) 
+	 $(CXX) -march=native -std=c++20 src/main.cpp -o exec.elf $(CXX_FLAGS) 
+
+release: 
+	$(CXX) -march=native -std=c++20 -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
 
 testO0:
-	$(CXX) -std=c++20 -O0  -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[mean_complex]" --rng-seed 3144853315
+	$(CXX) -std=c++20 -O0  -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[mean_complex]" #--rng-seed 3144853315
 
 testO3:
-	$(CXX) -std=c++20 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf  --rng-seed 3144853315
+	$(CXX) -std=c++20 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf  #--rng-seed 3144853315
 
 test: testO0 testO3
 
 
 version: 
 	$(CXX) --version
+
+clean:
+	rm exec.elf test.elf test_optimized.elf prod_binary
 #leaks: compile
 #	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)

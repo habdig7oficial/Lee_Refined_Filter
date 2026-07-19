@@ -2,8 +2,12 @@
 #include "string.h"
 #include "lib/filter.hpp"
 
-//#include "lib/gierull.hpp"
-//#include "gsl/gsl_integration.h"
+
+#if NDEBUG
+  constexpr bool dev_mode = true;
+#else 
+  constexpr bool dev_mode = false;
+#endif
 
 using namespace std;
 
