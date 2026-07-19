@@ -103,6 +103,23 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
   return mean;
 }
 
+template<size_t N>
+constexpr array<double, N> dist(){
+    array<double, N> arr;
+
+    int half = N / 2;
+    for(int i = 0; i < N; i++){
+      double res = 1 / sqrt(pow((i + 1) - half, 2) + pow((i + 1) - half, 2));
+      
+      if(isinf(res))
+        arr[i] = 0;
+      else 
+        arr[i] = res;
+    }
+
+    return arr;
+}
+
 template<typename T>
 Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi, int max_iter = MAX_ITERATIONS){
 
@@ -129,7 +146,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   cout << "Increments: " << iter << endl;
   cout << "psi_epsilon: " << res << " integral " << aprox << endl;
-
 
   /* Main Loop */
   for(int j = padding; j < image.cols - padding; j++){
@@ -181,6 +197,12 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
         cout << "Smooth!" << endl;
     }
   }
+
+  constexpr size_t len = DIMENSION + 2;
+  array<double, len> distance = dist<len>();
+
+  for(int i = 0; i < len; i++)
+    cout << distance[i] << endl;
   
   gsl_integration_workspace_free(w);
   return image;
