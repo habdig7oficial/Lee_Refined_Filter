@@ -135,16 +135,18 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   for(int j = padding; j < image.cols - padding; j++){
     for(int i = padding; i < image.rows - padding; i++){
       double max_mean = 0;
+      double select_angle;
       int select_win;
 
-      apply([&max_mean, &image, i, j, &select_win](auto&&... win){
+      apply([&max_mean, &image, i, j, &select_win, &select_angle](auto&&... win){
         double aux ;
           ((
             aux = calc_mean_complex<double>(image, i, j, win, NOT_ROTATED),
-            (void)[aux, &win, &max_mean, &select_win](){
+            (void)[aux, &win, &max_mean, &select_win, &select_angle](){
               if(abs(aux) > max_mean){
                 max_mean = aux;
                 select_win = win.get_win_num();
+                select_angle = win.angle();
               }
               if constexpr(dev_mode)
                 cout << win.get_win_num() << ") " << aux << endl;
@@ -152,23 +154,25 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
           ), ...);
       }, all_windows);
 
-      apply([&max_mean, &image, i, j, &select_win](auto&&... win){
+      apply([&max_mean, &image, i, j, &select_win, &select_angle](auto&&... win){
           double aux;
           ((
             aux = calc_mean_complex<double>(image, i, j, win, ROTATED),
-            (void)[aux, &win, &max_mean, &select_win](){
+            (void)[aux, &win, &max_mean, &select_win, &select_angle](){
               if(abs(aux) > max_mean){
                 max_mean = aux;
                 select_win = win.get_mirror_num();
+                select_angle = win.angle_inverse();
               }
               if constexpr(dev_mode)
                 cout << win.get_mirror_num() << ") " << aux << endl;
             }()
           ), ...);
       }, all_windows);
-    
+
       cout << "Max Mean: " << max_mean << endl;
       cout << "Select win: " << select_win << endl;
+      cout << "Angle win: " << select_angle << endl;
 
       if(max_mean < eth){
         cout << "Is not smooth enought " << endl;
