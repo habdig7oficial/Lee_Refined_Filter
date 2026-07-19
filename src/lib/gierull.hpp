@@ -12,12 +12,14 @@
 #include "cmath"
 #include "iostream"
 #include "gsl/gsl_sf_gamma.h"
+#include "optimization.hpp"
 
 
 #include "iomanip"
 #include "numbers"
 
 using namespace std;
+using namespace env;
 
 namespace gierull {
   typedef struct {
@@ -63,15 +65,16 @@ double gierull(double x, void *ptr_args){
 	  - gsl_sf_lngamma(L)
 	  ) / pow(numbers::pi, 1.5);
 
-    /*
-    cout << "hello from gierrul" << endl;
-    cout << "Beta " << beta << endl;
-    cout << "Sum 1: " << sum1 << endl;
-    cout << "Sum 2: " << sum2 << endl;
-    cout << "Sum 3: " << sum3 << endl;
-
-    cout << "vet: " << 0 << endl;
-    */
+    if constexpr(dev_mode){
+      /*
+      cout << "gierrul data" << endl;
+      cout << "Beta " << beta << endl;
+      cout << "Sum 1: " << sum1 << endl;
+      cout << "Sum 2: " << sum2 << endl;
+      cout << "Sum 3: " << sum3 << endl;
+      */
+    }
+    
     /* This part is different from the R code check later if this is correct : Appears correct*/
     double sum4 = 0;
     double acc = 0;
@@ -80,15 +83,16 @@ double gierull(double x, void *ptr_args){
       //cout << c << " "<< i << " gammaratio: " << log(i) << " acc: " << acc << endl;
 
       sum4 += pow(-1, c + 1) * pow(-1, c - 1) * 
-	exp(
-	    L * log(1 - pow(r, 2))
-	    + gsl_sf_lngamma(L - c) - gsl_sf_lngamma(L)
-	    + acc
-	    + log(1 + (2 * c - 1) * pow(beta, 2))
-	    - (c + 1) * log(1 - pow(beta, 2))
+	    exp(
+        L * log(1 - pow(r, 2))
+        + gsl_sf_lngamma(L - c) - gsl_sf_lngamma(L)
+        + acc
+        + log(1 + (2 * c - 1) * pow(beta, 2))
+        - (c + 1) * log(1 - pow(beta, 2))
 	    ) * 0.25 / numbers::pi;
 
-      //cout << c << " " << sum4 << endl;
+         
+      //cout << c << " " << sum4 << endl;  
       acc += log(i);
     }
 
