@@ -181,11 +181,6 @@ constexpr array<T, N> min_row(array<array<T, N>, N> matrix){
 
 template<typename T>
 Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi, int max_iter = MAX_ITERATIONS){
-
-  /
-  array<double, nglen> mi = min_row(diff(dist<double, len>(), angles));
-
-
   /* Check if window is inside image  */
   int padding = window / 2;
 
