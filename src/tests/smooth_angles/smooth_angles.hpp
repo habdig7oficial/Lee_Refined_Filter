@@ -37,3 +37,28 @@ TEST_CASE("Vector test", "[sm_vec]"){
   }
 
 }
+
+TEST_CASE("First integral pass", "[smooth_angles2]"){
+   (*Rbind).parseEvalQ("source(\"src/tests/smooth_angles/smooth_angles.R\")");
+
+   double l = (*Rbind).parseEval("length(window_angle)");
+   (*Rbind).parseEvalQ("i <- 1");
+   (*Rbind).parseEvalQ("j <- 1");
+
+   
+array<array<double, nglen>, nglen> test = diff(dist<double, len>(), angles);
+
+
+   for(int i = 0; i < nglen; i++){
+      NumericVector r_res = (*Rbind).parseEval("validate_diff(w, window_angle[i])");
+       for(int j = 0; j < nglen; j++){
+
+        REQUIRE(abs(r_res[j] - test[i][j]) < EPSILON);
+        cout << r_res[j] << " - " << test[i][j] << endl;
+
+        (*Rbind).parseEvalQ("j <- j + 1");
+       }
+        (*Rbind).parseEvalQ("i <- i + 1");
+        (*Rbind).parseEvalQ("j <- 1");
+   }
+}
