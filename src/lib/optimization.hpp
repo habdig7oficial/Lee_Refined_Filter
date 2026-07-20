@@ -9,6 +9,7 @@ namespace env {
 }
 
 #include "array"
+#include "tuple"
 #include "algorithm"
 
 using namespace std;
@@ -40,6 +41,34 @@ constexpr array<T, N> normalize(array<T, N> arr){
 
     for(int i = 0; i < N; i++)
         new_arr[i] = arr[i] / sum_arr;
+    
+    return new_arr;
+}
+
+template<typename T, size_t N>
+constexpr tuple<uint, T> min(array<T, N> arr){
+    static_assert(is_arithmetic_v<T>, "Type must be a number");
+
+    T total = arr[0];
+    uint pos = 0;
+
+    for(int i = 1; i < N; i++)
+        if(arr[i] < total){
+            total = arr[i];
+            pos = i;
+        }
+            
+    return {pos, total};
+}
+
+template<typename T, size_t N>
+constexpr array<T, N> abs(array<T, N> arr){
+    static_assert(is_arithmetic_v<T>, "Type must be a number");
+
+    array<T, N> new_arr;
+
+    for(int i = 0; i < N; i++)
+        new_arr[i] = abs(arr[i]);
     
     return new_arr;
 }

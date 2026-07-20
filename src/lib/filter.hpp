@@ -169,9 +169,22 @@ constexpr array<array<T, M>, M> diff(array<T, N> arr, array<T, M> angles){
   return new_arr;
 }
 
+template<typename T, size_t N>
+constexpr array<T, N> min_row(array<array<T, N>, N> matrix){
+  array<T, N> min_row;
+
+  for(int i = 0; i < N; i++) 
+    min_row[i] = get<0>(min(abs(matrix[i])));
+
+  return min_row;
+}
 
 template<typename T>
 Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi, int max_iter = MAX_ITERATIONS){
+
+  /
+  array<double, nglen> mi = min_row(diff(dist<double, len>(), angles));
+
 
   /* Check if window is inside image  */
   int padding = window / 2;
@@ -267,6 +280,12 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
       cout << endl;
   }
+
+  cout << " >>>>>>>>>>> " << endl;
+
+
+  for(int i = 0; i < nglen; i++)
+    cout << i << " " << mi[i] << endl;
 
   gsl_integration_workspace_free(w);
 
