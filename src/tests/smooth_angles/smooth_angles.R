@@ -18,7 +18,8 @@ validate <- function(arr, angle_selected){
   differences<-(window_angle - adjustedAngle)
   index_closest_to_zero <- which.min(abs(differences))
 
-  print(adjustedAngle)
-  print(or)
-  print("--")
+
+
+  print(adjustedAngle )
+  return(adjustedAngle)
 }

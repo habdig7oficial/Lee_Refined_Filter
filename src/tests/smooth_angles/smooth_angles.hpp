@@ -1,21 +1,27 @@
+constexpr size_t len = DIMENSION + 2;
+constexpr size_t nglen = 2 * (DIMENSION - 1);
+
 TEST_CASE("First integral pass", "[smooth_angles]"){
    (*Rbind).parseEvalQ("source(\"src/tests/smooth_angles/smooth_angles.R\")");
 
-   int len = (*Rbind).parseEval("length(window_angle)");
+   double l = (*Rbind).parseEval("length(window_angle)");
    (*Rbind).parseEvalQ("i <- 1");
 
+   
+   array<double, nglen> distance = adjust_angles(dist<double, len>(), angles);
 
    for(int i = 0; i < len; i++){
-        (*Rbind).parseEvalQ("validate(w, window_angle[i])");
-        cout << i << endl;
+        double r_res = (*Rbind).parseEval("validate(w, window_angle[i])");
+
+        REQUIRE(abs(r_res - distance[i]) < EPSILON);
+        //cout << distance[i] << endl;
 
         (*Rbind).parseEvalQ("i <- i + 1");
    }
 }
 
 TEST_CASE("Vector test", "[sm_vec]"){
-  constexpr size_t len = DIMENSION + 2;
-  array<double, len> distance = dist<len>();
+  array<double, len> distance = dist<double,len>();
 
   (*Rbind).parseEvalQ("w <- 1 / sqrt((1:13 - 6)^2 + (1:13 - 6)^2)");
   (*Rbind).parseEvalQ("w[6] <- 0  # Delete masked pixels");

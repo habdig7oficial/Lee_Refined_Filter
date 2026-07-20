@@ -103,13 +103,13 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, boo
   return mean;
 }
 
-template<size_t N>
-constexpr array<double, N> dist(){
-    array<double, N> arr;
+template<typename T,size_t N>
+constexpr array<T, N> dist(){
+    array<T, N> arr;
 
     int half = N / 2;
     for(int i = 0; i < N; i++){
-      double res = 1 / sqrt(pow((i + 1) - half, 2) + pow((i + 1) - half, 2));
+      T res = 1 / sqrt(pow((i + 1) - half, 2) + pow((i + 1) - half, 2));
       
       if(isinf(res))
         arr[i] = 0;
@@ -118,6 +118,42 @@ constexpr array<double, N> dist(){
     }
 
     return arr;
+}
+
+
+template<typename T, size_t N>
+constexpr T adjust_angle(array<T, N> norm, T ng){
+    array<T, N> arr;
+
+    array<T,N> sin_arr = norm;
+    array<T,N> cos_arr = norm;
+
+    cout << "Ng: " << ng << endl;
+
+    for(int i = 0; i < N; i++){
+      sin_arr[i] *= sin(ng);
+      //cout << "sin: " << sin_arr[i] << endl;
+    }
+      
+    
+    for(int i = 0; i < N; i++){
+      cos_arr[i] *= cos(ng);
+      //cout << "cos: " << cos_arr[i] << endl;
+    }
+      
+
+    return atan2(sum(sin_arr), sum(cos_arr));
+}
+
+template<typename T, size_t N, size_t M>
+constexpr array<T, M> adjust_angles(array<T, N> dist, array<T, M> angles){
+    array<T, M> new_arr;
+    array<T, N> norm = normalize(dist);
+
+    for(int i = 0; i < M; i++)
+      new_arr[i] = adjust_angle(norm, angles[i]);
+    
+    return new_arr;
 }
 
 template<typename T>
@@ -198,13 +234,17 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
     }
   }
 
-  constexpr size_t len = DIMENSION + 2;
-  array<double, len> distance = dist<len>();
 
-  for(int i = 0; i < len; i++)
-    cout << distance[i] << endl;
-  
+  constexpr size_t len = DIMENSION + 2;
+  constexpr size_t nglen = 2 * (DIMENSION - 1);
+
+  array<double, nglen> fi = adjust_angles(dist<double, len>(), angles);
+
+  for(int i = 0; i < nglen; i++)
+    cout << i << " " << fi[i] << endl;
+
   gsl_integration_workspace_free(w);
+
   return image;
 }
 

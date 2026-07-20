@@ -248,7 +248,33 @@ MagicPoints window9(
     DIMENSION
 );
 
+
+template<typename T, size_t N>
+constexpr array<T, N> all_angles(auto& all_windows){
+    array<T,  N> new_arr;
+    int i = 0;
+    apply([&i, &new_arr](auto&&... win){
+        ((
+            new_arr[i] = win.angle(),
+            i++
+        ), ...);
+    }, all_windows);
+
+    apply([&i, &new_arr](auto&&... win){
+        ((
+            new_arr[i] = win.angle_inverse(),
+            i++
+        ), ...);
+    }, all_windows);
+    return new_arr;
+}
+
 auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
+
+array<double, 2 * all_windows_size> angles = all_angles<double, 2 * all_windows_size>(all_windows);
+
+
+
 
 //array<MagicPointsWrapper, 10> all_windows = { window0, window1, window2, window3, window4, window5, window6, window7, window8, window9 };
