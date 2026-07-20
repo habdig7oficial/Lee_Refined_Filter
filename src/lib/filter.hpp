@@ -254,40 +254,12 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       cout << "Angle win: " << select_angle << endl;
 
       if(max_mean < eth){
-        cout << "Is not smooth enought " << endl;
+        cout << "Smooth " << endl;
+        /* See what to do hear later because, it's wrong on the original code */
       }
-      else 
-        cout << "Smooth!" << endl;
+
     }
   }
-
-
-  constexpr size_t len = DIMENSION + 2;
-  constexpr size_t nglen = 2 * (DIMENSION - 1);
-
-  array<double, nglen> fi = adjust_angles(dist<double, len>(), angles);
-
-  for(int i = 0; i < nglen; i++)
-    cout << i << " " << fi[i] << endl;
-
-
-  array<array<double, nglen>, nglen> test = diff(dist<double, len>(), angles);
-
-  cout << " ==== " << endl;
-  for(int i = 0; i < nglen; i++){
-      for(int j = 0; j < nglen; j++)
-        cout << i << ","  << j << ") " << test[i][j] << endl;
-
-      cout << endl;
-  }
-
-  cout << " >>>>>>>>>>> " << endl;
-
-
-  for(int i = 0; i < nglen; i++)
-    cout << i << " " << mi[i] << endl;
-
-  gsl_integration_workspace_free(w);
 
   return image;
 }

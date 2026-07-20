@@ -38,7 +38,7 @@ isso pode ser utizado tambem para economizar memoria, o importante é saber o x,
 ```
 if(max(Mod(averages))<eth){ # region is plain 
 ```
-perhaps when this if triggers it's better make the tradicional lee filter
+perhaps when this if triggers it's better make the tradicional lee filter (see removed thrash commit)
 
 ## Indentified errors
 
