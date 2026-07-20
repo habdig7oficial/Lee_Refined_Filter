@@ -31,10 +31,13 @@ isso pode ser utizado tambem para economizar memoria, o importante é saber o x,
 
 ## Major changes
 
-use binary search instead of linear search
-use fold method to pass across less points
-Replaced calc min complex with AI sin,cos method
-
+- use binary search instead of linear search
+- use fold method to pass across less points
+- Replaced calc min complex with AI sin,cos method
+- Discoverd in line 362 all the math is useless it rechoose the same window
+```
+if(max(Mod(averages))<eth){
+```
 
 ## Indentified errors
 
