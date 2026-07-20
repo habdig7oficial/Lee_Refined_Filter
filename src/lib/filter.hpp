@@ -156,6 +156,20 @@ constexpr array<T, M> adjust_angles(array<T, N> dist, array<T, M> angles){
     return new_arr;
 }
 
+template<typename T, size_t N, size_t M>
+constexpr array<array<T, M>, M> diff(array<T, N> arr, array<T, M> angles){
+  array<array<T, M>, M> new_arr;
+  array<T, M> angles_base = adjust_angles(arr, angles);
+
+  for(int i = 0; i < M; i++)
+    for(int j = 0; j < M; j++)
+      new_arr[i][j] = angles_base[j] - angles[i];
+  
+
+  return new_arr;
+}
+
+
 template<typename T>
 Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, double xi = 0.9, double lower_limit = -numbers::pi, double upper_limit = numbers::pi, int max_iter = MAX_ITERATIONS){
 
@@ -242,6 +256,17 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
 
   for(int i = 0; i < nglen; i++)
     cout << i << " " << fi[i] << endl;
+
+
+  array<array<double, nglen>, nglen> test = diff(dist<double, len>(), angles);
+
+  cout << " ==== " << endl;
+  for(int i = 0; i < nglen; i++){
+      for(int j = 0; j < nglen; j++)
+        cout << i << ","  << j << ") " << test[i][j] << endl;
+
+      cout << endl;
+  }
 
   gsl_integration_workspace_free(w);
 
