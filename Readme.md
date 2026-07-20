@@ -36,8 +36,9 @@ isso pode ser utizado tambem para economizar memoria, o importante é saber o x,
 - Replaced calc min complex with AI sin,cos method
 - Discoverd in line 362 all the math is useless it rechoose the same window
 ```
-if(max(Mod(averages))<eth){
+if(max(Mod(averages))<eth){ # region is plain 
 ```
+perhaps when this if triggers it's better make the tradicional lee filter
 
 ## Indentified errors
 
