@@ -11,6 +11,10 @@ using namespace env;
 using Point = pair<char, char>;
 
 #define DIMENSION 11
+#define DIMENSION_INNER 3
+
+#define INNER_HALF (int) DIMENSION_INNER / 2
+#define INNER_AREA DIMENSION_INNER * DIMENSION_INNER
 
 #define SIDE_A true
 #define SIDE_B false
@@ -32,6 +36,8 @@ class MagicPoints {
         this -> win_number = win_number;
         this -> side = side;
         this -> area = this -> side * this -> side;
+
+        this -> mark_relevant();
     }
 
     /* 
@@ -40,9 +46,8 @@ class MagicPoints {
     */
     template<typename Lambda>
     void traverse(Lambda lambda){
-        if constexpr (dev_mode){
+        if constexpr (dev_mode)
             cout << "Side A Special: ";
-        }
             
         lambda(0, 0, SIDE_A);
 
@@ -73,6 +78,55 @@ class MagicPoints {
              cout << "SIDE_B: ";
         for(const Point& point : this -> relative_coordinates)
             lambda(point.second, -point.first, SIDE_B);
+    }
+
+    template<typename Lambda>
+    void traverse_data(Lambda lambda){
+        if constexpr (dev_mode)
+            cout << "Side A Special: ";
+            
+        lambda(0, 0, SIDE_A);
+
+        if constexpr (dev_mode)
+            cout << "SIDE_A: ";
+        for(const Point& point : this -> relative_coordinates)
+            lambda(point.first, point.second, SIDE_A);
+
+    }
+
+    constexpr array<Point, 2 * INNER_AREA * (N + 1)> mark_relevant(){
+        array<Point, 2 * INNER_AREA * (N + 1)> relevant_points;
+
+        int c = 0;
+        this -> traverse([&c, &relevant_points](char rx, char ry, bool scope){
+            for(int j = ry - INNER_HALF; j <= ry + INNER_HALF; j++){
+                for(int i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
+                    if(dev_mode){
+                        cout << "this -> (" << (int)rx << ", " << (int)ry << ") |\t";
+                        cout << "(" << i << ", " << (int)j << ") - " << c << endl;
+
+                        /* Cap out of bounds points */
+                        if(abs(i) > (int) DIMENSION / 2 || abs(j) > (int) DIMENSION / 2){
+                            relevant_points[c] = Point{0, 0};
+                            continue;
+                        }
+    
+                        relevant_points[c] = Point{i, j};
+                        c++;
+                    }
+                }
+                if(dev_mode)
+                    cout << endl << " --(j)-- " << endl;
+            }
+            if(dev_mode)
+                cout << endl << " --(i)-- " << endl;
+        });
+
+        if(dev_mode)
+            cout << INNER_AREA * (N + 1) << ") " << endl;
+
+        cout << " ===================================== " << endl;
+        return relevant_points;
     }
 
     /* Numbers of matrixes tiles before complete a half spin */
