@@ -123,7 +123,7 @@ class MagicPoints {
     }
 
     template<typename Lambda>
-    void traverse_data(Lambda lambda){
+    void traverse_relevant(Lambda lambda){
         if constexpr (dev_mode)
             cout << "Side A Special: ";
             
@@ -131,11 +131,31 @@ class MagicPoints {
 
         if constexpr (dev_mode)
             cout << "SIDE_A: ";
-        for(const Point& point : this -> relative_coordinates)
+        for(const Point& point : this -> relevant_points)
             lambda(point.first, point.second, SIDE_A);
 
+        if constexpr (dev_mode)
+            cout << "SIDE_B: ";
+        for(const Point& point : this -> relevant_points)
+            lambda(-point.first, -point.second, SIDE_B);
     }
 
+    template<typename Lambda>
+    void traverse_relevant_inverse(Lambda lambda){
+        if constexpr (dev_mode)
+            cout << "Side A Special: ";
+        lambda(0, 0, SIDE_A);
+    
+        if constexpr (dev_mode)
+            cout << "SIDE_A: ";
+        for(const Point& point : this -> relevant_points)
+            lambda(-point.second, point.first, SIDE_A);
+
+        if constexpr (dev_mode)
+             cout << "SIDE_B: ";
+        for(const Point& point : this -> relevant_points)
+            lambda(point.second, -point.first, SIDE_B);
+    }
 
     /* Numbers of matrixes tiles before complete a half spin */
     int dimension() const {
