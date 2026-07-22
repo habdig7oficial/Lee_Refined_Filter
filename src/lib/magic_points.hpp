@@ -15,6 +15,7 @@ using Point = pair<char, char>;
 
 #define INNER_HALF (int) DIMENSION_INNER / 2
 #define INNER_AREA DIMENSION_INNER * DIMENSION_INNER
+#define RELEVANT_POINTS_SIZE 2 * INNER_AREA * (N + 1)
 
 #define SIDE_A true
 #define SIDE_B false
@@ -28,16 +29,17 @@ template <size_t N>
 class MagicPoints {
     private:
         const array<Point, N>relative_coordinates;
+        const array<Point, RELEVANT_POINTS_SIZE>relevant_points; 
         int side, area;
         int win_number;
 
     public:
-    MagicPoints(int win_number, const array<Point, N>& relative_coordinates, int side) : relative_coordinates(relative_coordinates){
+    MagicPoints(int win_number, const array<Point, N>& relative_coordinates, int side) : relative_coordinates(relative_coordinates), relevant_points(this -> mark_relevant()){
         this -> win_number = win_number;
         this -> side = side;
         this -> area = this -> side * this -> side;
 
-        this -> mark_relevant();
+        this -> filter(this -> mark_relevant(), DIMENSION_INNER);
     }
 
     /* 
@@ -94,8 +96,60 @@ class MagicPoints {
 
     }
 
-    constexpr array<Point, 2 * INNER_AREA * (N + 1)> mark_relevant(){
-        array<Point, 2 * INNER_AREA * (N + 1)> relevant_points;
+    template<typename T, size_t M> 
+    constexpr size_t filter_size(array<T, M> arr, uint threshold){
+        size_t matches = 0;
+        typename array<T, M>::iterator new_end, point;
+        new_end = arr.end();
+
+        for(point = arr.begin(); point != new_end; ++point){
+            int c = count(arr.begin(), new_end, *point);
+
+            if(c < threshold){
+               new_end = remove(arr.begin(), new_end, *point);
+               matches++;
+               continue;
+            }
+        }
+        return matches;
+    }
+
+    template<typename T, size_t M> 
+    constexpr vector<T> filter(array<T, M> arr, uint threshold){
+
+        vector<T> new_vec;
+        typename array<T, M>::iterator new_end, point;
+
+        new_end = arr.end();
+        for(point = arr.begin(); point != new_end; ++point){
+            int c = count(arr.begin(), new_end, *point);
+
+            if(c < threshold){
+               new_end = remove(arr.begin(), new_end, *point);
+               continue;
+            }
+
+            cout << "(" << (int)point -> first << ", " << (int)point -> second << ") " << c << endl;
+        }
+
+        copy(new_vec.begin(), new_vec.end(), arr.begin());
+
+        auto cleaned = unique(new_vec.begin(), new_vec.end());
+
+        cout << " <<<<<<<<<<<>>>>>>>>>>>>>>>> " << endl;
+
+        for(point = arr.begin(); point != new_end; ++point)
+             cout << "(" << (int)point -> first << ", " << (int)point -> second << ") " << count(arr.begin(), new_end, *point) << endl;
+
+
+        return new_vec;
+    }
+
+    constexpr array<Point, RELEVANT_POINTS_SIZE> mark_relevant(){
+        array<Point, RELEVANT_POINTS_SIZE> relevant_points;
+
+        if(dev_mode)
+            cout << this -> get_win_num() << ") " << endl;
 
         int c = 0;
         this -> traverse([&c, &relevant_points](char rx, char ry, bool scope){
@@ -121,9 +175,6 @@ class MagicPoints {
             if(dev_mode)
                 cout << endl << " --(i)-- " << endl;
         });
-
-        if(dev_mode)
-            cout << INNER_AREA * (N + 1) << ") " << endl;
 
         cout << " ===================================== " << endl;
         return relevant_points;
@@ -154,7 +205,7 @@ class MagicPoints {
     int get_side()       const { return this -> side; }
     int get_area()       const { return this -> area; }
     int get_win_num()    const { return this -> win_number; }
-    int get_mirror_num() const { return this -> win_number + (int)(this -> dimension() / 2);}
+    int get_mirror_num() const { return this -> win_number + (int)(this -> dimension() / 2); }
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
         os << "Magic Points: [";
