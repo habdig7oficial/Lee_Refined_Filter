@@ -99,23 +99,17 @@ class MagicPoints {
 
     template<typename T> 
     constexpr vector<T> filter(vector<T> arr, uint threshold){
-
         vector<T> new_vec;
-        typename vector<T>::iterator new_end, point;
 
-        new_end = arr.end();
-        for(point = arr.begin(); point != new_end; ++point){
-            uint c = count(arr.begin(), new_end, *point);
+        for(const Point& point : arr){
+            uint c = count(arr.begin(), arr.end(), point);
 
-            if(c < threshold){
-               arr.erase(point);
+            if(c < threshold)
                continue;
-            }
-
-            cout << "(" << (int)point -> first << ", " << (int)point -> second << ") " << c << endl;
+            
+            new_vec.push_back(point);
+            cout << "(" << (int)point.first << ", " << (int)point.second << ") " << c << endl;
         }
-
-        copy(arr.begin(), new_end, back_inserter(new_vec));
 
         sort(new_vec.begin(), new_vec.end());
         
