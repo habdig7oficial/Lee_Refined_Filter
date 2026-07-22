@@ -25,6 +25,48 @@ using Point = pair<char, char>;
 #define ROTATED false
 
 
+template<typename T> 
+constexpr vector<T> filter(vector<T> arr, uint threshold){
+    vector<T> new_vec;
+
+    for(const Point& point : arr){
+        uint c = count(arr.begin(), arr.end(), point);
+
+        if(c < threshold)
+            continue;
+        
+        new_vec.push_back(point);
+    }
+
+    sort(new_vec.begin(), new_vec.end());
+    
+    auto cleaned = unique(new_vec.begin(), new_vec.end());
+    new_vec.erase(cleaned, new_vec.end());
+
+    return new_vec;
+}
+
+  
+template<size_t M>
+constexpr vector<Point> mark_relevant(const array<Point, M>arr){
+    vector<Point> relevant_points;
+    for(auto [rx, ry] : arr ){
+        for(int j = ry - INNER_HALF; j <= ry + INNER_HALF; j++){
+            for(int i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
+
+                /* Cap out of bounds points */
+                if(abs(i) > ((int) DIMENSION / 2) - 1 || abs(j) > ((int) DIMENSION / 2) - 1)
+                    continue;
+        
+                relevant_points.push_back(Point{i, j});
+            }
+        }
+    }
+
+    return relevant_points;
+}
+
+
 template <size_t N>
 class MagicPoints {
     private:
@@ -34,13 +76,10 @@ class MagicPoints {
         int win_number;
 
     public:
-    MagicPoints(int win_number, const array<Point, N>& relative_coordinates, int side) : relative_coordinates(relative_coordinates), relevant_points(this -> mark_relevant()){
+    constexpr MagicPoints(int win_number, const array<Point, N>& relative_coordinates, int side) : relative_coordinates(relative_coordinates), relevant_points(filter(mark_relevant(this -> relative_coordinates), DIMENSION_INNER)){
         this -> win_number = win_number;
         this -> side = side;
         this -> area = this -> side * this -> side;
-
-        //this -> mark_relevant();
-        this -> filter(this -> mark_relevant(), DIMENSION_INNER);
     }
 
     /* 
@@ -97,67 +136,6 @@ class MagicPoints {
 
     }
 
-    template<typename T> 
-    constexpr vector<T> filter(vector<T> arr, uint threshold){
-        vector<T> new_vec;
-
-        for(const Point& point : arr){
-            uint c = count(arr.begin(), arr.end(), point);
-
-            if(c < threshold)
-               continue;
-            
-            new_vec.push_back(point);
-            cout << "(" << (int)point.first << ", " << (int)point.second << ") " << c << endl;
-        }
-
-        sort(new_vec.begin(), new_vec.end());
-        
-        auto cleaned = unique(new_vec.begin(), new_vec.end());
-        new_vec.erase(cleaned, new_vec.end());
-        
-
-        cout << " <<<<<<<<<<<>>>>>>>>>>>>>>>> " << endl;
-
-       for(const Point& point : new_vec)
-           cout << "(" << (int)point.first << ", " << (int)point.second << ") " << count(new_vec.begin(), new_vec.end(), point) << endl;
-
-        cout << new_vec.size() << endl;
-
-        return new_vec;
-    }
-
-    constexpr vector<Point> mark_relevant(){
-        vector<Point> relevant_points;
-
-        if(dev_mode)
-            cout << this -> get_win_num() << ") " << endl;
-        this -> traverse_data([&relevant_points](char rx, char ry, bool scope){
-            for(int j = ry - INNER_HALF; j <= ry + INNER_HALF; j++){
-                for(int i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
-                    if(dev_mode){
-                        cout << "this -> (" << (int)rx << ", " << (int)ry << ") |\t";
-                        cout << "(" << i << ", " << (int)j << ") - " << endl;
-
-                    }
-
-                    /* Cap out of bounds points */
-                    if(abs(i) > ((int) DIMENSION / 2) - 1 || abs(j) > ((int) DIMENSION / 2) - 1)
-                        continue;
-                    
-
-                    relevant_points.push_back(Point{i, j});
-                }
-                if(dev_mode)
-                    cout << endl << " --(j)-- " << endl;
-            }
-            if(dev_mode)
-                cout << endl << " --(i)-- " << endl;
-        });
-
-        cout << " ===================================== " << endl;
-        return relevant_points;
-    }
 
     /* Numbers of matrixes tiles before complete a half spin */
     int dimension() const {
@@ -185,6 +163,12 @@ class MagicPoints {
     int get_area()       const { return this -> area; }
     int get_win_num()    const { return this -> win_number; }
     int get_mirror_num() const { return this -> win_number + (int)(this -> dimension() / 2); }
+
+
+    #if !NDEBUG  
+        vector<Point> show_marked(){ return mark_relevant(relative_coordinates); }
+        vector<Point> show_filtered(){ return relevant_points; }
+    #endif
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
         os << "Magic Points: [";
