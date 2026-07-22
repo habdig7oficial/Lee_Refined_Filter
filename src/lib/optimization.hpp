@@ -73,3 +73,11 @@ constexpr array<T, N> abs(array<T, N> arr){
     return new_arr;
 }
 
+template<typename T, size_t M>
+constexpr array<T, M> to_arr(vector<T> vec){
+    array<T, M>new_arr;
+
+    copy(vec.begin(), vec.end(), new_arr.begin());
+
+    return new_arr;
+}
