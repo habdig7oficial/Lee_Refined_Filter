@@ -13,9 +13,9 @@ using Point = pair<char, char>;
 #define DIMENSION 11
 #define DIMENSION_INNER 3
 
-#define INNER_HALF (int) DIMENSION_INNER / 2
-#define INNER_AREA DIMENSION_INNER * DIMENSION_INNER
-#define RELEVANT_POINTS_SIZE 2 * INNER_AREA * (N + 1)
+#define INNER_HALF ((int) DIMENSION_INNER / 2)
+#define INNER_AREA (DIMENSION_INNER * DIMENSION_INNER)
+#define RELEVANT_POINTS_SIZE(N) (2 * INNER_AREA * (N + 1)) 
 
 #define SIDE_A true
 #define SIDE_B false
@@ -29,7 +29,7 @@ template <size_t N>
 class MagicPoints {
     private:
         const array<Point, N>relative_coordinates;
-        const array<Point, RELEVANT_POINTS_SIZE>relevant_points; 
+        vector<Point> relevant_points; 
         int side, area;
         int win_number;
 
@@ -39,6 +39,7 @@ class MagicPoints {
         this -> side = side;
         this -> area = this -> side * this -> side;
 
+        //this -> mark_relevant();
         this -> filter(this -> mark_relevant(), DIMENSION_INNER);
     }
 
@@ -96,36 +97,18 @@ class MagicPoints {
 
     }
 
-    template<typename T, size_t M> 
-    constexpr size_t filter_size(array<T, M> arr, uint threshold){
-        size_t matches = 0;
-        typename array<T, M>::iterator new_end, point;
-        new_end = arr.end();
-
-        for(point = arr.begin(); point != new_end; ++point){
-            int c = count(arr.begin(), new_end, *point);
-
-            if(c < threshold){
-               new_end = remove(arr.begin(), new_end, *point);
-               matches++;
-               continue;
-            }
-        }
-        return matches;
-    }
-
-    template<typename T, size_t M> 
-    constexpr vector<T> filter(array<T, M> arr, uint threshold){
+    template<typename T> 
+    constexpr vector<T> filter(vector<T> arr, uint threshold){
 
         vector<T> new_vec;
-        typename array<T, M>::iterator new_end, point;
+        typename vector<T>::iterator new_end, point;
 
         new_end = arr.end();
         for(point = arr.begin(); point != new_end; ++point){
-            int c = count(arr.begin(), new_end, *point);
+            uint c = count(arr.begin(), new_end, *point);
 
             if(c < threshold){
-               new_end = remove(arr.begin(), new_end, *point);
+               arr.erase(point);
                continue;
             }
 
@@ -150,29 +133,26 @@ class MagicPoints {
         return new_vec;
     }
 
-    constexpr array<Point, RELEVANT_POINTS_SIZE> mark_relevant(){
-        array<Point, RELEVANT_POINTS_SIZE> relevant_points;
+    constexpr vector<Point> mark_relevant(){
+        vector<Point> relevant_points;
 
         if(dev_mode)
             cout << this -> get_win_num() << ") " << endl;
-
-        int c = 0;
-        this -> traverse([&c, &relevant_points](char rx, char ry, bool scope){
+        this -> traverse_data([&relevant_points](char rx, char ry, bool scope){
             for(int j = ry - INNER_HALF; j <= ry + INNER_HALF; j++){
                 for(int i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
                     if(dev_mode){
                         cout << "this -> (" << (int)rx << ", " << (int)ry << ") |\t";
-                        cout << "(" << i << ", " << (int)j << ") - " << c << endl;
+                        cout << "(" << i << ", " << (int)j << ") - " << endl;
 
-                        /* Cap out of bounds points */
-                        if(abs(i) > (int) DIMENSION / 2 || abs(j) > (int) DIMENSION / 2){
-                            relevant_points[c] = Point{0, 0};
-                            continue;
-                        }
-    
-                        relevant_points[c] = Point{i, j};
-                        c++;
                     }
+
+                    /* Cap out of bounds points */
+                    if(abs(i) > ((int) DIMENSION / 2) - 1 || abs(j) > ((int) DIMENSION / 2) - 1)
+                        continue;
+                    
+
+                    relevant_points.push_back(Point{i, j});
                 }
                 if(dev_mode)
                     cout << endl << " --(j)-- " << endl;
