@@ -132,15 +132,20 @@ class MagicPoints {
             cout << "(" << (int)point -> first << ", " << (int)point -> second << ") " << c << endl;
         }
 
-        copy(new_vec.begin(), new_vec.end(), arr.begin());
+        copy(arr.begin(), new_end, back_inserter(new_vec));
 
+        sort(new_vec.begin(), new_vec.end());
+        
         auto cleaned = unique(new_vec.begin(), new_vec.end());
+        new_vec.erase(cleaned, new_vec.end());
+        
 
         cout << " <<<<<<<<<<<>>>>>>>>>>>>>>>> " << endl;
 
-        for(point = arr.begin(); point != new_end; ++point)
-             cout << "(" << (int)point -> first << ", " << (int)point -> second << ") " << count(arr.begin(), new_end, *point) << endl;
+       for(const Point& point : new_vec)
+           cout << "(" << (int)point.first << ", " << (int)point.second << ") " << count(new_vec.begin(), new_vec.end(), point) << endl;
 
+        cout << new_vec.size() << endl;
 
         return new_vec;
     }
