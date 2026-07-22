@@ -138,19 +138,56 @@ TEST_CASE("First integral pass", "[relevant_points]"){
                     (*Rbind)["ex"] = (int) a[i].first;
                     (*Rbind)["ey"] = (int) a[i].second;
                     //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
-                    (*Rbind).parseEvalQ("points(ex, ey, pch = 17, col=\"green\", cex = 3)");
+                    //(*Rbind).parseEvalQ("points(ex, ey, pch = 17, col=\"green\", cex = 3)");
                 }
-
-                
-                auto b = args.show_filtered(); 
-                for(int i = 0; i < b.size(); i++){
-                    (*Rbind)["ex"] = (int) b[i].first;
-                    (*Rbind)["ey"] = (int) b[i].second;
-                    //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
-                    (*Rbind).parseEvalQ("points(ex, ey, pch = 18, col=\"orange\", cex = 3)");
-                }
-
             }(),
+            args.traverse_relevant([](char rx, char ry, bool scope){
+                (*Rbind)["ex"] = (int) rx;
+                (*Rbind)["ey"] = (int) ry;
+                //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
+                (*Rbind).parseEvalQ("points(ex, ey, pch = 18, col=\"orange\", cex = 3)");
+            }),
+            (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
+            (*Rbind).parseEvalQ("i <- i + 1"),
+            i++
+        ), ...);
+    }, all_windows);
+
+    i = 0;
+    apply([&i, side](auto&&... args){
+        (*Rbind)["i"]  = i + 1;
+        LogicalMatrix m = (*Rbind).parseEval("second_half[[i]]");
+        ((
+            (*Rbind).parseEvalQ("plot(0,0, xlim = c(-7, 7), ylim = c(-7, 7))"),
+            args.traverse_inverse([&i, side](char rx, char ry, bool scope){
+                (*Rbind)["rx"] = (int)rx;
+                (*Rbind)["ry"] = (int)ry;
+                
+                LogicalMatrix m = (*Rbind).parseEval("second_half[[i]]");
+
+                (*Rbind).parseEvalQ("axis(side = 1, at = seq(-5, 5, by = 1))");
+                (*Rbind).parseEvalQ("axis(side = 2, at = seq(-5, 5, by = 1))");
+                
+                (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"blue\", cex = 3)");
+                        
+                //cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << endl;
+            }),
+            (void)[&args](){ 
+            
+                auto a = args.show_marked(); 
+                for(int i = 0; i < a.size(); i++){
+                    (*Rbind)["ex"] = (int) a[i].first;
+                    (*Rbind)["ey"] = (int) a[i].second;
+                    //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
+                    //(*Rbind).parseEvalQ("points(ey, ex, pch = 17, col=\"green\", cex = 3)"); // inverted intencionally
+                }
+            }(),
+            args.traverse_relevant_inverse([](char rx, char ry, bool scope){
+                (*Rbind)["ex"] = (int) rx;
+                (*Rbind)["ey"] = (int) ry;
+                //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
+                (*Rbind).parseEvalQ("points(ex, ey, pch = 16, col=\"orange\", cex = 3)"); 
+            }),
             (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
             (*Rbind).parseEvalQ("i <- i + 1"),
             i++
