@@ -118,7 +118,7 @@ TEST_CASE("First integral pass", "[relevant_points]"){
         LogicalMatrix m = (*Rbind).parseEval("first_half[[i]]");
         ((
             (*Rbind).parseEvalQ("plot(0,0, xlim = c(-7, 7), ylim = c(-7, 7))"),
-            args.traverse([&i, side](char rx, char ry, bool scope){
+            args.traverse_data([&i, side](char rx, char ry, bool scope){
                 (*Rbind)["rx"] = (int)rx;
                 (*Rbind)["ry"] = (int)ry;
                 
@@ -140,7 +140,14 @@ TEST_CASE("First integral pass", "[relevant_points]"){
                     (*Rbind).parseEvalQ("points(ex, ey, pch = 17, col=\"green\", cex = 3)");
                 }
 
-                args.filter(args.mark_relevant(), DIMENSION_INNER);
+                auto b = args.filter(args.mark_relevant(), DIMENSION_INNER); 
+                for(int i = 0; i < b.size(); i++){
+                    (*Rbind)["ex"] = (int) b[i].first;
+                    (*Rbind)["ey"] = (int) b[i].second;
+                    //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
+                    (*Rbind).parseEvalQ("points(ex, ey, pch = 18, col=\"orange\", cex = 3)");
+                }
+
             }(),
             (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
             (*Rbind).parseEvalQ("i <- i + 1"),
