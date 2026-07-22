@@ -129,16 +129,18 @@ TEST_CASE("First integral pass", "[relevant_points]"){
                 
                 (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
                         
-                cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << endl;
+                //cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << endl;
             }),
             (void)[&args](){ 
                 auto a = args.mark_relevant(); 
                 for(int i = 0; i < a.size(); i++){
                     (*Rbind)["ex"] = (int) a[i].first;
                     (*Rbind)["ey"] = (int) a[i].second;
-                    cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
+                    //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
                     (*Rbind).parseEvalQ("points(ex, ey, pch = 17, col=\"green\", cex = 3)");
                 }
+
+                args.filter(args.mark_relevant(), DIMENSION_INNER);
             }(),
             (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
             (*Rbind).parseEvalQ("i <- i + 1"),
