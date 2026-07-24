@@ -2,6 +2,7 @@
 
 #include "array"
 #include "utility"
+#include "ranges"
 
 #include "tuple"
 #include "optimization.hpp" 
@@ -50,6 +51,7 @@ constexpr vector<T> filter(vector<T> arr, uint threshold){
 template<size_t M>
 constexpr vector<Point> mark_relevant(const array<Point, M>arr){
     vector<Point> relevant_points;
+
     for(auto [rx, ry] : arr ){
         for(int j = ry - INNER_HALF; j <= ry + INNER_HALF; j++){
             for(int i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
@@ -57,6 +59,16 @@ constexpr vector<Point> mark_relevant(const array<Point, M>arr){
                 /* Cap out of bounds points */
                 if(abs(i) > ((int) DIMENSION / 2) - 1 || abs(j) > ((int) DIMENSION / 2) - 1)
                     continue;
+
+                /* Ensure that the mirror points are placed */
+                if(rx == 0){
+                    for(int k = 0; k < DIMENSION; k++)
+                        relevant_points.push_back(Point{i, j});
+
+                    continue;   
+                }       
+                
+                    
         
                 relevant_points.push_back(Point{i, j});
             }
@@ -155,6 +167,19 @@ class MagicPoints {
              cout << "SIDE_B: ";
         for(const Point& point : this -> relevant_points)
             lambda(point.second, -point.first, SIDE_B);
+    }
+
+    template<typename Lambda>
+    void traverse_data(Lambda lambda){
+        if constexpr (dev_mode)
+            cout << "Side A Special: ";
+            
+        lambda(0, 0, SIDE_A);
+
+        if constexpr (dev_mode)
+            cout << "SIDE_A: ";
+        for(const Point& point : this -> relative_coordinates)
+            lambda(point.first, point.second, SIDE_A);
     }
 
     /* Numbers of matrixes tiles before complete a half spin */
