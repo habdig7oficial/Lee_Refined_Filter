@@ -73,8 +73,8 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
 }
 
 /* image, image x point, image y point, correspodent window, direction */
-template <typename T, size_t N>
-double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N>& window, bool is_reverse){
+template <typename T, size_t N, size_t M>
+double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N, M>& window, bool is_reverse){
   double sin_complex = 0, cos_real = 0;
   auto lambda = [&image, &tx, &ty, &window, &sin_complex, &cos_real](char rx, char ry, bool scope){
         /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */

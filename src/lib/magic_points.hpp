@@ -41,6 +41,15 @@ struct Point {
     auto operator <=> (const Point&) const = default;
 };
 
+
+auto sorting_lambda = [](const Point& a, const Point &b){
+    if(a.second == b.second){
+        return a.first < b.first;
+    }
+    else
+        return a.second > b.second;
+};
+
 template<typename T> 
 constexpr vector<T> filter(vector<T> arr, uint threshold){
     vector<T> new_vec;
@@ -62,7 +71,6 @@ constexpr vector<T> filter(vector<T> arr, uint threshold){
     return new_vec;
 }
 
-  
 template<size_t M>
 constexpr vector<Point> mark_relevant(const array<Point, M>arr){
     vector<Point> relevant_points;
@@ -93,12 +101,29 @@ constexpr vector<Point> mark_relevant(const array<Point, M>arr){
     return relevant_points;
 }
 
+template<size_t N> 
+constexpr size_t filtered_size(const array<Point, N>arr, uint threshold){ return filter(mark_relevant(arr), threshold).size(); }
 
-template <size_t N>
+
+template<size_t N, size_t M>
+constexpr array<Point, M> gen_static(const array<Point, N>& arr, uint threshold){
+    vector<Point> marked = mark_relevant(arr);
+    vector<Point> filter_arr = filter(marked, threshold);
+
+    array<Point, M> final_arr;
+
+    copy(filter_arr.begin(), filter_arr.end(), final_arr.begin());
+
+    return final_arr;
+}
+
+
+template <size_t N, size_t M>
 class MagicPoints {
     private:
         const array<Point, N>relative_coordinates;
         //vector<Point> relevant_points; 
+        array<Point, M> relevant_points; 
 
         BitSet2D<N, N> mask;
 
@@ -106,7 +131,7 @@ class MagicPoints {
         int win_number;
 
     public:
-    constexpr MagicPoints(int win_number, const array<Point, N>& relative_coordinates, int side) : relative_coordinates(relative_coordinates), relevant_points(filter(mark_relevant(this -> relative_coordinates), DIMENSION_INNER)){
+    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, DIMENSION) } {
         this -> win_number = win_number;
         this -> side = side;
         this -> area = this -> side * this -> side;
@@ -244,15 +269,17 @@ class MagicPoints {
     }
 };
 
-auto sorting_lambda = [](const Point& a, const Point &b){
-    if(a.second == b.second){
-        return a.first < b.first;
-    }
-    else
-        return a.second > b.second;
-};
+template<array RelativeCoordinates, uint Side, size_t N>
+constexpr auto magic_points_factory(int win_number){
+    //auto relevant_points = gen_static(relative_coordinates, side);
+
+    constexpr size_t M = filtered_size(RelativeCoordinates, Side);
+
+    return MagicPoints<N, 100>(win_number, sort_compile_time(RelativeCoordinates, sorting_lambda), Side);
+}
 
 
+/*
 MagicPoints window0(
     0,
     sort_compile_time(array<Point, 16>{
@@ -266,7 +293,7 @@ MagicPoints window0(
     DIMENSION
 );
 
-/*
+
 MagicPoints window1(
     1,
     sort_compile_time(array<Point, 16>{
@@ -400,6 +427,17 @@ constexpr array<T, N> all_angles(auto& all_windows){
     return new_arr;
 }
 
+;
+
+
+auto window0 = magic_points_factory<array<Point, 16>{
+        Point{0, 1}, 
+        Point{1, 1}, Point{1, 0}, Point{1, -1},
+        Point{2, 1}, Point{2, 0}, Point{2, -1},
+        Point{3, 1}, Point{3, 0}, Point{3, -1},
+        Point{4, 1}, Point{4, 0}, Point{4, -1},
+        Point{5, 1}, Point{5, 0}, Point{5, -1}
+}, DIMENSION, 16>(0);
 auto all_windows = tie(window0);
 //auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
