@@ -40,6 +40,11 @@ if(max(Mod(averages))<eth){ # region is plain
 ```
 perhaps when this if triggers it's better make the tradicional lee filter (see removed thrash commit)
 
+
+*Notes:* On the relevant points some points in the vertices are wrong but they dont change the result, only the performance
+
+Change the vector into a static array
+
 ## Indentified errors
 
 The 8th window in the article was wrong, it should mirror the 18th window, 1 pixel left 
