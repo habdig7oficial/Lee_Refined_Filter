@@ -6,6 +6,7 @@
 
 
 #include "tuple"
+#include "2d_bitset.hpp"
 #include "optimization.hpp" 
 
 using namespace std;
@@ -28,8 +29,8 @@ using namespace env;
 
 #if(DIMENSION / 2 <= (SCHAR_MAX >> (CHAR_BIT / 2)))
     #define SIZE_POINT (CHAR_BIT / 2)
-#elif(DIMENSION / 2 <= SCHAR_MAX )
-#   define SIZE_POINT CHAR_BIT
+#elif(DIMENSION / 2 <= SCHAR_MAX)
+    #define SIZE_POINT CHAR_BIT
 #endif
 
 /* In side A NOT_ROTATED is (x, y) */
@@ -71,7 +72,7 @@ constexpr vector<Point> mark_relevant(const array<Point, M>arr){
             for(signed char i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
 
                 /* Cap out of bounds points */
-                if(abs(i) > ((int) DIMENSION / 2) - 1 || abs(j) > ((int) DIMENSION / 2) - 1)
+                if(const_abs(i) > ((int) DIMENSION / 2) - 1 || const_abs(j) > ((int) DIMENSION / 2) - 1)
                     continue;
 
                 /* Ensure that the mirror points are placed */
@@ -97,7 +98,10 @@ template <size_t N>
 class MagicPoints {
     private:
         const array<Point, N>relative_coordinates;
-        vector<Point> relevant_points; 
+        //vector<Point> relevant_points; 
+
+        BitSet2D<N, N> mask;
+
         int side, area;
         int win_number;
 
@@ -262,7 +266,7 @@ MagicPoints window0(
     DIMENSION
 );
 
-
+/*
 MagicPoints window1(
     1,
     sort_compile_time(array<Point, 16>{
@@ -375,7 +379,7 @@ MagicPoints window9(
     DIMENSION
 );
 
-
+*/
 template<typename T, size_t N>
 constexpr array<T, N> all_angles(auto& all_windows){
     array<T,  N> new_arr;
@@ -396,7 +400,8 @@ constexpr array<T, N> all_angles(auto& all_windows){
     return new_arr;
 }
 
-auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
+auto all_windows = tie(window0);
+//auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
 array<double, 2 * all_windows_size> angles = all_angles<double, 2 * all_windows_size>(all_windows);
