@@ -269,13 +269,14 @@ class MagicPoints {
     }
 };
 
-template<array RelativeCoordinates, uint Side, size_t N>
+template<array RelativeCoordinates, uint Side>
 constexpr auto magic_points_factory(int win_number){
-    //auto relevant_points = gen_static(relative_coordinates, side);
-
+    constexpr size_t N = RelativeCoordinates.size();
     constexpr size_t M = filtered_size(RelativeCoordinates, Side);
 
-    return MagicPoints<N, 100>(win_number, sort_compile_time(RelativeCoordinates, sorting_lambda), Side);
+    auto relevant_points = gen_static<N, M>(RelativeCoordinates, Side);
+
+    return MagicPoints<N, M>(win_number, sort_compile_time(RelativeCoordinates, sorting_lambda), Side);
 }
 
 
@@ -429,15 +430,15 @@ constexpr array<T, N> all_angles(auto& all_windows){
 
 ;
 
-
-auto window0 = magic_points_factory<array<Point, 16>{
+constexpr array w0_arr = {
         Point{0, 1}, 
         Point{1, 1}, Point{1, 0}, Point{1, -1},
         Point{2, 1}, Point{2, 0}, Point{2, -1},
         Point{3, 1}, Point{3, 0}, Point{3, -1},
         Point{4, 1}, Point{4, 0}, Point{4, -1},
         Point{5, 1}, Point{5, 0}, Point{5, -1}
-}, DIMENSION, 16>(0);
+};
+auto window0 = magic_points_factory<w0_arr, DIMENSION>(0);
 auto all_windows = tie(window0);
 //auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
