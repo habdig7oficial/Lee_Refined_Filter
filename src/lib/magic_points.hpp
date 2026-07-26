@@ -306,7 +306,7 @@ constexpr array w0_arr = {
         Point{4, 1}, Point{4, 0}, Point{4, -1},
         Point{5, 1}, Point{5, 0}, Point{5, -1}
 };
-auto window0 = magic_points_factory<w0_arr, DIMENSION, 0>();
+constinit auto window0 = magic_points_factory<w0_arr, DIMENSION, 0>();
 
 constexpr array w1_arr = {
         Point{1, -1}, Point{0, 1},
@@ -316,7 +316,7 @@ constexpr array w1_arr = {
         Point{4, 2}, Point{4, 1}, Point{4, 0},
         Point{5, 2}, Point{5, 1}, Point{5, 0}, 
 };
-auto window1 = magic_points_factory<w1_arr, DIMENSION, 1>();
+constinit auto window1 = magic_points_factory<w1_arr, DIMENSION, 1>();
 
 constexpr array w2_arr = {
         Point{0, 1},
@@ -326,7 +326,7 @@ constexpr array w2_arr = {
         Point{4, 3}, Point{4, 2}, Point{4, 1},
         Point{5, 3}, Point{5, 2}, Point{5, 1}
     };
-auto window2 = magic_points_factory<w2_arr, DIMENSION, 2>();
+constinit auto window2 = magic_points_factory<w2_arr, DIMENSION, 2>();
 
 constexpr array w3_arr = {
         Point{0, 1}, Point{-1, 1}, 
@@ -336,7 +336,7 @@ constexpr array w3_arr = {
         Point{4, 3}, Point{4, 2}, Point{4, 1},
         Point{5, 4}, Point{5, 3}, Point{5, 2}
 };
-auto window3 = magic_points_factory<w3_arr, DIMENSION, 3>();
+constinit auto window3 = magic_points_factory<w3_arr, DIMENSION, 3>();
 
 constexpr array w4_arr = {
         Point{0, 1}, 
@@ -346,7 +346,7 @@ constexpr array w4_arr = {
         Point{4, 4}, Point{4, 3}, Point{4, 2},
         Point{5, 5}, Point{5, 4}, Point{5, 3}
 };
-auto window4 = magic_points_factory<w4_arr, DIMENSION, 4>();
+constinit auto window4 = magic_points_factory<w4_arr, DIMENSION, 4>();
 
 constexpr array w5_arr = {
         Point{0, 1},
@@ -356,7 +356,7 @@ constexpr array w5_arr = {
         Point{4, 5}, Point{4, 4}, Point{4, 3},
         Point{5, 5}, Point{5, 4}
     };
-auto window5 = magic_points_factory<w5_arr, DIMENSION, 5>();
+constinit auto window5 = magic_points_factory<w5_arr, DIMENSION, 5>();
 
 constexpr array w6_arr = {
         Point{0, 1},
@@ -366,7 +366,7 @@ constexpr array w6_arr = {
         Point{4, 5}, Point{4, 4},
         Point{5, 5}
 };
-auto window6 = magic_points_factory<w6_arr, DIMENSION, 6>();
+constinit auto window6 = magic_points_factory<w6_arr, DIMENSION, 6>();
 
 constexpr array w7_arr = {
         Point{0, 1},
@@ -375,7 +375,7 @@ constexpr array w7_arr = {
         Point{3, 5}, Point{3, 4},
         Point{4, 5}
 };
-auto window7 = magic_points_factory<w7_arr, DIMENSION, 7>();
+constinit auto window7 = magic_points_factory<w7_arr, DIMENSION, 7>();
 
 constexpr array w8_arr = {
         Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
@@ -383,14 +383,14 @@ constexpr array w8_arr = {
         Point{2, 5}, Point{2, 4}, Point{2, 3},
         Point{3, 5}
 };
-auto window8 = magic_points_factory<w8_arr, DIMENSION, 8>();
+constinit auto window8 = magic_points_factory<w8_arr, DIMENSION, 8>();
 
 constexpr array w9_arr = {
         Point{0, 5}, Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
         Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
         Point{2, 5}, Point{2, 4}, Point{2, 3}
 };
-auto window9 = magic_points_factory<w9_arr, DIMENSION, 9>();
+constinit auto window9 = magic_points_factory<w9_arr, DIMENSION, 9>();
 
 
 auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
