@@ -4,12 +4,12 @@
 #include "utility"
 #include "ranges"
 
+
 #include "tuple"
 #include "optimization.hpp" 
 
 using namespace std;
 using namespace env;
-using Point = pair<char, char>;
 
 #define DIMENSION 11
 #define DIMENSION_INNER 3
@@ -25,6 +25,20 @@ using Point = pair<char, char>;
 #define NOT_ROTATED true
 #define ROTATED false
 
+
+#if(DIMENSION / 2 <= (SCHAR_MAX >> (CHAR_BIT / 2)))
+    #define SIZE_POINT (CHAR_BIT / 2)
+#elif(DIMENSION / 2 <= SCHAR_MAX )
+#   define SIZE_POINT CHAR_BIT
+#endif
+
+/* In side A NOT_ROTATED is (x, y) */
+struct Point {
+    signed char first : SIZE_POINT;
+    signed char second : SIZE_POINT;
+
+    auto operator <=> (const Point&) const = default;
+};
 
 template<typename T> 
 constexpr vector<T> filter(vector<T> arr, uint threshold){
@@ -53,8 +67,8 @@ constexpr vector<Point> mark_relevant(const array<Point, M>arr){
     vector<Point> relevant_points;
 
     for(auto [rx, ry] : arr ){
-        for(int j = ry - INNER_HALF; j <= ry + INNER_HALF; j++){
-            for(int i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
+        for(signed char j = ry - INNER_HALF; j <= ry + INNER_HALF; j++){
+            for(signed char i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
 
                 /* Cap out of bounds points */
                 if(abs(i) > ((int) DIMENSION / 2) - 1 || abs(j) > ((int) DIMENSION / 2) - 1)
