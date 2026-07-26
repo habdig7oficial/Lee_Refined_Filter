@@ -37,7 +37,7 @@ TEST_CASE("First integral pass", "[magic_points]"){
         (*Rbind).parseEvalQ("print(first_half)");
         bool has_left = (*Rbind).parseEval("any(sapply(first_half, any))");
         cout << "Has Left: " << has_left << endl;
-        INFO(m);
+        INFO("first half\n" << m);
         REQUIRE(!has_left);
     }, all_windows);
 
@@ -72,7 +72,7 @@ TEST_CASE("First integral pass", "[magic_points]"){
         //(*Rbind).parseEvalQ("print(second_half)");
         bool has_left = (*Rbind).parseEval("any(sapply(second_half, any))");
         cout << "Has Left: " << has_left << endl;
-        INFO(m);
+        INFO("second half\n" << m);
         REQUIRE(!has_left);
     }, all_windows);
 }
