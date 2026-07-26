@@ -81,3 +81,9 @@ constexpr array<T, M> to_arr(vector<T> vec){
 
     return new_arr;
 }
+
+
+template<typename T>
+constexpr T const_abs(T var){
+    return (var < 0)? -var : var;
+}
