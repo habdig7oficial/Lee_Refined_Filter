@@ -122,7 +122,6 @@ template <size_t N, size_t M>
 class MagicPoints {
     private:
         const array<Point, N>relative_coordinates;
-        //vector<Point> relevant_points; 
         array<Point, M> relevant_points; 
 
         BitSet2D<N, N> mask;
@@ -269,145 +268,16 @@ class MagicPoints {
     }
 };
 
-template<array RelativeCoordinates, uint Side>
-constexpr auto magic_points_factory(int win_number){
+template<array RelativeCoordinates, uint Side, uint WinNumber>
+constexpr auto magic_points_factory(){
     constexpr size_t N = RelativeCoordinates.size();
     constexpr size_t M = filtered_size(RelativeCoordinates, Side);
 
     auto relevant_points = gen_static<N, M>(RelativeCoordinates, Side);
 
-    return MagicPoints<N, M>(win_number, sort_compile_time(RelativeCoordinates, sorting_lambda), Side);
+    return MagicPoints<N, M>(WinNumber, sort_compile_time(RelativeCoordinates, sorting_lambda), Side);
 }
 
-
-/*
-MagicPoints window0(
-    0,
-    sort_compile_time(array<Point, 16>{
-        Point{0, 1}, 
-        Point{1, 1}, Point{1, 0}, Point{1, -1},
-        Point{2, 1}, Point{2, 0}, Point{2, -1},
-        Point{3, 1}, Point{3, 0}, Point{3, -1},
-        Point{4, 1}, Point{4, 0}, Point{4, -1},
-        Point{5, 1}, Point{5, 0}, Point{5, -1}
-    }, sorting_lambda),
-    DIMENSION
-);
-
-
-MagicPoints window1(
-    1,
-    sort_compile_time(array<Point, 16>{
-        Point{1, -1}, Point{0, 1},
-        Point{1, 1}, Point{1, 0},
-        Point{2, 2}, Point{2, 1}, Point{2, 0},
-        Point{3, 2}, Point{3, 1}, Point{3, 0},
-        Point{4, 2}, Point{4, 1}, Point{4, 0},
-        Point{5, 2}, Point{5, 1}, Point{5, 0}, 
-    }, sorting_lambda),   
-    DIMENSION
-);
-
-MagicPoints window2(
-    2,
-    sort_compile_time(array<Point, 15>{
-        Point{0, 1},
-        Point{1, 1}, Point{1, 0}, Point{1, -1},
-        Point{2, 2}, Point{2, 1}, Point{2, 0},
-        Point{3, 2}, Point{3, 1},
-        Point{4, 3}, Point{4, 2}, Point{4, 1},
-        Point{5, 3}, Point{5, 2}, Point{5, 1}
-    }, sorting_lambda),  
-    DIMENSION
-);
-
-MagicPoints window3(
-    3,
-    sort_compile_time(array<Point, 15>{
-        Point{0, 1}, Point{-1, 1}, 
-        Point{1, 1}, Point{1, 0},
-        Point{2, 2}, Point{2, 1}, Point{2, 0},
-        Point{3, 2}, Point{3, 1},
-        Point{4, 3}, Point{4, 2}, Point{4, 1},
-        Point{5, 4}, Point{5, 3}, Point{5, 2}
-    }, sorting_lambda),    
-    DIMENSION
-);
-
-MagicPoints window4(
-    4,
-    sort_compile_time(array<Point, 16>{
-        Point{0, 1}, 
-        Point{1, 1}, Point{1, 0}, Point{1, -1},
-        Point{2, 2}, Point{2, 1}, Point{2, 0},
-        Point{3, 3}, Point{3, 2}, Point{3, 1},
-        Point{4, 4}, Point{4, 3}, Point{4, 2},
-        Point{5, 5}, Point{5, 4}, Point{5, 3}
-    }, sorting_lambda),
-    DIMENSION
-);
-
-MagicPoints window5(
-    5,
-    sort_compile_time(array<Point, 15>{
-        Point{0, 1},
-        Point{1, 1}, Point{1, 0}, Point{1, 2}, 
-        Point{2, 3}, Point{2, 2}, Point{2, 1},
-        Point{3, 4}, Point{3, 3}, Point{3, 2},
-        Point{4, 5}, Point{4, 4}, Point{4, 3},
-        Point{5, 5}, Point{5, 4}
-    }, sorting_lambda),
-    DIMENSION
-);
-
-MagicPoints window6(
-    6,
-    sort_compile_time(array<Point, 18>{
-        Point{0, 1},
-        Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
-        Point{2, 4}, Point{2, 3}, Point{2, 2}, Point{2, 1}, Point{2, 0},
-        Point{3, 5}, Point{3, 4}, Point{3, 3}, Point{3, 2}, Point{3, 1},
-        Point{4, 5}, Point{4, 4},
-        Point{5, 5}
-    }, sorting_lambda),
-    DIMENSION
-);
-
-MagicPoints window7(
-    7,
-    sort_compile_time(array<Point, 15>{
-        Point{0, 1},
-        Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
-        Point{2, 5}, Point{2, 4}, Point{2, 3}, Point{2, 2}, Point{2, 1}, Point{2, 0},
-        Point{3, 5}, Point{3, 4},
-        Point{4, 5}
-    }, sorting_lambda), 
-    DIMENSION
-);
-
-MagicPoints window8(
-    8,
-    sort_compile_time(array<Point, 14>{
-        Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
-        Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
-        Point{2, 5}, Point{2, 4}, Point{2, 3},
-        Point{3, 5}
-    }, sorting_lambda),
-    DIMENSION
-);
-
-
-MagicPoints window9(
-    9,
-    sort_compile_time(array<Point,15>{
-        Point{0, 5}, Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
-        Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
-        Point{2, 5}, Point{2, 4}, Point{2, 3}
-    }, sorting_lambda),
-    DIMENSION
-);
-
-*/
 template<typename T, size_t N>
 constexpr array<T, N> all_angles(auto& all_windows){
     array<T,  N> new_arr;
@@ -426,9 +296,7 @@ constexpr array<T, N> all_angles(auto& all_windows){
         ), ...);
     }, all_windows);
     return new_arr;
-}
-
-;
+};
 
 constexpr array w0_arr = {
         Point{0, 1}, 
@@ -438,9 +306,94 @@ constexpr array w0_arr = {
         Point{4, 1}, Point{4, 0}, Point{4, -1},
         Point{5, 1}, Point{5, 0}, Point{5, -1}
 };
-auto window0 = magic_points_factory<w0_arr, DIMENSION>(0);
-auto all_windows = tie(window0);
-//auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
+auto window0 = magic_points_factory<w0_arr, DIMENSION, 0>();
+
+constexpr array w1_arr = {
+        Point{1, -1}, Point{0, 1},
+        Point{1, 1}, Point{1, 0},
+        Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 2}, Point{3, 1}, Point{3, 0},
+        Point{4, 2}, Point{4, 1}, Point{4, 0},
+        Point{5, 2}, Point{5, 1}, Point{5, 0}, 
+};
+auto window1 = magic_points_factory<w1_arr, DIMENSION, 1>();
+
+constexpr array w2_arr = {
+        Point{0, 1},
+        Point{1, 1}, Point{1, 0}, Point{1, -1},
+        Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 2}, Point{3, 1},
+        Point{4, 3}, Point{4, 2}, Point{4, 1},
+        Point{5, 3}, Point{5, 2}, Point{5, 1}
+    };
+auto window2 = magic_points_factory<w2_arr, DIMENSION, 2>();
+
+constexpr array w3_arr = {
+        Point{0, 1}, Point{-1, 1}, 
+        Point{1, 1}, Point{1, 0},
+        Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 2}, Point{3, 1},
+        Point{4, 3}, Point{4, 2}, Point{4, 1},
+        Point{5, 4}, Point{5, 3}, Point{5, 2}
+};
+auto window3 = magic_points_factory<w3_arr, DIMENSION, 3>();
+
+constexpr array w4_arr = {
+        Point{0, 1}, 
+        Point{1, 1}, Point{1, 0}, Point{1, -1},
+        Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 3}, Point{3, 2}, Point{3, 1},
+        Point{4, 4}, Point{4, 3}, Point{4, 2},
+        Point{5, 5}, Point{5, 4}, Point{5, 3}
+};
+auto window4 = magic_points_factory<w4_arr, DIMENSION, 4>();
+
+constexpr array w5_arr = {
+        Point{0, 1},
+        Point{1, 1}, Point{1, 0}, Point{1, 2}, 
+        Point{2, 3}, Point{2, 2}, Point{2, 1},
+        Point{3, 4}, Point{3, 3}, Point{3, 2},
+        Point{4, 5}, Point{4, 4}, Point{4, 3},
+        Point{5, 5}, Point{5, 4}
+    };
+auto window5 = magic_points_factory<w5_arr, DIMENSION, 5>();
+
+constexpr array w6_arr = {
+        Point{0, 1},
+        Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
+        Point{2, 4}, Point{2, 3}, Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 5}, Point{3, 4}, Point{3, 3}, Point{3, 2}, Point{3, 1},
+        Point{4, 5}, Point{4, 4},
+        Point{5, 5}
+};
+auto window6 = magic_points_factory<w6_arr, DIMENSION, 6>();
+
+constexpr array w7_arr = {
+        Point{0, 1},
+        Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
+        Point{2, 5}, Point{2, 4}, Point{2, 3}, Point{2, 2}, Point{2, 1}, Point{2, 0},
+        Point{3, 5}, Point{3, 4},
+        Point{4, 5}
+};
+auto window7 = magic_points_factory<w7_arr, DIMENSION, 7>();
+
+constexpr array w8_arr = {
+        Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
+        Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
+        Point{2, 5}, Point{2, 4}, Point{2, 3},
+        Point{3, 5}
+};
+auto window8 = magic_points_factory<w8_arr, DIMENSION, 8>();
+
+constexpr array w9_arr = {
+        Point{0, 5}, Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
+        Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
+        Point{2, 5}, Point{2, 4}, Point{2, 3}
+};
+auto window9 = magic_points_factory<w9_arr, DIMENSION, 9>();
+
+
+auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
 array<double, 2 * all_windows_size> angles = all_angles<double, 2 * all_windows_size>(all_windows);
