@@ -253,18 +253,22 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       }, all_windows);
 
 
-      for(int i = 0; i < relevant_size; i++){
-        cout << relevant[i] << endl;
+      if constexpr(dev_mode)      
+        for(int i = 0; i < relevant_size; i++)
+          cout << relevant[i] << endl;
+      
+
+      if constexpr(dev_mode){
+        cout << "Max Mean: " << max_mean << endl;
+        cout << "Select win: " << select_win << endl;
+        cout << "Angle win: " << select_angle << endl;
       }
 
-      cout << "Max Mean: " << max_mean << endl;
-      cout << "Select win: " << select_win << endl;
-      cout << "Angle win: " << select_angle << endl;
-
+      /*
       if(max_mean < eth){
         cout << "Smooth " << endl;
-        /* See what to do hear later because, it's wrong on the original code */
-      }
+        //See what to do hear later because, it's wrong on the original code
+      }*/
 
     }
   }
