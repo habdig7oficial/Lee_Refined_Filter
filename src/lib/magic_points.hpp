@@ -265,7 +265,7 @@ class MagicPoints {
 
     #if !NDEBUG  
         vector<Point> show_marked(){ return mark_relevant(relative_coordinates); }
-        vector<Point> show_filtered(){ return filter(mark_relevant(relative_coordinates)); }
+        vector<Point> show_filtered(){ return filter(mark_relevant(relative_coordinates), DIMENSION); }
     #endif
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){

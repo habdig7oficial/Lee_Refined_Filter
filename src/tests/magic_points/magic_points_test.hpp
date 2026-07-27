@@ -132,8 +132,7 @@ TEST_CASE("First integral pass", "[relevant_points]"){
                 //cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << endl;
             }),
             (void)[&args](){ 
-            
-                auto a = args.show_marked(); 
+                auto a = args.show_filtered(); 
                 for(int i = 0; i < a.size(); i++){
                     (*Rbind)["ex"] = (int) a[i].first;
                     (*Rbind)["ey"] = (int) a[i].second;
