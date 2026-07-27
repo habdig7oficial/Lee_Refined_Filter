@@ -15,20 +15,19 @@ using namespace std;
 using namespace env;
 using namespace Magic;
 
-
 template <size_t N, size_t M>
 class MagicPoints {
     private:
         const array<Point, N>relative_coordinates;
         const array<Point, M> relevant_points; 
 
-        BitSet2D<DIMENSION, DIMENSION> mask;
+        BitSetMask<DIMENSION, DIMENSION> mask;
 
         int side, area;
         int win_number;
 
     public:
-    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) }, mask(BitSet2D<DIMENSION, DIMENSION>(rl)) {
+    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) }, mask(BitSetMask<DIMENSION, DIMENSION>(diff<M, N>(gen_static<N, M>(rl, side), rl))) {
         this -> win_number = win_number;
         this -> side = side;
         this -> area = this -> side * this -> side;

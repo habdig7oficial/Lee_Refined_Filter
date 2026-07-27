@@ -115,3 +115,11 @@ constexpr array<Point, M> gen_static(const array<Point, N>& arr, uint threshold)
     return final_arr;
 }
 
+template<size_t N, size_t M>
+constexpr array<Point, N> diff(array<Point, N> a, array<Point, M> b){
+    array<Point, N> arr{};
+
+    set_difference(a.begin(), a.end(), b.begin(), b.end(), arr.begin());
+
+    return arr;
+}
