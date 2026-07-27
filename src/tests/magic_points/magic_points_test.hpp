@@ -118,7 +118,7 @@ TEST_CASE("First integral pass", "[relevant_points]"){
         LogicalMatrix m = (*Rbind).parseEval("first_half[[i]]");
         ((
             (*Rbind).parseEvalQ("plot(0,0, xlim = c(-7, 7), ylim = c(-7, 7))"),
-            args.traverse_data([&i, side](char rx, char ry, bool scope){
+            args.traverse([&i, side](char rx, char ry, bool scope){
                 (*Rbind)["rx"] = (int)rx;
                 (*Rbind)["ry"] = (int)ry;
                 

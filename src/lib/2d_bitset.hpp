@@ -3,9 +3,10 @@
 #include "point.hpp"
 
 using namespace std;
+using namespace Magic;
 
 template<uint LenX, uint LenY>
-class BitSet2D {
+class BitSetMask {
     private:
         bitset<LenX * LenY> mask;
 
@@ -13,9 +14,15 @@ class BitSet2D {
     public:
 
         template<size_t N>
-        constexpr BitSet2D(const array<Magic::Point, N>& points){
-            //cout << "BIT MASK HELLO";
+        static constexpr bitset<LenX * LenY> init(const array<Point, N>& points){
+            bitset<LenX * LenY> premask(1);
+
+
+            return premask;
         }
+
+        template<size_t N>
+        constexpr BitSetMask(const array<Point, N>& points) : mask(init(points)) {}
 
         size_t size() const noexcept { return LenX * LenY; }
         size_t size_x() const noexcept { return LenX; } 
@@ -31,7 +38,7 @@ class BitSet2D {
             return mask[(x * LenY) + y];
         }
 
-        friend ostream& operator << (ostream& os, const BitSet2D& bitset_2d){
+        friend ostream& operator << (ostream& os, const BitSetMask& bitset_2d){
             os << "Bit Set 2D: [";
 
             os << "]" << endl;
