@@ -252,6 +252,11 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
           ), ...);
       }, all_windows);
 
+
+      for(int i = 0; i < relevant_size; i++){
+        cout << relevant[i] << endl;
+      }
+
       cout << "Max Mean: " << max_mean << endl;
       cout << "Select win: " << select_win << endl;
       cout << "Angle win: " << select_angle << endl;

@@ -138,14 +138,14 @@ TEST_CASE("First integral pass", "[relevant_points]"){
                     (*Rbind)["ex"] = (int) a[i].first;
                     (*Rbind)["ey"] = (int) a[i].second;
                     //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
-                    //(*Rbind).parseEvalQ("points(ex, ey, pch = 17, col=\"green\", cex = 3)");
+                    (*Rbind).parseEvalQ("points(ex, ey, pch = 17, col=\"green\", cex = 3)");
                 }
             }(),
             args.traverse_relevant([](char rx, char ry, bool scope){
                 (*Rbind)["ex"] = (int) rx;
                 (*Rbind)["ey"] = (int) ry;
                 //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
-                (*Rbind).parseEvalQ("points(ex, ey, pch = 18, col=\"orange\", cex = 3)");
+                //(*Rbind).parseEvalQ("points(ex, ey, pch = 18, col=\"orange\", cex = 3)");
             }),
             (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
             (*Rbind).parseEvalQ("i <- i + 1"),
@@ -179,14 +179,14 @@ TEST_CASE("First integral pass", "[relevant_points]"){
                     (*Rbind)["ex"] = (int) a[i].first;
                     (*Rbind)["ey"] = (int) a[i].second;
                     //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
-                    //(*Rbind).parseEvalQ("points(ey, ex, pch = 17, col=\"green\", cex = 3)"); // inverted intencionally
+                    (*Rbind).parseEvalQ("points(ey, ex, pch = 17, col=\"green\", cex = 3)"); // inverted intencionally
                 }
             }(),
             args.traverse_relevant_inverse([](char rx, char ry, bool scope){
                 (*Rbind)["ex"] = (int) rx;
                 (*Rbind)["ey"] = (int) ry;
                 //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
-                (*Rbind).parseEvalQ("points(ex, ey, pch = 16, col=\"orange\", cex = 3)"); 
+                //(*Rbind).parseEvalQ("points(ex, ey, pch = 16, col=\"orange\", cex = 3)"); 
             }),
             (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
             (*Rbind).parseEvalQ("i <- i + 1"),
