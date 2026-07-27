@@ -77,3 +77,12 @@ template<typename T>
 constexpr T const_abs(T var){
     return (var < 0)? -var : var;
 }
+
+template<typename T, size_t N, size_t M>
+constexpr array<T, N> diff(array<T, N> a, array<T, M> b){
+    array<T, N>res;
+
+    auto it = set_difference(a.begin(), a.end(), b.begin(), b.end(), res.begin());
+
+    return res;
+}
