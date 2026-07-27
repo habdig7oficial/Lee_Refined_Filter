@@ -137,7 +137,7 @@ TEST_CASE("First integral pass", "[relevant_points]"){
                     (*Rbind)["ex"] = (int) a[i].first;
                     (*Rbind)["ey"] = (int) a[i].second;
                     //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
-                    (*Rbind).parseEvalQ("points(ex, ey, pch = 17, col=\"green\", cex = 3)");
+                    (*Rbind).parseEvalQ("points(ex, ey, pch = 17, col=\"yellow\", cex = 3)");
                 }
             }(),
             args.traverse_relevant([](char rx, char ry, bool scope){

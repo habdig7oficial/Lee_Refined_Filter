@@ -139,7 +139,7 @@ class MagicPoints {
         int win_number;
 
     public:
-    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, DIMENSION) } {
+    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) } {
         this -> win_number = win_number;
         this -> side = side;
         this -> area = this -> side * this -> side;
@@ -265,7 +265,7 @@ class MagicPoints {
 
     #if !NDEBUG  
         vector<Point> show_marked(){ return mark_relevant(relative_coordinates); }
-        vector<Point> show_filtered(){ return filter(mark_relevant(relative_coordinates), DIMENSION); }
+        vector<Point> show_filtered(){ return filter(this -> show_marked(), 3); }
     #endif
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
