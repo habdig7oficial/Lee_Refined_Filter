@@ -15,8 +15,14 @@ class BitSetMask {
 
         template<size_t N>
         static constexpr bitset<LenX * LenY> init(const array<Point, N>& points){
-            bitset<LenX * LenY> premask(1);
+            bitset<LenX * LenY> premask = {};
 
+            int center_x = LenX / 2;
+            int center_y = LenY / 2;
+
+            for(auto [x, y] : points){
+                premask.set(((center_y - y) * LenX) + (center_x + x));
+            }
 
             return premask;
         }
@@ -39,9 +45,32 @@ class BitSetMask {
         }
 
         friend ostream& operator << (ostream& os, const BitSetMask& bitset_2d){
-            os << "Bit Set 2D: [";
+            os << "Bit Set 2D: [" << endl;
 
+            os << "    ";
+            for(int i = 0; i < LenX; i++)
+                os << i << " ";
+
+            os << endl;
+
+            for(int i = 0; i < LenX; i++)
+                os << "--";
+
+            os << endl;
+
+            for(int i = 0; i < LenX; i++){
+                if(i < 10)
+                    os << i << " | ";
+                else
+                    os << i << "| ";
+
+                for(int j = 0; j < LenX; j++)
+                    os << bitset_2d.mask[(i * LenY) + j] << " ";
+                os << endl;
+            }
+
+            
             os << "]" << endl;
-        return os;
-    }
+            return os;
+        }
 };

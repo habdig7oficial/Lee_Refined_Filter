@@ -137,6 +137,7 @@ TEST_CASE("First integral pass", "[relevant_points]"){
                 //cout << i << ") rx: " <<  (int) a[i].first << " ry: " << (int) a[i].second << endl;
                 (*Rbind).parseEvalQ("points(ex, ey, pch = 18, col=\"purple\", cex = 3)");
             }),
+            cout << args.get_mask() << endl,
             (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
             (*Rbind).parseEvalQ("i <- i + 1"),
             i++
