@@ -40,6 +40,12 @@ namespace Magic {
         signed char second : SIZE_POINT;
 
         auto operator <=> (const Point&) const = default;
+
+
+    friend ostream& operator << (ostream& os, const Point& point){
+        os << "Point {" << (int)point.first << ", " << (int)point.second << "} ";
+        return os;
+    }
     };
 }
 
@@ -259,7 +265,7 @@ class MagicPoints {
 
     #if !NDEBUG  
         vector<Point> show_marked(){ return mark_relevant(relative_coordinates); }
-        vector<Point> show_filtered(){ return relevant_points; }
+        vector<Point> show_filtered(){ return filter(mark_relevant(relative_coordinates)); }
     #endif
 
     friend ostream& operator << (ostream& os, const MagicPoints& magic_points){
