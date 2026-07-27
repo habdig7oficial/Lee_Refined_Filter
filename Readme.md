@@ -57,19 +57,7 @@ The 2th window in the code was also wrong, it should be one square in y lower.
 
 
 
-# Unused snippets
 
-constexpr array w8_arr = {
-        Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
-        Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0},
-        Point{2, 5}, Point{2, 4}, Point{2, 3},
-        Point{3, 5}
-};
-auto window8 = magic_points_factory<w8_arr, DIMENSION, 8>();
 
-constexpr array w9_arr = {
-        Point{0, 5}, Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
-        Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
-        Point{2, 5}, Point{2, 4}, Point{2, 3}
-};
-auto window9 = magic_points_factory<w9_arr, DIMENSION, 9>();
+    const Point* get_relevant() const { return relevant_points.data(); }
+    static size_t get_relevant_size() { return M; }

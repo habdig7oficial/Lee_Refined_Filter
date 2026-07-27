@@ -34,13 +34,16 @@ using namespace env;
 #endif
 
 /* In side A NOT_ROTATED is (x, y) */
-struct Point {
-    signed char first : SIZE_POINT;
-    signed char second : SIZE_POINT;
+namespace Magic {
+    struct Point {
+        signed char first : SIZE_POINT;
+        signed char second : SIZE_POINT;
 
-    auto operator <=> (const Point&) const = default;
-};
+        auto operator <=> (const Point&) const = default;
+    };
+}
 
+using namespace Magic;
 
 auto sorting_lambda = [](const Point& a, const Point &b){
     if(a.second == b.second){
@@ -122,7 +125,7 @@ template <size_t N, size_t M>
 class MagicPoints {
     private:
         const array<Point, N>relative_coordinates;
-        array<Point, M> relevant_points; 
+        const array<Point, M> relevant_points; 
 
         BitSet2D<N, N> mask;
 
@@ -251,6 +254,8 @@ class MagicPoints {
     int get_win_num()    const { return this -> win_number; }
     int get_mirror_num() const { return this -> win_number + (int)(this -> dimension() / 2); }
 
+    const Point* get_relevant() const { return relevant_points.data(); }
+    size_t get_relevant_size()  const { return M; }
 
     #if !NDEBUG  
         vector<Point> show_marked(){ return mark_relevant(relative_coordinates); }

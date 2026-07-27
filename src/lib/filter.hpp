@@ -212,16 +212,21 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       double max_mean = 0;
       double select_angle;
       int select_win;
+      Magic::Point *relevant;
+      size_t relevant_size;
 
-      apply([&max_mean, &image, i, j, &select_win, &select_angle](auto&&... win){
-        double aux ;
+      apply([&, i, j](auto&&... win){
+        double aux;
           ((
             aux = calc_mean_complex<double>(image, i, j, win, NOT_ROTATED),
-            (void)[aux, &win, &max_mean, &select_win, &select_angle](){
+            (void)[&, aux](){
               if(abs(aux) > max_mean){
                 max_mean = aux;
                 select_win = win.get_win_num();
                 select_angle = win.angle();
+                relevant = (Magic::Point *) win.get_relevant(); // overrides class type
+                relevant_size = (size_t) win.get_relevant_size();
+                //relevant_points = win.get_relevant();
               }
               if constexpr(dev_mode)
                 cout << win.get_win_num() << ") " << aux << endl;
@@ -229,15 +234,17 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
           ), ...);
       }, all_windows);
 
-      apply([&max_mean, &image, i, j, &select_win, &select_angle](auto&&... win){
+      apply([&, i, j](auto&&... win){
           double aux;
           ((
             aux = calc_mean_complex<double>(image, i, j, win, ROTATED),
-            (void)[aux, &win, &max_mean, &select_win, &select_angle](){
+            (void)[&, aux](){
               if(abs(aux) > max_mean){
                 max_mean = aux;
                 select_win = win.get_mirror_num();
                 select_angle = win.angle_inverse();
+                relevant = (Magic::Point *) win.get_relevant(); // overrides class type
+                relevant_size = (size_t) win.get_relevant_size();
               }
               if constexpr(dev_mode)
                 cout << win.get_mirror_num() << ") " << aux << endl;
