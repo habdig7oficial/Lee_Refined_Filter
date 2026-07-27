@@ -1,5 +1,6 @@
 
 #include "bitset"
+#include "point.hpp"
 
 using namespace std;
 
@@ -10,6 +11,11 @@ class BitSet2D {
 
 
     public:
+
+        template<size_t N>
+        constexpr BitSet2D(const array<Magic::Point, N>& points){
+            //cout << "BIT MASK HELLO";
+        }
 
         size_t size() const noexcept { return LenX * LenY; }
         size_t size_x() const noexcept { return LenX; } 
