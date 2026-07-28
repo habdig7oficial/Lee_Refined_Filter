@@ -5,70 +5,101 @@
 using namespace std;
 using namespace Magic;
 
-template<uint LenX, uint LenY>
+template<uint Len>
 class BitSetMask {
     private:
-        bitset<LenX * LenY> mask;
+        bitset<Len * Len> mask;
 
 
     public:
 
-        template<size_t N>
-        static constexpr bitset<LenX * LenY> init(const array<Point, N>& points){
-            bitset<LenX * LenY> premask = {};
+        template<size_t N, size_t M>
+        static constexpr bitset<Len * Len> init(const array<Point, N>& points, const array<Point, M>& bit_mask){
+            bitset<Len * Len> premask;
 
-            int center_x = LenX / 2;
-            int center_y = LenY / 2;
+            int center = Len / 2;
 
-            for(auto [x, y] : points){
-                premask.set(((center_y - y) * LenX) + (center_x + x));
-            }
+            // zero
+            //premask[(center * Len) + center] = true;
+
+
+            //right sector
+            for(auto [x, y] : points)
+                premask[((center - y) * Len) + (center + x)] = true;
+            
+
+            // left
+            for(auto [x, y] : points)
+                premask[((center + y) * Len) + (center - x)] = true;
+            
 
             return premask;
         }
 
-        template<size_t N>
-        constexpr BitSetMask(const array<Point, N>& points) : mask(init(points)) {}
+        template<size_t N, size_t M>
+        constexpr BitSetMask(const array<Point, N>& points, const array<Point, M>& bit_mask) : mask(init(points, bit_mask)) {}
 
-        size_t size() const noexcept { return LenX * LenY; }
-        size_t size_x() const noexcept { return LenX; } 
-        size_t size_y() const noexcept { return LenY; } 
+        size_t size() const noexcept { return Len * Len; }
+        size_t size_x() const noexcept { return Len; } 
+        size_t size_y() const noexcept { return Len; } 
 
         bool flip(uint x, uint y) const {
-            this -> mask[(x * LenY) + y] = !this -> mask[(x * LenY) + y];
+            this -> mask[(x * Len) + y] = !this -> mask[(x * Len) + y];
 
-            return this -> mask[(x * LenY) + y];
+            return this -> mask[(x * Len) + y];
         }
 
         bool operator () (uint x, uint y) const {
-            return mask[(x * LenY) + y];
+            return mask[(x * Len) + y];
         }
 
         friend ostream& operator << (ostream& os, const BitSetMask& bitset_2d){
             os << "Bit Set 2D: [" << endl;
 
-            os << "    ";
-            for(int i = 0; i < LenX; i++)
+            os << "N:  ";
+            for(int i = 0; i < Len; i++)
                 os << i << " ";
 
-            os << endl;
+            os << endl << "----";
 
-            for(int i = 0; i < LenX; i++)
+            for(int i = 0; i < Len; i++)
                 os << "--";
 
             os << endl;
 
-            for(int i = 0; i < LenX; i++){
+            for(int i = 0; i < Len; i++){
                 if(i < 10)
                     os << i << " | ";
                 else
                     os << i << "| ";
 
-                for(int j = 0; j < LenX; j++)
-                    os << bitset_2d.mask[(i * LenY) + j] << " ";
+                for(int j = 0; j < Len; j++)
+                    os << bitset_2d.mask[(i * Len) + j] << " ";
                 os << endl;
             }
+            os << "]" << endl;
 
+            os << "R:  ";
+            for(int i = 0; i < Len; i++)
+                os << i << " ";
+
+            os << endl << "----";
+
+            for(int i = 0; i < Len; i++)
+                os << "--";
+
+            os << endl;
+
+            for(int j = 0; j < Len; j++){
+                if(j < 10)
+                    os << j << " | ";
+                else
+                    os << j << "| ";
+
+                for(int i = 0; i < Len; i++)
+                    os << bitset_2d.mask[(i * Len) + j] << " ";
+                os << endl;
+            }
             
             os << "]" << endl;
             return os;

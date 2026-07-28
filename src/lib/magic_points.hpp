@@ -21,13 +21,13 @@ class MagicPoints {
         const array<Point, N>relative_coordinates;
         const array<Point, M> relevant_points; 
 
-        BitSetMask<DIMENSION, DIMENSION> mask;
+        BitSetMask<DIMENSION> mask;
 
         int side, area;
         int win_number;
 
     public:
-    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) }, mask(BitSetMask<DIMENSION, DIMENSION>(gen_static<N, M>(rl, side))) {
+    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) }, mask(BitSetMask<DIMENSION>(relevant_points, rl)) {
         this -> win_number = win_number;
         this -> side = side;
         this -> area = this -> side * this -> side;
@@ -148,7 +148,7 @@ class MagicPoints {
     int get_win_num()    const { return this -> win_number; }
     int get_mirror_num() const { return this -> win_number + (int)(this -> dimension() / 2); }
 
-    BitSetMask<DIMENSION, DIMENSION> get_mask() const { return this -> mask; } 
+    BitSetMask<DIMENSION> get_mask() const { return this -> mask; } 
 
     const Point* get_relevant() const { return relevant_points.data(); }
     size_t get_relevant_size()  const { return M; }
