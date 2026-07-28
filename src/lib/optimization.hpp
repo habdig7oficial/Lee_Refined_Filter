@@ -61,6 +61,11 @@ constexpr tuple<uint, T> min(array<T, N> arr){
     return {pos, total};
 }
 
+template<typename T>
+constexpr T const_abs(T var){
+    return (var < 0)? -var : var;
+}
+
 template<typename T, size_t N>
 constexpr array<T, N> abs(array<T, N> arr){
     static_assert(is_arithmetic_v<T>, "Type must be a number");
@@ -68,21 +73,17 @@ constexpr array<T, N> abs(array<T, N> arr){
     array<T, N> new_arr;
 
     for(int i = 0; i < N; i++)
-        new_arr[i] = abs(arr[i]);
+        new_arr[i] = const_abs(arr[i]);
     
     return new_arr;
-}
-
-template<typename T>
-constexpr T const_abs(T var){
-    return (var < 0)? -var : var;
 }
 
 template<typename T, size_t N, size_t M>
 constexpr array<T, N> diff(array<T, N> a, array<T, M> b){
     array<T, N>res;
 
-    auto it = set_difference(a.begin(), a.end(), b.begin(), b.end(), res.begin());
 
-    return res;
+    //auto it = set_difference(at.begin(), at.end(), bt.begin(), bt.end(), res.begin());
+
+    return a;
 }
