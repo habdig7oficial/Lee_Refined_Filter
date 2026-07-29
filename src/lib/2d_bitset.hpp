@@ -17,17 +17,18 @@ class BitSetMask {
         template<size_t N, size_t M>
         static constexpr bitset<Len * Len> init(const array<Point, N>& points, const array<Point, M>& bit_mask){
             bitset<Len * Len> premask;
+            premask.set();
 
             int center = Len / 2;
 
             //right sector
-            for(auto [x, y] : points)
-                premask[((center - y) * Len) + (center + x)] = true;
+            //for(auto [x, y] : points)
+            //   premask[((center - y) * Len) + (center + x)] = true;
             
 
             // left
-            for(auto [x, y] : points)
-                premask[((center + y) * Len) + (center - x)] = true;
+            //for(auto [x, y] : points)
+            //    premask[((center + y) * Len) + (center - x)] = true;
 
             for(auto [x, y] : bit_mask)
                 premask[((center - y) * Len) + (center + x)] = false;
@@ -54,7 +55,7 @@ class BitSetMask {
         }
 
         bool operator () (uint x, uint y) const {
-            return mask[(x * Len) + y];
+            return mask[(y * Len) + x];
         }
 
         friend ostream& operator << (ostream& os, const BitSetMask& bitset_2d){
