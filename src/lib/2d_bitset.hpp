@@ -5,6 +5,7 @@
 using namespace std;
 using namespace Magic;
 
+/* Apply fold method on the Mask later */
 template<uint Len>
 class BitSetMask {
     private:
@@ -19,10 +20,6 @@ class BitSetMask {
 
             int center = Len / 2;
 
-            // zero
-            //premask[(center * Len) + center] = true;
-
-
             //right sector
             for(auto [x, y] : points)
                 premask[((center - y) * Len) + (center + x)] = true;
@@ -31,7 +28,14 @@ class BitSetMask {
             // left
             for(auto [x, y] : points)
                 premask[((center + y) * Len) + (center - x)] = true;
+
+            for(auto [x, y] : bit_mask)
+                premask[((center - y) * Len) + (center + x)] = false;
+
+            for(auto [x, y] : bit_mask)
+                premask[((center + y) * Len) + (center - x)] = false;
             
+            premask[(center * Len) + center] = false;
 
             return premask;
         }
