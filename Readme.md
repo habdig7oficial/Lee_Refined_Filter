@@ -57,4 +57,64 @@ The 2th window in the code was also wrong, it should be one square in y lower.
 
 # Unused 
 
-mask(BitSetMask<DIMENSION, DIMENSION>(diff<M, N>(gen_static<N, M>(rl, side), rl))) 
+
+
+
+            for(auto [x, y] : bit_mask)
+                premask[((center + y) * Len) + (center - x)] = false;
+
+
+
+
+
+            //right sector
+            for(auto [x, y] : points)
+                premask[((center - y) * Len) + (center + x)] = true;
+            
+
+            // left
+            for(auto [x, y] : points)
+                premask[((center + y) * Len) + (center - x)] = true;
+
+            
+            for(auto [x, y] : bit_mask)
+                premask[((center - y) * Len) + (center + x)] = false;
+
+            for(auto [x, y] : bit_mask)
+                premask[((center + y) * Len) + (center - x)] = false;
+
+            
+            // zero
+            premask[(center * Len) + center] = false;
+            
+
+
+
+
+
+
+
+
+                       os << "R:  ";
+            for(int i = 0; i < Len; i++)
+                os << i << " ";
+
+            os << endl << "----";
+
+            for(int i = 0; i < Len; i++)
+                os << "--";
+
+            os << endl;
+
+            for(int j = 0; j < Len; j++){
+                if(j < 10)
+                    os << j << " | ";
+                else
+                    os << j << "| ";
+
+                for(int i = 0; i < Len; i++)
+                    os << bitset_2d.mask[(i * Len) + j] << " ";
+                os << endl;
+            }
+            
+            os << "]" << endl;

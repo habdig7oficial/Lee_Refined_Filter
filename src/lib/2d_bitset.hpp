@@ -8,30 +8,21 @@ using namespace Magic;
 template<uint Len>
 class BitSetMask {
     private:
-        bitset<Len * Len> mask;
+
+        static constexpr uint Size = (Len * (Len + 1)) / 2;
+        bitset<Size> mask;
 
 
     public:
 
         template<size_t N, size_t M>
-        static constexpr bitset<Len * Len> init(const array<Point, N>& points, const array<Point, M>& bit_mask){
-            bitset<Len * Len> premask;
+        static constexpr bitset<Size> init(const array<Point, N>& points, const array<Point, M>& bit_mask){
+            bitset<Size> premask;
 
             int center = Len / 2;
 
-            // zero
-            //premask[(center * Len) + center] = true;
-
-
-            //right sector
-            for(auto [x, y] : points)
-                premask[((center - y) * Len) + (center + x)] = true;
-            
-
-            // left
-            for(auto [x, y] : points)
-                premask[((center + y) * Len) + (center - x)] = true;
-            
+            for(auto [x, y] : bit_mask)
+                premask[((center - y) * ) + x] = true;
 
             return premask;
         }
@@ -53,55 +44,61 @@ class BitSetMask {
             return mask[(x * Len) + y];
         }
 
+        static void print_helper (ostream& os, const BitSetMask& bitset_2d, bool mirror){
+            constexpr uint side = (Len + 1) / 2;
+            os << Size << ") Bit Set 2D: [" << endl;
+
+            if(mirror)
+                os << "R:  ";
+            else 
+                os << "N:  ";
+
+            for(int i = Len / 2; i < Len; i++)
+                os << i << " ";
+
+            os << endl << "----";
+
+            for(int i = 0; i < (Len + 1) / 2; i++)
+                os << "--";
+
+            os << endl;
+
+
+            if(!mirror){
+                for(int i = 0; i < Len; i++){
+                    if(i < 10)
+                        os << i << " | ";
+                    else
+                        os << i << "| ";
+
+                    for(int j = 0; j < side; j++)
+                        os << bitset_2d.mask[(i * side) + j] << " "; // 
+
+                    os << endl;
+                }
+            }
+            else {
+                for(int i = 0; i < side; i++){
+                    if(i < 10)
+                        os << i << " | ";
+                    else
+                        os << i << "| ";
+
+                    for(int j = 0; j < Len; j++)
+                        os << bitset_2d.mask[(j * side) + i] << " "; // bitset_2d.mask[(j * side) + i]
+
+                    os << endl;
+                }
+            }
+
+            os << "]" << endl;
+
+        }
+
         friend ostream& operator << (ostream& os, const BitSetMask& bitset_2d){
-            os << "Bit Set 2D: [" << endl;
-
-            os << "N:  ";
-            for(int i = 0; i < Len; i++)
-                os << i << " ";
-
-            os << endl << "----";
-
-            for(int i = 0; i < Len; i++)
-                os << "--";
-
-            os << endl;
-
-            for(int i = 0; i < Len; i++){
-                if(i < 10)
-                    os << i << " | ";
-                else
-                    os << i << "| ";
-
-                for(int j = 0; j < Len; j++)
-                    os << bitset_2d.mask[(i * Len) + j] << " ";
-                os << endl;
-            }
-            os << "]" << endl;
-
-            os << "R:  ";
-            for(int i = 0; i < Len; i++)
-                os << i << " ";
-
-            os << endl << "----";
-
-            for(int i = 0; i < Len; i++)
-                os << "--";
-
-            os << endl;
-
-            for(int j = 0; j < Len; j++){
-                if(j < 10)
-                    os << j << " | ";
-                else
-                    os << j << "| ";
-
-                for(int i = 0; i < Len; i++)
-                    os << bitset_2d.mask[(i * Len) + j] << " ";
-                os << endl;
-            }
-            
-            os << "]" << endl;
+            print_helper(os, bitset_2d, false);
+            print_helper(os, bitset_2d, true);
+ 
             return os;
         }
 };
