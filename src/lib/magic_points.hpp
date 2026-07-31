@@ -127,7 +127,6 @@ class MagicPoints {
     }
 
     double angle() const {
-        cout << "D: " << this -> dimension() << endl;
         return this -> win_number * numbers::pi / this -> dimension();
     }
 

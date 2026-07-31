@@ -289,7 +289,8 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
             cout <<endl;
         }
 
-        cout << endl;
+      cout << endl << *mask << endl;
+
 
       for(int k = 0; k < relevant_size; k++){
         auto [x, y] = relevant[k];
@@ -308,7 +309,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
           }   
         }
       }
-      cout << *mask << endl;
       /*
       if(max_mean < eth){
         cout << "Smooth " << endl;

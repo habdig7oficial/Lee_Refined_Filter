@@ -5,12 +5,14 @@ TEST_CASE("First integral pass", "[magic_points]"){
 
     int size = (*Rbind)["size"];
     int side = size / 2;
+    //shared_ptr<BitSetMask<DIMENSION>> mask;
 
     int i = 0;
     apply([&i, side](auto&&... args){
         (*Rbind)["i"]  = i + 1;
         LogicalMatrix m = (*Rbind).parseEval("first_half[[i]]");
         ((
+            //mask = (BitSetMask<DIMENSION>) args.get_mask();
             (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))"),
             args.traverse([&i, side](char rx, char ry, bool scope){
                 (*Rbind)["rx"] = (int)rx;
@@ -23,18 +25,19 @@ TEST_CASE("First integral pass", "[magic_points]"){
                 
                 (*Rbind).parseEvalQ("points(rx, ry, pch = 15, col=\"red\", cex = 3)");
                         
-                cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << endl;
+                //cout << i << ") rx: " << (int)rx << " ry: " << (int)ry <<" tx: " << (int)rx + side << " ty: " << (int)side - ry << endl;
 
                 INFO(i << " - (" << (int)rx << ", " << (int)ry << "), (" << side - ry << ", " << side - ry << ")\n" << m);
                 REQUIRE(m(side - ry, rx + side));
                 m(side - ry, rx + side) = !m(side - ry, rx + side);
-                (*Rbind).parseEval("print(first_half[[i]])");
+                //(*Rbind).parseEval("print(first_half[[i]])");
             }),
             (*Rbind).parseEvalQ("grid(nx = NULL, ny = NULL, col = \"black\", lty = \"solid\", lwd = 1)"),
             (*Rbind).parseEvalQ("i <- i + 1"),
+            cout << args.get_mask() << endl,
             i++
         ), ...);
-        (*Rbind).parseEvalQ("print(first_half)");
+        //(*Rbind).parseEvalQ("print(first_half)");
         bool has_left = (*Rbind).parseEval("any(sapply(first_half, any))");
         cout << "Has Left: " << has_left << endl;
         INFO("first half\n" << m);
@@ -87,7 +90,7 @@ TEST_CASE("angles", "[angles]"){
         ((
             cout << args.get_win_num() << " - " << args.angle() << endl,
             angle_r = (*Rbind).parseEval("window_angle[[i]]"),
-            (*Rbind).parseEval("print(window_angle)"),
+            //(*Rbind).parseEval("print(window_angle)"),
             (void)[&](){ REQUIRE(abs(angle_r - args.angle()) < EPSILON); }(),
             (*Rbind).parseEvalQ("i <- i + 1")
         ), ...);
