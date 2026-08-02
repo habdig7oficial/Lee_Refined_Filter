@@ -21,18 +21,12 @@ class BitSetMask {
 
             int center = Len / 2;
 
-            //right sector
-            //for(auto [x, y] : points)
-            //   premask[((center - y) * Len) + (center + x)] = true;
-            
-
-            // left
-            //for(auto [x, y] : points)
-            //    premask[((center + y) * Len) + (center - x)] = true;
-
+            // NOT_ROTATED
+            // SIDE A 
             for(auto [x, y] : bit_mask)
                 premask[((center - y) * Len) + (center + x)] = false;
 
+            // SIDE B
             for(auto [x, y] : bit_mask)
                 premask[((center + y) * Len) + (center - x)] = false;
             
@@ -101,7 +95,7 @@ class BitSetMask {
                 else
                     os << j << "| ";
 
-                for(int i = 0; i < Len; i++)
+                for(int i = Len - 1; i >= 0; i--)
                     os << bitset_2d.mask[(i * Len) + j] << " ";
                 os << endl;
             }
