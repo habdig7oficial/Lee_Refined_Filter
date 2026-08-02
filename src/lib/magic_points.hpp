@@ -230,7 +230,7 @@ constexpr array w2_arr = {
 constinit auto window2 = magic_points_factory<w2_arr, DIMENSION, 2>();
 
 constexpr array w3_arr = {
-        Point{0, 1}, Point{-1, 1}, 
+        Point{0, 1}, Point{1, -1}, 
         Point{1, 1}, Point{1, 0},
         Point{2, 2}, Point{2, 1}, Point{2, 0},
         Point{3, 2}, Point{3, 1},

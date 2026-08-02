@@ -9,14 +9,15 @@ using namespace Magic;
 template<uint Len>
 class BitSetMask {
     private:
-        bitset<Len * Len> mask;
+        static constexpr size_t MaskSize = (Len + Len % 2) * (Len + Len % 2) + (Len + Len % 2);
+        bitset<MaskSize> mask;
 
 
     public:
 
         template<size_t N, size_t M>
-        static constexpr bitset<Len * Len> init(const array<Point, N>& points, const array<Point, M>& bit_mask){
-            bitset<Len * Len> premask;
+        static constexpr bitset<MaskSize> init(const array<Point, N>& points, const array<Point, M>& bit_mask){
+            bitset<MaskSize> premask;
             premask.set();
 
             int center = Len / 2;
