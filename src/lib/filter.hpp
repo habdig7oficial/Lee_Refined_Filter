@@ -269,8 +269,8 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       cout << setprecision(3);
 
       if constexpr(dev_mode)  
-        for(int pj = j - (DIMENSION / 2); pj < j + (DIMENSION / 2); pj++){
-            for(int pi = i - (DIMENSION / 2); pi < i + (DIMENSION / 2); pi++)
+        for(int pj = j - (DIMENSION / 2); pj <= j + (DIMENSION / 2); pj++){
+            for(int pi = i - (DIMENSION / 2); pi <= i + (DIMENSION / 2); pi++)
                 cout << *(image.ptr<T>(pj) + pi) << " ";
 
             cout << endl;
@@ -279,12 +279,12 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       cout << "--------" << endl;
 
       if constexpr(dev_mode)  
-        for(int pj = j - (DIMENSION / 2); pj < j + (DIMENSION / 2); pj++){
-            for(int pi = i - (DIMENSION / 2); pi < i + (DIMENSION / 2); pi++)
+        for(int pj = j - (DIMENSION / 2); pj <= j + (DIMENSION / 2); pj++){
+            for(int pi = i - (DIMENSION / 2); pi <= i + (DIMENSION / 2); pi++)
               if(select_win < DIMENSION - 1)
-                cout << (!(*mask)(pj, pi) ? *(image.ptr<T>(pj) + pi) : 0) << " ";
+                cout << (!(*mask)(pj, pi) ? *(image.ptr<T>(pj) + pi) : 0) << " (" << pi << ", " << pj << ") ";
               else
-                cout << (!(*mask)(pi, pj) ? *(image.ptr<T>(pj) + pi) : 0) << " "; // inverted mask
+                cout << (!(*mask)(pi, pj) ? *(image.ptr<T>(pj) + pi) : 0) << " (" << pi << ", " << pj << ") "; // inverted mask
           
             cout <<endl;
         }
