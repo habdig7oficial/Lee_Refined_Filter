@@ -26,10 +26,6 @@ class BitSetMask {
             // SIDE A 
             for(auto [x, y] : bit_mask)
                 premask[((center - y) * Len) + (center + x)] = false;
-
-            // SIDE B
-            for(auto [x, y] : bit_mask)
-                premask[((center + y) * Len) + (center - x)] = false;
             
             premask[(center * Len) + center] = false;
 
@@ -53,55 +49,44 @@ class BitSetMask {
             return mask[(y * Len) + x];
         }
 
-        friend ostream& operator << (ostream& os, const BitSetMask& bitset_2d){
+        static void print_helper(ostream& os, const BitSetMask& bitset_2d, bool is_rotated){
             os << "Bit Set 2D: [" << endl;
 
-            os << "N:  ";
+            os << ((is_rotated == NOT_ROTATED) ? "N:  " : "R:  ");
             for(int i = 0; i < Len; i++)
                 os << i << " ";
 
             os << endl << "----";
-
             for(int i = 0; i < Len; i++)
                 os << "--";
 
             os << endl;
 
-            for(int i = 0; i < Len; i++){
-                if(i < 10)
-                    os << i << " | ";
-                else
-                    os << i << "| ";
+            int begin, end;
+            if(is_rotated == NOT_ROTATED){
+                begin = Len / 2 + Len % 2;
+                end = 0;
+            }
+            else {
+                begin = 0;
+                end = Len / 2 + Len % 2;
+            }
 
-                for(int j = 0; j < Len; j++)
-                    os << bitset_2d.mask[(i * Len) + j] << " ";
+
+            for(int i = begin; (is_rotated == NOT_ROTATED) ? i > end : i < end; (is_rotated == NOT_ROTATED) ? i-- : i++){
+                os << i << ((abs(i) < 10) ? " | " : "| ");
+
+
+
                 os << endl;
             }
+
             os << "]" << endl;
+        }
 
-            os << "R:  ";
-            for(int i = 0; i < Len; i++)
-                os << i << " ";
-
-            os << endl << "----";
-
-            for(int i = 0; i < Len; i++)
-                os << "--";
-
-            os << endl;
-
-            for(int j = 0; j < Len; j++){
-                if(j < 10)
-                    os << j << " | ";
-                else
-                    os << j << "| ";
-
-                for(int i = Len - 1; i >= 0; i--)
-                    os << bitset_2d.mask[(i * Len) + j] << " ";
-                os << endl;
-            }
-            
-            os << "]" << endl;
+        friend ostream& operator << (ostream& os, const BitSetMask& bitset_2d){
+            print_helper(os, bitset_2d, NOT_ROTATED);
+            print_helper(os, bitset_2d, ROTATED);
             return os;
         }
 };

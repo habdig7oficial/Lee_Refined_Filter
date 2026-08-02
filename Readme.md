@@ -66,3 +66,54 @@ mask(BitSetMask<DIMENSION, DIMENSION>(diff<M, N>(gen_static<N, M>(rl, side), rl)
             cout << "Point: (" << (int)point_x << ", " << (int)point_y << ") Real: (" << (int)x << ", " << (int)y << ") " << endl;
           }
         }
+
+
+
+            os << "Bit Set 2D: [" << endl;
+
+            os << "N:  ";
+            for(int i = 0; i < Len; i++)
+                os << i << " ";
+
+            os << endl << "----";
+
+            for(int i = 0; i < Len; i++)
+                os << "--";
+
+            os << endl;
+
+            for(int i = 0; i < Len; i++){
+                if(i < 10)
+                    os << i << " | ";
+                else
+                    os << i << "| ";
+
+                for(int j = 0; j < Len; j++)
+                    os << bitset_2d.mask[(i * Len) + j] << " ";
+                os << endl;
+            }
+            os << "]" << endl;
+
+            os << "R:  ";
+            for(int i = 0; i < Len; i++)
+                os << i << " ";
+
+            os << endl << "----";
+
+            for(int i = 0; i < Len; i++)
+                os << "--";
+
+            os << endl;
+
+            for(int j = 0; j < Len; j++){
+                if(j < 10)
+                    os << j << " | ";
+                else
+                    os << j << "| ";
+
+                for(int i = Len - 1; i >= 0; i--)
+                    os << bitset_2d.mask[(i * Len) + j] << " ";
+                os << endl;
+            }
+            
+            os << "]" << endl;
