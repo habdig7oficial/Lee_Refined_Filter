@@ -11,7 +11,9 @@ TEST_CASE("First integral pass", "[magic_points]"){
         (*Rbind)["i"]  = i + 1;
         LogicalMatrix m = (*Rbind).parseEval("first_half[[i]]");
         ((
-            (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5), main = str_glue(\"Window {i}\"))"),
+            (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))"),
+            (*Rbind).parseEvalQ("title(main = sprintf(\"%d° window\", i), cex.main = 3)"),
+
             args.traverse([&i, side](char rx, char ry, bool scope){
                 (*Rbind)["rx"] = (int)rx;
                 (*Rbind)["ry"] = (int)ry;
@@ -48,6 +50,7 @@ TEST_CASE("First integral pass", "[magic_points]"){
         LogicalMatrix m = (*Rbind).parseEval("second_half[[i]]");
         ((
             (*Rbind).parseEvalQ("plot(0,0, xlim = c(-5, 5), ylim = c(-5, 5))"),
+            (*Rbind).parseEvalQ("title(main = sprintf(\"%d° transformed window \", i), cex.main = 3)"),
             args.traverse_inverse([&i, side](char rx, char ry, bool scope){
                 (*Rbind)["rx"] = (int)rx;
                 (*Rbind)["ry"] = (int)ry;
