@@ -282,7 +282,7 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
         for(int pj = j - (DIMENSION / 2); pj <= j + (DIMENSION / 2); pj++){
             for(int pi = i - (DIMENSION / 2); pi <= i + (DIMENSION / 2); pi++)
               if(select_win < DIMENSION - 1)
-                cout << (!(*mask)(pj, pi) ? *(image.ptr<T>(pj) + pi) : 0) << " ";
+                cout << (!(*mask)(pj, pi) ? *(image.ptr<T>(pj) + pi) : 0) << " " ;
               else
                 cout << (!(*mask)(pj, pi) ? *(image.ptr<T>(pj) + pi) : 0) << " "; // inverted mask
           
