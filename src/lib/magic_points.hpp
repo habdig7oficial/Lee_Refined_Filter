@@ -29,7 +29,7 @@ class MagicPoints {
     public:
     constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) }, mask(BitSetMask<DIMENSION>(relevant_points, rl)) {
         this -> win_number = win_number;
-        this -> side = side;
+        this -> side = DIMENSION;
         this -> area = this -> side * this -> side;
     }
 
