@@ -24,10 +24,10 @@ run: compile
 	./exec.elf
 
 testO0:
-	$(CXX) -std=c++23 -fconstexpr-steps=0 -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[relevant_points]" #--rng-seed 3144853315
+	$(CXX) -std=c++23 -fconstexpr-steps=0 -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf --abort #--rng-seed 3144853315
 
 testO3:
-	$(CXX) -std=c++20 -fconstexpr-steps=0 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf  #--rng-seed 3144853315
+	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf  #--rng-seed 3144853315
 
 test: testO0 testO3
 
