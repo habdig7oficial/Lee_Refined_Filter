@@ -121,18 +121,13 @@ class MagicPoints {
             lambda(point.first, point.second, SIDE_A);
     }
 
-    /* Numbers of matrixes tiles before complete a half spin */
-    int dimension() const {
-        return 2 * (this -> side - 1);
-    }
-
     double angle() const {
-        return this -> win_number * numbers::pi / this -> dimension();
+        return this -> win_number * numbers::pi / (2 * (DIMENSION - 1));
     }
 
     /* Angle of the mirror image */
     double angle_inverse() const {
-        return this -> get_mirror_num() * numbers::pi / this -> dimension();
+        return this -> get_mirror_num() * numbers::pi / (2 * (DIMENSION - 1));
     }
 
     size_t size() const {
@@ -146,9 +141,9 @@ class MagicPoints {
     int get_side()       const { return this -> side; }
     int get_area()       const { return this -> area; }
     int get_win_num()    const { return this -> win_number; }
-    int get_mirror_num() const { return this -> win_number + (int)(this -> dimension() / 2); }
+    int get_mirror_num() const { return this -> win_number + (DIMENSION - 1); }
 
-    const BitSetMask<DIMENSION>& get_mask() const { return this -> mask; } 
+    BitSetMask<DIMENSION> get_mask() const { return this -> mask; } 
 
     const Point* get_relevant() const { return relevant_points.data(); }
     size_t get_relevant_size()  const { return M; }
