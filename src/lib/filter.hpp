@@ -214,7 +214,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       int select_win;
       Magic::Point *relevant;
       size_t relevant_size;
-      shared_ptr<BitSetMask<DIMENSION>> mask;
 
       apply([&, i, j](auto&&... win){
         double aux;
@@ -227,7 +226,7 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
                 select_angle = win.angle();
                 relevant = (Magic::Point *) win.get_relevant(); // overrides class type
                 relevant_size = (size_t) win.get_relevant_size();
-                mask = make_shared<BitSetMask<DIMENSION>>((BitSetMask<DIMENSION>) win.get_mask());
+                //relevant_points = win.get_relevant();
               }
               if constexpr(dev_mode)
                 cout << win.get_win_num() << ") " << aux << endl;
@@ -246,7 +245,6 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
                 select_angle = win.angle_inverse();
                 relevant = (Magic::Point *) win.get_relevant(); // overrides class type
                 relevant_size = (size_t) win.get_relevant_size();
-                mask = make_shared<BitSetMask<DIMENSION>>((BitSetMask<DIMENSION>) win.get_mask());
               }
               if constexpr(dev_mode)
                 cout << win.get_mirror_num() << ") " << aux << endl;
@@ -266,56 +264,12 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
         cout << "Angle win: " << select_angle << endl;
       }
 
-      cout << setprecision(3);
-
-      if constexpr(dev_mode)  
-        for(int pj = j - (DIMENSION / 2); pj <= j + (DIMENSION / 2); pj++){
-            for(int pi = i - (DIMENSION / 2); pi <= i + (DIMENSION / 2); pi++)
-                cout << *(image.ptr<T>(pj) + pi) << " ";
-
-            cout << endl;
-        }
-
-      cout << "--------" << endl;
-
-      if constexpr(dev_mode)  
-        for(int pj = j - (DIMENSION / 2); pj <= j + (DIMENSION / 2); pj++){
-            for(int pi = i - (DIMENSION / 2); pi <= i + (DIMENSION / 2); pi++)
-              if(select_win < DIMENSION - 1)
-                cout << (!(*mask)(pj, pi) ? *(image.ptr<T>(pj) + pi) : 0) << " " ;
-              else
-                cout << (!(*mask)(pj, pi) ? *(image.ptr<T>(pj) + pi) : 0) << " "; // inverted mask
-          
-            cout <<endl;
-        }
-
-      cout << endl << *mask << endl;
-
-
-      for(int k = 0; k < relevant_size; k++){
-        auto [x, y] = relevant[k];
-
-        cout << select_win << ") " << relevant[k] << (int)x << (int)y << endl;
-
-        for(signed char point_y = y - INNER_HALF; point_y <= y + INNER_HALF; point_y++){
-          for(signed char point_x = x - INNER_HALF; point_x <= x + INNER_HALF; point_x++){
-            bool is_masked = (*mask)(j + point_x, i - point_y);
-
-            cout << "X: " << (int)point_x << " Y: " << (int)point_y << " " << *(image.ptr<T>(i - point_y) + (j + point_x)) << " " << is_masked << endl;
-
-            if(is_masked)
-              continue;
-
-          }   
-        }
-      }
       /*
       if(max_mean < eth){
         cout << "Smooth " << endl;
         //See what to do hear later because, it's wrong on the original code
       }*/
-      if(dev_mode)
-        cout << setprecision(15);
+
     }
   }
 

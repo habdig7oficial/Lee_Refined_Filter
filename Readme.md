@@ -55,6 +55,11 @@ The 17th window in the article was wrong, it should mirror the 17th window, solu
 The 2th window in the code was also wrong, it should be one square in y lower.
 
 
+## Road map 
+
+See calc_mean_complex optimization acording to paper formula
+add select window integrated test
+
 # Unused 
 
 mask(BitSetMask<DIMENSION, DIMENSION>(diff<M, N>(gen_static<N, M>(rl, side), rl))) 
