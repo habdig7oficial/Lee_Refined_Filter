@@ -2,6 +2,7 @@
 #include "benchmark/benchmark.h"
 #include "utility"
 #include "../../lib/filter.hpp"
+#include "mean_baseline.hpp"
 
 #include "random"
 
@@ -11,11 +12,11 @@ using namespace benchmark;
 class WindowSetupFixture : public Fixture {
   public:
     Mat data;
-    unsigned int seed;
+    unsigned int seed = 0;
     double res;
     void SetUp(State& state) override {
       random_device rd;
-      seed = rd();
+      //seed = rd();
       mt19937 gen(seed);
       uniform_real_distribution<double> distribution(0, 1);
       array<double, 11 * 11> arr;
@@ -26,17 +27,11 @@ class WindowSetupFixture : public Fixture {
 
       Mat arr_mat(arr, false);
       data = arr_mat.reshape(0, 11);
-    }
-
-    template<size_t WinNum>
-    void mean_complex_opt(State& state){
-      
-    }
-  
+    } 
 };
 
 
-BENCHMARK_F(WindowSetupFixture, mean_complex_opt)(State& state){
+BENCHMARK_F(WindowSetupFixture, w0_opt)(State& state){
   for(auto _ : state){
     res = calc_mean_complex<double>(data, 5, 5, get<0>(all_windows), NOT_ROTATED);
     DoNotOptimize(res);
@@ -44,31 +39,34 @@ BENCHMARK_F(WindowSetupFixture, mean_complex_opt)(State& state){
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
 
-/*
-template <size_t WinNum>
-struct Register {
-  Register(){
-    BENCHMARK_REGISTER_F(WindowSetupFixture, mean_complex_opt<WinNum>);
+
+constinit BitSetMask<11> base_window0(w0_arr);
+
+
+BENCHMARK_F(WindowSetupFixture, w0_base)(State& state){
+  for(auto _ : state){
+    res = calc_mean_complex<double, 11>(data, 5, 5, base_window0, NOT_ROTATED);
+    DoNotOptimize(res);
   }
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
+};
+
+/* Baseline */
+
+BENCHMARK_F(WindowSetupFixture, w10_opt)(State& state){
+  for(auto _ : state){
+    res = calc_mean_complex<double>(data, 5, 5, get<0>(all_windows), ROTATED);
+    DoNotOptimize(res);
+  }
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
 
 
-template <size_t ...Is>
-void register_benchmark(index_sequence<Is ...>){
-  (Register<Is>{}, ...);
-}
 
-const bool registred = [](){
-  register_benchmark(make_index_sequence<20>{});
-  
-  return true;
-}();
-*/
-/*
-
-     benchmark::internal::RegisterBenchmarkInternal( new ::benchmark::internal::FixtureDeterminer<WindowSetupFixture>(
-      "Hello",
-      to_string(Is),
-      &WindowSetupFixture::RunBenchmark<Is>
-    ))
-*/
+BENCHMARK_F(WindowSetupFixture, w10_base)(State& state){
+  for(auto _ : state){
+    res = calc_mean_complex<double, 11>(data, 5, 5, base_window0, ROTATED);
+    DoNotOptimize(res);
+  }
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
+};
