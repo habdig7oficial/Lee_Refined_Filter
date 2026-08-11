@@ -13,6 +13,8 @@ RINSIDE_CXX_TEST := $(shell Rscript -e "RInside:::CxxFlags()")
 RINSIDE_LDF_TEST := $(shell Rscript -e "RInside:::LdFlags()") 
 
 CXX_FLAGS_TEST = `pkg-config --cflags --libs opencv4 gsl catch2` # Catch2 for tests
+CXX_FLAGS_BENCHMARK = `pkg-config --cflags --libs opencv4 benchmark` # Catch2 for tests
+
 
 compile:
 	 $(CXX) -march=native -fconstexpr-steps=0 -std=c++23 src/main.cpp -o exec.elf $(CXX_FLAGS) 
@@ -31,6 +33,10 @@ testO3:
 
 test: testO0 testO3
 
+
+
+benchmark:
+	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native src/benchmark/benchmark.cpp -o benchmark.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf  #--rng-seed 3144853315
 
 version: 
 	$(CXX) --version
