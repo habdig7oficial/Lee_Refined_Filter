@@ -13,7 +13,7 @@ RINSIDE_CXX_TEST := $(shell Rscript -e "RInside:::CxxFlags()")
 RINSIDE_LDF_TEST := $(shell Rscript -e "RInside:::LdFlags()") 
 
 CXX_FLAGS_TEST = `pkg-config --cflags --libs opencv4 gsl catch2` # Catch2 for tests
-CXX_FLAGS_BENCHMARK = `pkg-config --cflags --libs opencv4 benchmark` # Catch2 for tests
+CXX_FLAGS_BENCHMARK = `pkg-config --cflags --libs opencv4 gsl benchmark` # Catch2 for tests
 
 
 compile:
