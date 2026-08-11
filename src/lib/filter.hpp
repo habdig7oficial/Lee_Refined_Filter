@@ -92,6 +92,11 @@ double calc_mean_complex(Mat& image, int tx, int ty, MagicPoints<N, M>& window, 
   // the cos(0) on the null cels makes 0 that can be decuced without passing
   cos_real += window.unused() * cos(0);
 
+  if(dev_mode){
+      cout << "Cos: " << cos_real << endl;
+      cout << "Sin: " << sin_complex << endl;
+  }
+
   /* Mean of sin and cos */
   sin_complex /= window.get_area();
   cos_real /= window.get_area();

@@ -41,6 +41,27 @@ class BitSetMask {
         template<size_t N, size_t M>
         constexpr BitSetMask(const array<Point, N>& points, const array<Point, M>& bit_mask) : mask(init(points, bit_mask)) {}
 
+        template<size_t M>
+        static constexpr bitset<Len * Len> init(const array<Point, M>& bit_mask){
+            bitset<Len * Len> premask;
+            premask.set();
+
+            int center = Len / 2;
+
+            for(auto [x, y] : bit_mask)
+                premask[((center - y) * Len) + (center + x)] = false;
+
+            for(auto [x, y] : bit_mask)
+                premask[((center + y) * Len) + (center - x)] = false;
+            
+            premask[(center * Len) + center] = false;
+
+            return premask;
+        }
+  
+        template<size_t M>
+        constexpr BitSetMask(const array<Point, M>& bit_mask) : mask(init(bit_mask)) {}
+  
         size_t size() const noexcept { return Len * Len; }
         size_t size_x() const noexcept { return Len; } 
         size_t size_y() const noexcept { return Len; } 
