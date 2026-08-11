@@ -1,5 +1,6 @@
 #pragma once
 #include "benchmark/benchmark.h"
+#include "../../lib/filter.hpp"
 
 #include "random"
 
@@ -14,6 +15,8 @@ class WindowSetupFixture : public Fixture{
       mt19937 gen(rd());
       uniform_real_distribution<double> distribution(0, 1);
       array<double, 11 * 11> arr;
+
+      
       
       generate(arr.begin(), arr.end(), [&]{
 	return  distribution(gen); 
