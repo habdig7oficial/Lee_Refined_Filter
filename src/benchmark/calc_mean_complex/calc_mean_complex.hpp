@@ -12,11 +12,12 @@ using namespace benchmark;
 class WindowSetupFixture : public Fixture {
   public:
     Mat data;
-    unsigned int seed = 0;
+    inline static unsigned int seed = 0; /* Same Seed (Variable must be inline) */
     double res;
     void SetUp(State& state) override {
       random_device rd;
-      //seed = rd();
+      if(seed == 0)
+        seed = rd();
       mt19937 gen(seed);
       uniform_real_distribution<double> distribution(0, 1);
       array<double, 11 * 11> arr;
