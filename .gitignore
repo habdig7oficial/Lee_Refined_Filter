@@ -3,3 +3,6 @@ satelite
 *~
 *.ans
 *.ansi
+*.json
+*.png
+*.tiff

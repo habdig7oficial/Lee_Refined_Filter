@@ -23,7 +23,7 @@ class WindowSetupFixture : public Fixture {
       array<double, 11 * 11> arr;
       
       generate(arr.begin(), arr.end(), [&]{
-	return  distribution(gen); 
+	      return  distribution(gen); 
       });
 
       Mat arr_mat(arr, false);
@@ -36,6 +36,7 @@ BENCHMARK_F(WindowSetupFixture, w0_opt)(State& state){
   for(auto _ : state){
     res = calc_mean_complex<double>(data, 5, 5, get<0>(all_windows), NOT_ROTATED);
     DoNotOptimize(res);
+    ClobberMemory();
   }
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
@@ -48,6 +49,7 @@ BENCHMARK_F(WindowSetupFixture, w0_base)(State& state){
   for(auto _ : state){
     res = calc_mean_complex<double, 11>(data, 5, 5, base_window0, NOT_ROTATED);
     DoNotOptimize(res);
+    ClobberMemory();
   }
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
@@ -56,6 +58,7 @@ BENCHMARK_F(WindowSetupFixture, w1_opt)(State& state){
   for(auto _ : state){
     res = calc_mean_complex<double>(data, 5, 5, get<1>(all_windows), NOT_ROTATED);
     DoNotOptimize(res);
+    ClobberMemory();
   }
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
@@ -66,6 +69,7 @@ BENCHMARK_F(WindowSetupFixture, w1_base)(State& state){
   for(auto _ : state){
     res = calc_mean_complex<double, 11>(data, 5, 5, base_window1, NOT_ROTATED);
     DoNotOptimize(res);
+    ClobberMemory();
   }
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
@@ -76,6 +80,7 @@ BENCHMARK_F(WindowSetupFixture, w10_opt)(State& state){
   for(auto _ : state){
     res = calc_mean_complex<double>(data, 5, 5, get<0>(all_windows), ROTATED);
     DoNotOptimize(res);
+    ClobberMemory();
   }
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
@@ -86,6 +91,7 @@ BENCHMARK_F(WindowSetupFixture, w10_base)(State& state){
   for(auto _ : state){
     res = calc_mean_complex<double, 11>(data, 5, 5, base_window0, ROTATED);
     DoNotOptimize(res);
+    ClobberMemory();
   }
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
