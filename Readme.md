@@ -62,12 +62,29 @@ add select window integrated test
 
 # Unused 
 
-mask(BitSetMask<DIMENSION, DIMENSION>(diff<M, N>(gen_static<N, M>(rl, side), rl))) 
+BENCHMARK_MEAN_COMPLEX(0, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(0, base_windows, ROTATED);
 
+BENCHMARK_MEAN_COMPLEX(1, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(1, base_windows, ROTATED);
 
+BENCHMARK_MEAN_COMPLEX(2, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(2, base_windows, ROTATED);
 
-       for(signed char point_y = y - INNER_HALF; point_y <= point_y + INNER_HALF; point_y++){
-          for(signed char point_x = x - INNER_HALF; point_x <= point_x + INNER_HALF; point_x++){
-            cout << "Point: (" << (int)point_x << ", " << (int)point_y << ") Real: (" << (int)x << ", " << (int)y << ") " << endl;
-          }
-        }
+BENCHMARK_MEAN_COMPLEX(3, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(3, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(4, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(4, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(5, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(5, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(7, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(7, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(8, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(8, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(9, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(9, base_windows, ROTATED);
