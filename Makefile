@@ -45,7 +45,12 @@ benchmark_paper:
 version: 
 	$(CXX) --version
 
-clean:
-	rm exec.elf test.elf test_optimized.elf prod_binary
+clean_bin:
+	rm exec.elf test.elf test_optimized.elf prod_binary benchmark.elf
+
+clean_img:
+	rm gierull_plot.png magic_point.png magic_point2.png
+
+clean: clean_bin clean_img
 #leaks: compile
 #	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)
