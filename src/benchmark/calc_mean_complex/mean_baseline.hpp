@@ -18,10 +18,10 @@ double calc_mean_complex(Mat& image, int tx, int ty, BitSetMask<N>& window, bool
       for(int j = 0; j < N; j++){
 
 	T pixel;
-	if(window(i, j))
+	if(window(j, i))
 	  pixel = 0;
 	else
-	  pixel = *(image.ptr<T>(j) + i);
+	  pixel = *(image.ptr<T>(i) + j);
 
 	sin_complex += sin((double) pixel);
 	cos_real += cos((double) pixel);
@@ -33,10 +33,10 @@ double calc_mean_complex(Mat& image, int tx, int ty, BitSetMask<N>& window, bool
       for(int j = 0; j < N; j++){
 
 	T pixel;
-	if(window(j, i))
+	if(window(i, j))
 	  pixel = 0;
 	else
-	  pixel = *(image.ptr<T>(j) + i);
+	  pixel = *(image.ptr<T>(i) + j);
 
 	sin_complex += sin((double) pixel);
 	cos_real += cos((double) pixel);
