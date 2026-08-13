@@ -42,14 +42,18 @@ benchmark_paper:
 	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native -DNDEBUG src/benchmark/benchmark.cpp -o benchmark.elf $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf --benchmark_min_warmup_time=2 --benchmark_repetitions=40 --benchmark_report_aggregates_only=true --benchmark_out=benchmark.json --benchmark_out_format=json
 
 
+# Deno && Image magick required
+benchmark_gen_graphics:
+	deno run --allow-write src/benchmark/graphics.ts src/benchmark/grafics.ts && magick bar_chart.svg bar_chart.png
+
 version: 
 	$(CXX) --version
 
 clean_bin:
-	rm exec.elf test.elf test_optimized.elf prod_binary benchmark.elf
+	rm -f exec.elf test.elf test_optimized.elf prod_binary benchmark.elf
 
 clean_img:
-	rm gierull_plot.png magic_point.png magic_point2.png
+	rm -f gierull_plot.png magic_point.png magic_point2.png bar_chart.svg bar_chart.png
 
 clean: clean_bin clean_img
 #leaks: compile
