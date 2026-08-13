@@ -34,20 +34,31 @@ const plot = await Plot.plot({
     document,
     width: 1920,
     height: 1080,
+    marginTop: 70,
 
-    x: { axis: null },
-    y: { tickFormat: "s", grid: true },
-    //fx: {label: "name"},
+    x: { axis: null},// padding: 0.4
+    y: { tickFormat: "s", grid: true, padding: 0.4},
+    fx: { padding: 0.1 },
     color: { type: "categorical", scheme: "spectral" },
     marks: [
       Plot.barY(benchmark.benchmarks, {
         x: "aggregate_name",
         y: "real_time",
-        fx: (m:BenchmarkData)=>`Window ${m.run_name.split("_").at(-1)}`,
-        fill: "category",
+        fx: (m:BenchmarkData)=>`${m.run_name.split("_").at(1)}${m.run_name.split("_").at(-1)}`,
+        fill: "aggregate_name",
+        insertLeft: 4
        // sort: {x: null, color: null, fx: {value: "-y", reduce: "sum"}}
       }),
-
+      Plot.text(benchmark.benchmarks, Plot.groupX({y: "sum", text: "first"}, {
+         x: "aggregate_name",
+         y: 1000,
+         fx: (m:BenchmarkData)=>`${m.run_name.split("_").at(1)}${m.run_name.split("_").at(-1)}`,
+         text: "aggregate_name",
+         anchor: "bottom",
+         dy: -6,
+         rotate: -45,
+         lineWidth: 20
+      })),
       Plot.ruleY([0])
     ],
 

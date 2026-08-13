@@ -36,7 +36,7 @@ test: testO0 testO3
 
 
 benchmark:
-	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native -DNDEBUG src/benchmark/benchmark.cpp -o benchmark.elf $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf --benchmark_out=benchmark.json --benchmark_out_format=json
+	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native -DNDEBUG src/benchmark/benchmark.cpp -o benchmark.elf $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf --benchmark_repetitions=2 --benchmark_report_aggregates_only=true --benchmark_out=benchmark.json --benchmark_out_format=json
 
 benchmark_paper:
 	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native -DNDEBUG src/benchmark/benchmark.cpp -o benchmark.elf $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf --benchmark_min_warmup_time=2 --benchmark_repetitions=40 --benchmark_report_aggregates_only=true --benchmark_out=benchmark.json --benchmark_out_format=json
