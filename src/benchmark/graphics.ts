@@ -29,7 +29,7 @@ interface BenchmarkData {
 let data = benchmark.benchmarks.filter((m)=>{return m.aggregate_name != "stddev" &&  m.aggregate_name != "cv"}) 
 
 
-let mean = benchmark.benchmarks.filter((m)=>{return m.aggregate_name == "mean"}) 
+let mean = benchmark.benchmarks.filter((m)=>{return m.aggregate_name == "mean" && m.aggregate_name}) 
 let stddev = benchmark.benchmarks.filter((m)=>{return m.aggregate_name == "stddev"}) 
 
 type Bound = {
@@ -37,28 +37,33 @@ type Bound = {
   name: string,
   lower: number,
   aggregate_name: "mean" | "median" | "stddev" | "cv",
+  stddev: number
 }
 
 let bounds : Bound[] = Array.from({length: mean.length}, ()=>({aggregate_name: "mean"} as Bound))
 
 for (let i = 0; i < bounds.length; i++) {
   let ix = stddev.findIndex((n)=> n.run_name == mean[i].run_name)
-  bounds[i].lower = mean[i].real_time - stddev[ix].real_time
-  bounds[i].upper = mean[i].real_time + stddev[ix].real_time
+
+  if(ix != -1){
+    bounds[i].lower = mean[i].real_time - stddev[ix].real_time
+    bounds[i].upper = mean[i].real_time + stddev[ix].real_time
+    bounds[i].stddev = stddev[ix].real_time
+  }
 
   bounds[i].name = `window ${mean[i].index} ${mean[i].rotation == 1? "" : "(R)"}`;
 }
 
-//domain: ["median", "mean", "lorem"]
+
 const plot = await Plot.plot({
     document,
-    width: 1920,
-    height: 1080,
+    width: 1800,
+    height: 600,
     marginTop: 50,
     marginBottom: 80,
     columns: ["median", "mean"],
-    x: { padding: 0.1, align: 0.6, tickRotate: -45, },// padding: 0.4
-    y: { tickFormat: "s", grid: true, padding: 0.4, label: "Seconds (ns)"},
+    x: { padding: 0.1, align: 0.6, tickRotate: -45, domain: ["median", "mean"]},// padding: 0.4
+    y: { tickFormat: "s", grid: true, padding: 0.5, label: "Seconds (ns)"},
     fx: { padding: 0.1, label: "", align: 0.5 },
     color: { type: "categorical", scheme: "observable10"},
     marks: [
@@ -79,32 +84,33 @@ const plot = await Plot.plot({
          anchor: "bottom",
          rotate: -45,
          lineWidth: 20, 
-      })),*/
-      Plot.ruleX(["lorem"], bounds, {
+      })),
+      Plot.ruleX(bounds, {
           x: "aggregate_name",
           y1: "lower",
           y2: "upper",
           fx: "name",
           stroke: "black",
           dx: 30
+      }),*/
+      Plot.rectY(bounds, {
+        x: "aggregate_name",
+        y1: "lower",
+        y2: "upper",
+        fx: "name",
+        stroke: "black",
+        fill: "label",
+        fillOpacity: 0.5,
+        insetX: 15,
       }),
-      Plot.ruleY(bounds, {
-          x: "aggregate_name",
-          y: "lower",
-          fx: "name",
-          stroke: "black"
-      }),
-      Plot.ruleY(bounds, {
-          x: "aggregate_name",
-          y: "upper",
-          fx: "name",
-          stroke: "black"
-      }),
-      Plot.ruleY(bounds, {
-          x: "aggregate_name",
-          y: "upper",
-          fx: "name",
-          stroke: "black"
+      Plot.text(bounds, {
+        x: "aggregate_name",
+        y: "upper",
+        fx: "name",
+        text: "stddev",
+        fontSize: 10, 
+        fill: "black",
+        dy: -8
       }),
       Plot.ruleY([0])
     ],
