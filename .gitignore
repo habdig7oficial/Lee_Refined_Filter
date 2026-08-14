@@ -6,3 +6,5 @@ satelite
 *.json
 *.png
 *.tiff
+*.elf
+!benchmark.json

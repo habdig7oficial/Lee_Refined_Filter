@@ -37,7 +37,8 @@ type Bound = {
   name: string,
   lower: number,
   aggregate_name: "mean" | "median" | "stddev" | "cv",
-  stddev: number
+  stddev: number,
+  label: string
 }
 
 let bounds : Bound[] = Array.from({length: mean.length}, ()=>({aggregate_name: "mean"} as Bound))
@@ -49,6 +50,7 @@ for (let i = 0; i < bounds.length; i++) {
     bounds[i].lower = mean[i].real_time - stddev[ix].real_time
     bounds[i].upper = mean[i].real_time + stddev[ix].real_time
     bounds[i].stddev = stddev[ix].real_time
+    bounds[i].label = stddev[ix].label
   }
 
   bounds[i].name = `window ${mean[i].index} ${mean[i].rotation == 1? "" : "(R)"}`;
@@ -109,8 +111,8 @@ const plot = await Plot.plot({
         fx: "name",
         text: "stddev",
         fontSize: 10, 
-        fill: "black",
-        dy: -8
+        fill: (m:Bound)=>m.label == "base_windows" ? "black" : "white",
+        dy: 15
       }),
       Plot.ruleY([0])
     ],
