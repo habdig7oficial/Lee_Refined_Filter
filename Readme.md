@@ -167,3 +167,31 @@ for (const element of benchmark.benchmarks) {
         dy: -6,
         lineAnchor: "bottom"
       }),
+
+
+
+
+            {
+          y1: 100,
+          y2: 1
+        },
+
+
+
+              Plot.ruleY(bounds, Plot.groupX(
+        {
+          x: "category",
+          y: "lower",
+          fx: "name"
+        }
+      )),
+
+
+
+      {
+          x: "category",
+          y: "lower",
+          fx: "name"
+      }
+
+
