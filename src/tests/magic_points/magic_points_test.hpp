@@ -86,18 +86,17 @@ TEST_CASE("angles", "[angles]"){
         double angle_r;
         ((
             cout << args.get_win_num() << " - " << args.angle() << endl,
-            angle_r = (*Rbind).parseEval("window_angle [[i]]"),
+            angle_r = (*Rbind).parseEval("window_angle[[i]]"),
             (void)[&](){ REQUIRE(abs(angle_r - args.angle()) < EPSILON); }(),
             (*Rbind).parseEvalQ("i <- i + 1")
         ), ...);
     }, all_windows);
 
-
     apply([](auto&&... args){
         double angle_r;
         ((
             cout << args.get_mirror_num() << " - " << args.angle_inverse() << endl,
-            angle_r = (*Rbind).parseEval("window_angle [[i]]"),
+            angle_r = (*Rbind).parseEval("window_angle[[i]]"),
             (void)[&](){ REQUIRE(abs(angle_r - args.angle_inverse()) < EPSILON); }(),
             (*Rbind).parseEvalQ("i <- i + 1")
         ), ...);
