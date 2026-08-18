@@ -33,7 +33,7 @@ class BitSetMask {
             //    premask[((center + y) * Len) + (center - x)] = true;
 
             for(auto [x, y] : bit_mask)
-                premask[((center - y) * ) + x] = true;
+                premask[((center - y) * Len) + x] = true;
 
             return premask;
         }
