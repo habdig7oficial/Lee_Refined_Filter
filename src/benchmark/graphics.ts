@@ -2,6 +2,8 @@ import { DOMParser } from "npm:linkedom";
 import * as Plot from "npm:@observablehq/plot"
 import benchmark from "../../benchmark.json" with { type: "json" }
 
+import { geometricMean } from "npm:simple-statistics"
+
 const document = new DOMParser().parseFromString("<!DOCTYPE html><html><head></head><body></body></html>", "text/html")
 
 interface BenchmarkData {
@@ -28,6 +30,7 @@ interface BenchmarkData {
 
 let data = benchmark.benchmarks.filter((m)=>{return m.aggregate_name != "stddev" &&  m.aggregate_name != "cv"}) 
 
+let median = benchmark.benchmarks.filter((m)=>{return m.aggregate_name == "median" && m.aggregate_name}) 
 
 let mean = benchmark.benchmarks.filter((m)=>{return m.aggregate_name == "mean" && m.aggregate_name}) 
 let stddev = benchmark.benchmarks.filter((m)=>{return m.aggregate_name == "stddev"}) 
@@ -65,7 +68,7 @@ const plot = await Plot.plot({
     marginBottom: 80,
     columns: ["median", "mean"],
     x: { padding: 0.1, align: 0.6, tickRotate: -45, domain: ["median", "mean"]},// padding: 0.4
-    y: { tickFormat: "s", grid: true, padding: 0.5, label: "Seconds (ns)"},
+    y: { tickFormat: "s", grid: true, padding: 0.5, label: "Nano Seconds (ns)"},
     fx: { padding: 0.1, label: "", align: 0.5 },
     color: { type: "categorical", scheme: "observable10"},
     marks: [
@@ -134,4 +137,41 @@ Deno.writeTextFileSync("bar_chart.svg", plot.outerHTML);
 
 // (m : Type)=>{m.mean?.real_time}
 
-data.filter((m)=> console.log(m.aggregate_name));
+
+let parity = Math.ceil((median.length / 2 + 1) / 2);
+
+let sum_rotated : number[] = []
+let sum_n_rotated : number[] = []
+
+for (let i = 0; i < median.length - 1; i += 2) {
+  console.log(`${median[i].name} ${median[i].real_time}`);
+  console.log(`${median[i + 1].name} ${median[i + 1].real_time}`);
+
+  console.log();
+
+  let speedup = median[i + 1].real_time / median[i].real_time
+
+  if(median[i].rotation == 1)
+    sum_n_rotated.push(speedup)
+  else  
+    sum_rotated.push(speedup)
+  
+  console.log("---");
+}
+
+console.log(sum_n_rotated)
+console.log(sum_rotated);
+
+let gm_r = geometricMean(sum_rotated)
+let gm_nr = geometricMean(sum_n_rotated)
+
+
+console.log(gm_nr);
+console.log(gm_r);
+
+
+console.log((gm_nr + gm_r) / 2);
+
+
+
+
