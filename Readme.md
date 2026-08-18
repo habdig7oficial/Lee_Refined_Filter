@@ -118,3 +118,12 @@ The 2th window in the code was also wrong, it should be one square in y lower.
             }
             
             os << "]" << endl;
+mask(BitSetMask<DIMENSION, DIMENSION>(diff<M, N>(gen_static<N, M>(rl, side), rl))) 
+
+
+
+       for(signed char point_y = y - INNER_HALF; point_y <= point_y + INNER_HALF; point_y++){
+          for(signed char point_x = x - INNER_HALF; point_x <= point_x + INNER_HALF; point_x++){
+            cout << "Point: (" << (int)point_x << ", " << (int)point_y << ") Real: (" << (int)x << ", " << (int)y << ") " << endl;
+          }
+        }

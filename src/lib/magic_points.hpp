@@ -148,7 +148,7 @@ class MagicPoints {
     int get_win_num()    const { return this -> win_number; }
     int get_mirror_num() const { return this -> win_number + (int)(this -> dimension() / 2); }
 
-    BitSetMask<DIMENSION> get_mask() const { return this -> mask; } 
+    const BitSetMask<DIMENSION>& get_mask() const { return this -> mask; } 
 
     const Point* get_relevant() const { return relevant_points.data(); }
     size_t get_relevant_size()  const { return M; }
