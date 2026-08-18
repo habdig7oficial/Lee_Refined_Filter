@@ -29,69 +29,80 @@ class WindowSetupFixture : public Fixture {
       Mat arr_mat(arr, false);
       data = arr_mat.reshape(0, 11);
     } 
+
 };
 
+/* Fix this code repetition later */
 
-BENCHMARK_F(WindowSetupFixture, w0_opt)(State& state){
-  for(auto _ : state){
-    res = calc_mean_complex<double>(data, 5, 5, get<0>(all_windows), NOT_ROTATED);
-    DoNotOptimize(res);
-    ClobberMemory();
-  }
-  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
+constinit array<BitSetMask<11>, 10> base_windows = { BitSetMask<11>(w0_arr), BitSetMask<11>(w1_arr), BitSetMask<11>(w2_arr), BitSetMask<11>(w3_arr), BitSetMask<11>(w4_arr), BitSetMask<11>(w5_arr), BitSetMask<11>(w6_arr), BitSetMask<11>(w7_arr), BitSetMask<11>(w8_arr), BitSetMask<11>(w9_arr) };
+
+
+#define BENCHMARK_MEAN_COMPLEX(index, window_name, rotation) \
+BENCHMARK_F(WindowSetupFixture, rotation##_##window_name##_##index)(State& state){ \
+  for(auto _ : state){ \
+    res = calc_mean_complex(data, 5, 5, get<index>(window_name), rotation); \
+    DoNotOptimize(res); \
+    ClobberMemory(); \
+  } \
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed)); \
 };
 
+/* Fix this part latter */
+/* NOT_ROTATED windows */
+BENCHMARK_MEAN_COMPLEX(0, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(0, base_windows, NOT_ROTATED);
 
-constinit BitSetMask<11> base_window0(w0_arr);
+BENCHMARK_MEAN_COMPLEX(1, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(1, base_windows, NOT_ROTATED);
 
+BENCHMARK_MEAN_COMPLEX(2, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(2, base_windows, NOT_ROTATED);
 
-BENCHMARK_F(WindowSetupFixture, w0_base)(State& state){
-  for(auto _ : state){
-    res = calc_mean_complex<double, 11>(data, 5, 5, base_window0, NOT_ROTATED);
-    DoNotOptimize(res);
-    ClobberMemory();
-  }
-  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
-};
+BENCHMARK_MEAN_COMPLEX(3, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(3, base_windows, NOT_ROTATED);
 
-BENCHMARK_F(WindowSetupFixture, w1_opt)(State& state){
-  for(auto _ : state){
-    res = calc_mean_complex<double>(data, 5, 5, get<1>(all_windows), NOT_ROTATED);
-    DoNotOptimize(res);
-    ClobberMemory();
-  }
-  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
-};
+BENCHMARK_MEAN_COMPLEX(4, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(4, base_windows, NOT_ROTATED);
 
+BENCHMARK_MEAN_COMPLEX(5, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(5, base_windows, NOT_ROTATED);
 
-constinit BitSetMask<11> base_window1(w1_arr);
-BENCHMARK_F(WindowSetupFixture, w1_base)(State& state){
-  for(auto _ : state){
-    res = calc_mean_complex<double, 11>(data, 5, 5, base_window1, NOT_ROTATED);
-    DoNotOptimize(res);
-    ClobberMemory();
-  }
-  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
-};
+BENCHMARK_MEAN_COMPLEX(7, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(7, base_windows, NOT_ROTATED);
 
-/* Baseline */
+BENCHMARK_MEAN_COMPLEX(8, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(8, base_windows, NOT_ROTATED);
 
-BENCHMARK_F(WindowSetupFixture, w10_opt)(State& state){
-  for(auto _ : state){
-    res = calc_mean_complex<double>(data, 5, 5, get<0>(all_windows), ROTATED);
-    DoNotOptimize(res);
-    ClobberMemory();
-  }
-  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
-};
+BENCHMARK_MEAN_COMPLEX(9, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(9, base_windows, NOT_ROTATED);
 
 
+/* Rotated Windows */
 
-BENCHMARK_F(WindowSetupFixture, w10_base)(State& state){
-  for(auto _ : state){
-    res = calc_mean_complex<double, 11>(data, 5, 5, base_window0, ROTATED);
-    DoNotOptimize(res);
-    ClobberMemory();
-  }
-  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
-};
+
+BENCHMARK_MEAN_COMPLEX(0, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(0, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(1, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(1, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(2, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(2, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(3, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(3, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(4, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(4, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(5, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(5, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(7, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(7, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(8, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(8, base_windows, ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(9, all_windows, ROTATED);
+BENCHMARK_MEAN_COMPLEX(9, base_windows, ROTATED);

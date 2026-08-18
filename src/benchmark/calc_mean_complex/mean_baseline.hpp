@@ -9,7 +9,9 @@ using namespace env;
 
 /* image, image x point, image y point, correspodent window, direction */
 /* Bitset Version to benchmark only the true function is in filter.hpp */
-template <typename T, size_t N>
+
+/* Unsigned int for benchmark macro compatibility */
+template <typename T = double, unsigned int N = 11>
 double calc_mean_complex(Mat& image, int tx, int ty, BitSetMask<N>& window, bool is_reverse){
   double sin_complex = 0, cos_real = 0;
 
