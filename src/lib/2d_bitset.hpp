@@ -5,11 +5,12 @@
 using namespace std;
 using namespace Magic;
 
+/* Apply fold method on the Mask later */
 template<uint Len>
 class BitSetMask {
     private:
 
-        static constexpr uint Size = (Len * (Len + 1)) / 2;
+        static constexpr uint Size = Len * Len;
         bitset<Size> mask;
 
 
