@@ -11,7 +11,7 @@ make release && time ./prod_binary --image img/Simulated/phi_raster_noisy.tif --
 
 
 ```
-2 * (l - 1)
+2 * (n - 1)
 ```
 
 
