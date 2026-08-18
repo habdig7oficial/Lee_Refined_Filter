@@ -238,3 +238,39 @@ for (const element of benchmark.benchmarks) {
     // Draw the bars using x and y properties from your data
     Plot.barY(aggrated, Plot.stackY({ x: (m:Type)=>m.median?.run_name.split("_").at(-1), y: (m:Type)=>m.median?.real_time, fill: "steelblue" })),
     
+    
+          Plot.text(benchmark.benchmarks, {
+        x: "aggregate_name",
+        y: "real_time",
+        fx: (m:BenchmarkData)=>`Window ${m.run_name.split("_").at(-1)}`,
+        dy: -6,
+        lineAnchor: "bottom"
+      }),
+
+
+
+
+            {
+          y1: 100,
+          y2: 1
+        },
+
+
+
+              Plot.ruleY(bounds, Plot.groupX(
+        {
+          x: "category",
+          y: "lower",
+          fx: "name"
+        }
+      )),
+
+
+
+      {
+          x: "category",
+          y: "lower",
+          fx: "name"
+      }
+
+

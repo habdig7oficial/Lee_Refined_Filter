@@ -18,6 +18,8 @@ class WindowSetupFixture : public Fixture {
       random_device rd;
       if(seed == 0)
         seed = rd();
+      
+        
       mt19937 gen(seed);
       uniform_real_distribution<double> distribution(0, 1);
       array<double, 11 * 11> arr;
@@ -44,10 +46,14 @@ BENCHMARK_F(WindowSetupFixture, rotation##_##window_name##_##index)(State& state
     DoNotOptimize(res); \
     ClobberMemory(); \
   } \
-  state.SetLabel(to_string(res) + " With seed: " + to_string(seed)); \
+  state.SetLabel(#window_name);  \
   state.counters["index"] = index; \
   state.counters["rotation"] = rotation; \
+  state.counters["seed"] = (double)seed; \
+  state.counters["res"] = (double)res; \
 };
+
+//state.SetLabel(to_string(res) + " With seed: " + to_string(seed)); \
 
 /* Fix this part latter */
 /* NOT_ROTATED windows */
