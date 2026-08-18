@@ -143,13 +143,14 @@ let parity = Math.ceil((median.length / 2 + 1) / 2);
 let sum_rotated : number[] = []
 let sum_n_rotated : number[] = []
 
-for (let i = 0; i < median.length - 1; i += 2) {
+for (let i = 0; i < median.length; i += 2) {
   console.log(`${median[i].name} ${median[i].real_time}`);
   console.log(`${median[i + 1].name} ${median[i + 1].real_time}`);
 
-  console.log();
-
   let speedup = median[i + 1].real_time / median[i].real_time
+
+  console.log(speedup);
+  
 
   if(median[i].rotation == 1)
     sum_n_rotated.push(speedup)
@@ -165,9 +166,12 @@ console.log(sum_rotated);
 let gm_r = geometricMean(sum_rotated)
 let gm_nr = geometricMean(sum_n_rotated)
 
+console.log(sum_n_rotated.length);
+console.log(sum_rotated.length);
 
 console.log(gm_nr);
 console.log(gm_r);
+
 
 
 console.log((gm_nr + gm_r) / 2);
