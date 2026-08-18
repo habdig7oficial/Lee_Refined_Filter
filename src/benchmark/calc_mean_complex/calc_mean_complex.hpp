@@ -45,6 +45,8 @@ BENCHMARK_F(WindowSetupFixture, rotation##_##window_name##_##index)(State& state
     ClobberMemory(); \
   } \
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed)); \
+  state.counters["index"] = index; \
+  state.counters["rotation"] = rotation; \
 };
 
 /* Fix this part latter */

@@ -145,18 +145,16 @@ BENCHMARK_F(WindowSetupFixture, w1_opt)(State& state){
   state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+
        for(signed char point_y = y - INNER_HALF; point_y <= point_y + INNER_HALF; point_y++){
           for(signed char point_x = x - INNER_HALF; point_x <= point_x + INNER_HALF; point_x++){
             cout << "Point: (" << (int)point_x << ", " << (int)point_y << ") Real: (" << (int)x << ", " << (int)y << ") " << endl;
           }
         }
-=======
+
 BENCHMARK_MEAN_COMPLEX(3, all_windows, ROTATED);
 BENCHMARK_MEAN_COMPLEX(3, base_windows, ROTATED);
-=======
->>>>>>> 5c6afe2 (ok)
+
 
 constinit BitSetMask<11> base_window1(w1_arr);
 BENCHMARK_F(WindowSetupFixture, w1_base)(State& state){
@@ -180,11 +178,10 @@ BENCHMARK_F(WindowSetupFixture, w10_opt)(State& state){
 };
 
 
-<<<<<<< HEAD
+
 BENCHMARK_MEAN_COMPLEX(9, all_windows, ROTATED);
 BENCHMARK_MEAN_COMPLEX(9, base_windows, ROTATED);
->>>>>>> 6638271 (macro)
-=======
+
 
 BENCHMARK_F(WindowSetupFixture, w10_base)(State& state){
   for(auto _ : state){
@@ -241,4 +238,3 @@ for (const element of benchmark.benchmarks) {
     // Draw the bars using x and y properties from your data
     Plot.barY(aggrated, Plot.stackY({ x: (m:Type)=>m.median?.run_name.split("_").at(-1), y: (m:Type)=>m.median?.real_time, fill: "steelblue" })),
     
->>>>>>> 5c6afe2 (ok)
