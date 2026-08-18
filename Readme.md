@@ -127,12 +127,25 @@ mask(BitSetMask<DIMENSION, DIMENSION>(diff<M, N>(gen_static<N, M>(rl, side), rl)
 BENCHMARK_MEAN_COMPLEX(0, all_windows, ROTATED);
 BENCHMARK_MEAN_COMPLEX(0, base_windows, ROTATED);
 
-BENCHMARK_MEAN_COMPLEX(1, all_windows, ROTATED);
-BENCHMARK_MEAN_COMPLEX(1, base_windows, ROTATED);
+BENCHMARK_F(WindowSetupFixture, w0_base)(State& state){
+  for(auto _ : state){
+    res = calc_mean_complex<double, 11>(data, 5, 5, base_window0, NOT_ROTATED);
+    DoNotOptimize(res);
+    ClobberMemory();
+  }
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
+};
 
-BENCHMARK_MEAN_COMPLEX(2, all_windows, ROTATED);
-BENCHMARK_MEAN_COMPLEX(2, base_windows, ROTATED);
+BENCHMARK_F(WindowSetupFixture, w1_opt)(State& state){
+  for(auto _ : state){
+    res = calc_mean_complex<double>(data, 5, 5, get<1>(all_windows), NOT_ROTATED);
+    DoNotOptimize(res);
+    ClobberMemory();
+  }
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
+};
 
+<<<<<<< HEAD
 <<<<<<< HEAD
        for(signed char point_y = y - INNER_HALF; point_y <= point_y + INNER_HALF; point_y++){
           for(signed char point_x = x - INNER_HALF; point_x <= point_x + INNER_HALF; point_x++){
@@ -142,19 +155,90 @@ BENCHMARK_MEAN_COMPLEX(2, base_windows, ROTATED);
 =======
 BENCHMARK_MEAN_COMPLEX(3, all_windows, ROTATED);
 BENCHMARK_MEAN_COMPLEX(3, base_windows, ROTATED);
+=======
+>>>>>>> 5c6afe2 (ok)
 
-BENCHMARK_MEAN_COMPLEX(4, all_windows, ROTATED);
-BENCHMARK_MEAN_COMPLEX(4, base_windows, ROTATED);
+constinit BitSetMask<11> base_window1(w1_arr);
+BENCHMARK_F(WindowSetupFixture, w1_base)(State& state){
+  for(auto _ : state){
+    res = calc_mean_complex<double, 11>(data, 5, 5, base_window1, NOT_ROTATED);
+    DoNotOptimize(res);
+    ClobberMemory();
+  }
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
+};
 
-BENCHMARK_MEAN_COMPLEX(5, all_windows, ROTATED);
-BENCHMARK_MEAN_COMPLEX(5, base_windows, ROTATED);
+/* Baseline */
 
-BENCHMARK_MEAN_COMPLEX(7, all_windows, ROTATED);
-BENCHMARK_MEAN_COMPLEX(7, base_windows, ROTATED);
+BENCHMARK_F(WindowSetupFixture, w10_opt)(State& state){
+  for(auto _ : state){
+    res = calc_mean_complex<double>(data, 5, 5, get<0>(all_windows), ROTATED);
+    DoNotOptimize(res);
+    ClobberMemory();
+  }
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
+};
 
-BENCHMARK_MEAN_COMPLEX(8, all_windows, ROTATED);
-BENCHMARK_MEAN_COMPLEX(8, base_windows, ROTATED);
 
+<<<<<<< HEAD
 BENCHMARK_MEAN_COMPLEX(9, all_windows, ROTATED);
 BENCHMARK_MEAN_COMPLEX(9, base_windows, ROTATED);
 >>>>>>> 6638271 (macro)
+=======
+
+BENCHMARK_F(WindowSetupFixture, w10_base)(State& state){
+  for(auto _ : state){
+    res = calc_mean_complex<double, 11>(data, 5, 5, base_window0, ROTATED);
+    DoNotOptimize(res);
+    ClobberMemory();
+  }
+  state.SetLabel(to_string(res) + " With seed: " + to_string(seed));
+};
+
+
+
+
+
+BENCHMARK_MEAN_COMPLEX(0, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(0, base_windows, NOT_ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(1, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(1, base_windows, NOT_ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(2, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(2, base_windows, NOT_ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(3, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(3, base_windows, NOT_ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(4, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(4, base_windows, NOT_ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(5, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(5, base_windows, NOT_ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(7, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(7, base_windows, NOT_ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(8, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(8, base_windows, NOT_ROTATED);
+
+BENCHMARK_MEAN_COMPLEX(9, all_windows, NOT_ROTATED);
+BENCHMARK_MEAN_COMPLEX(9, base_windows, NOT_ROTATED);
+
+
+
+
+let aggrated : Type[] = Array.from({length: benchmark.benchmarks.length }, ()=> ({}) as Type)
+
+for (const element of benchmark.benchmarks) {
+  aggrated[element.family_index][element.aggregate_name as keyof Type] = element as BenchmarkData
+  console.log(`${element.family_index} - ${element.aggregate_name} ${aggrated[element.family_index][element.aggregate_name as keyof Type]?.name} - ${aggrated[element.family_index][element.aggregate_name as keyof Type]?.real_time}`);
+  
+}
+
+
+    // Draw the bars using x and y properties from your data
+    Plot.barY(aggrated, Plot.stackY({ x: (m:Type)=>m.median?.run_name.split("_").at(-1), y: (m:Type)=>m.median?.real_time, fill: "steelblue" })),
+    
+>>>>>>> 5c6afe2 (ok)
