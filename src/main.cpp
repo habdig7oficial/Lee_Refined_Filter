@@ -126,6 +126,13 @@ int main(int argc, char *argv[]){
 
   destroyAllWindows();
 
-  cout << num_windows << endl;
+  cout << MagicPoints::num_windows(dimension) << endl;
+
+  for(auto angle : angles){
+    cout << angle << endl;
+
+    cout << MagicPoints::gen_mask<dimension>(angle);
+  }
+
   return 0;
 }

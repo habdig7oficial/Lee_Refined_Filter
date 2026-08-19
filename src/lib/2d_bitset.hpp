@@ -61,6 +61,10 @@ class BitSetMask {
   
         template<size_t M>
         constexpr BitSetMask(const array<Point, M>& bit_mask) : mask(init(bit_mask)) {}
+
+        constexpr BitSetMask(double angle){
+
+        }
   
         size_t size() const noexcept { return Len * Len; }
         size_t size_x() const noexcept { return Len; } 
@@ -75,7 +79,7 @@ class BitSetMask {
         bool operator () (uint x, uint y) const {
             return mask[(y * Len) + x];
         }
-
+/*
         static void print_helper (ostream& os, const BitSetMask& bitset_2d, bool mirror){
             constexpr uint side = (Len + 1) / 2;
             os << Size << ") Bit Set 2D: [" << endl;
@@ -125,12 +129,36 @@ class BitSetMask {
 
             os << "]" << endl;
 
-        }
+        }*/
 
         friend ostream& operator << (ostream& os, const BitSetMask& bitset_2d){
-            print_helper(os, bitset_2d, false);
-            print_helper(os, bitset_2d, true);
+
+            os << "M:  ";
+
+            for(int i = 0; i < Len; i++)
+                os << i << " ";
+
+            os << endl;
+
+            for(int i = 0; i < Len; i++)
+                os << "--";
+
+            os << endl;
+
+            for(int i = 0; i < Len; i++){
+                if(i < 10)
+                    os << i << " | ";
+                else
+                    os << i << "| ";
+
+                for(int j = 0; j < Len; j++)            
+                    os << bitset_2d.mask[(i * Len) + j] << " "; // 
+                os << endl;
+            }
  
+            for(int i = Len; i < Len; i++)
+                os << i << " ";
+
             return os;
         }
 };

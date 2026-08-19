@@ -35,10 +35,20 @@ class MagicPoints {
         this -> area = this -> side * this -> side;
     }
 
-    static constexpr double angle(int win_number) {
-        return win_number * numbers::pi / (2 * (dimension - 1));
+    static constexpr double angle(uint win_number, uint dim = dimension) {
+        return win_number * numbers::pi / (2 * (dim - 1));
     }
     
+    static constexpr uint num_windows(uint dim = dimension){
+        return 2 * (dim - 1);
+    }
+
+    template <size_t Dim>
+    static constexpr BitSetMask<Dim> gen_mask(double angle){
+        BitSetMask<Dim> mask(angle);
+
+        return mask;
+    }
 
     /* 
         Lambda type should be:
@@ -189,7 +199,7 @@ constexpr auto magic_points_factory(){
 
 template<typename T, size_t N>
 constexpr array<T, N> all_angles(){
-    constexpr size_t angle_size = num_windows; // change later to an static method 
+    constexpr size_t angle_size = MagicPoints::num_windows(dimension);
     array<T,  N> new_arr;
     for(int i = 0; i < N; i++)
         new_arr[i] = MagicPoints::angle(i);
@@ -309,7 +319,7 @@ auto all_windows = tie(window0);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
 
-//array<double, 2 * all_windows_size> angles = all_angles<double, 2 * all_windows_size>(all_windows);
+array<double, MagicPoints::num_windows(dimension)> angles = all_angles<double, MagicPoints::num_windows(dimension)>();
 
 
 
