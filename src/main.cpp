@@ -131,7 +131,7 @@ int main(int argc, char *argv[]){
   for(auto angle : angles){
     cout << angle << endl;
 
-    cout << MagicPoints::gen_mask<dimension>(angle);
+    cout << MagicPoints::gen_mask<dimension>(angle, 3);
   }
 
   return 0;

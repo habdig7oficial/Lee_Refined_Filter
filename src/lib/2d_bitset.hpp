@@ -13,7 +13,6 @@ class BitSetMask {
         static constexpr uint Size = Len * Len;
         bitset<Size> mask;
 
-
     public:
 
         template<size_t N, size_t M>
@@ -44,9 +43,9 @@ class BitSetMask {
         template<size_t M>
         static constexpr bitset<Len * Len> init(const array<Point, M>& bit_mask){
             bitset<Len * Len> premask;
-            premask.set();
-
             int center = Len / 2;
+            
+            premask.set();
 
             for(auto [x, y] : bit_mask)
                 premask[((center - y) * Len) + (center + x)] = false;
@@ -62,8 +61,7 @@ class BitSetMask {
         template<size_t M>
         constexpr BitSetMask(const array<Point, M>& bit_mask) : mask(init(bit_mask)) {}
 
-        constexpr BitSetMask(double angle){
-
+        constexpr BitSetMask(){
         }
   
         size_t size() const noexcept { return Len * Len; }
@@ -77,6 +75,10 @@ class BitSetMask {
         }
 
         bool operator () (uint x, uint y) const {
+            return mask[(y * Len) + x];
+        }
+
+        auto operator [] (uint x, uint y){
             return mask[(y * Len) + x];
         }
 /*

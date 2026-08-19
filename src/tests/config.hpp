@@ -4,7 +4,6 @@
 #include "math.h"
 #include "../lib/filter.hpp"
 
-#define EPSILON 1e-9
 #define REPETITIONS 100
 
 #define IMG "img/Simulated/phi_raster_noisy.tif"

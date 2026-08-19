@@ -44,8 +44,27 @@ class MagicPoints {
     }
 
     template <size_t Dim>
-    static constexpr BitSetMask<Dim> gen_mask(double angle){
-        BitSetMask<Dim> mask(angle);
+    static constexpr BitSetMask<Dim> gen_mask(double angle, double threshold){
+        BitSetMask<Dim> mask {};
+
+            double s = sin(angle);
+            double c = cos(angle);
+
+            int center = Dim / 2;
+            for(int y = -center; y <= center; y++){
+                double yc = y * c;
+                for(int x = -center; x <= center; x++){
+                    double xs = x * s;
+
+                    double res = abs(xs - yc);
+                    if(res <= threshold / 2){
+                        /* Side A  NOT_ROTATED*/
+                        mask[center - y, center + x] = true;
+                        //mask[center + y, center - x] = true;
+
+                    }
+                }
+            }
 
         return mask;
     }
@@ -319,7 +338,7 @@ auto all_windows = tie(window0);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
 
-array<double, MagicPoints::num_windows(dimension)> angles = all_angles<double, MagicPoints::num_windows(dimension)>();
+array<double, MagicPoints::num_windows(dimension / 2 + dimension % 2)> angles = all_angles<double, MagicPoints::num_windows(dimension / 2 + dimension % 2)>();
 
 
 
