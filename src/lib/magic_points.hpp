@@ -1,4 +1,4 @@
-/* Hardcoded DIMENSIONxDIMENSION window, create a function that generates this later */
+/* Hardcoded dimensionxdimension window, create a function that generates this later */
 
 #include "array"
 #include "utility"
@@ -21,15 +21,15 @@ class MagicPoints {
         const array<Point, N>relative_coordinates;
         const array<Point, M> relevant_points; 
 
-        BitSetMask<DIMENSION> mask;
+        BitSetMask<dimension> mask;
 
         int side, area;
         int win_number;
 
     public:
-    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) }, mask(BitSetMask<DIMENSION>(relevant_points, rl)) {
+    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) }, mask(BitSetMask<dimension>(relevant_points, rl)) {
         this -> win_number = win_number;
-        this -> side = DIMENSION;
+        this -> side = dimension;
         this -> area = this -> side * this -> side;
     }
 
@@ -122,12 +122,12 @@ class MagicPoints {
     }
 
     double angle() const {
-        return this -> win_number * numbers::pi / (2 * (DIMENSION - 1));
+        return this -> win_number * numbers::pi / (2 * (dimension - 1));
     }
 
     /* Angle of the mirror image */
     double angle_inverse() const {
-        return this -> get_mirror_num() * numbers::pi / (2 * (DIMENSION - 1));
+        return this -> get_mirror_num() * numbers::pi / (2 * (dimension - 1));
     }
 
     size_t size() const {
@@ -141,9 +141,9 @@ class MagicPoints {
     int get_side()       const { return this -> side; }
     int get_area()       const { return this -> area; }
     int get_win_num()    const { return this -> win_number; }
-    int get_mirror_num() const { return this -> win_number + (DIMENSION - 1); }
+    int get_mirror_num() const { return this -> win_number + (dimension - 1); }
 
-    BitSetMask<DIMENSION> get_mask() const { return this -> mask; } 
+    BitSetMask<dimension> get_mask() const { return this -> mask; } 
 
     const Point* get_relevant() const { return relevant_points.data(); }
     size_t get_relevant_size()  const { return M; }
@@ -202,7 +202,7 @@ constexpr array w0_arr = {
         Point{4, 1}, Point{4, 0}, Point{4, -1},
         Point{5, 1}, Point{5, 0}, Point{5, -1}
 };
-constinit auto window0 = magic_points_factory<w0_arr, DIMENSION_INNER, 0>();
+constinit auto window0 = magic_points_factory<w0_arr, dimension_inner, 0>();
 
 constexpr array w1_arr = {
         Point{1, -1}, Point{0, 1},
@@ -212,7 +212,7 @@ constexpr array w1_arr = {
         Point{4, 2}, Point{4, 1}, Point{4, 0},
         Point{5, 2}, Point{5, 1}, Point{5, 0}, 
 };
-constinit auto window1 = magic_points_factory<w1_arr, DIMENSION_INNER, 1>();
+constinit auto window1 = magic_points_factory<w1_arr, dimension_inner, 1>();
 
 constexpr array w2_arr = {
         Point{0, 1},
@@ -222,7 +222,7 @@ constexpr array w2_arr = {
         Point{4, 3}, Point{4, 2}, Point{4, 1},
         Point{5, 3}, Point{5, 2}, Point{5, 1}
     };
-constinit auto window2 = magic_points_factory<w2_arr, DIMENSION_INNER, 2>();
+constinit auto window2 = magic_points_factory<w2_arr, dimension_inner, 2>();
 
 constexpr array w3_arr = {
         Point{0, 1}, Point{-1, 1}, 
@@ -232,7 +232,7 @@ constexpr array w3_arr = {
         Point{4, 3}, Point{4, 2}, Point{4, 1},
         Point{5, 4}, Point{5, 3}, Point{5, 2}
 };
-constinit auto window3 = magic_points_factory<w3_arr, DIMENSION_INNER, 3>();
+constinit auto window3 = magic_points_factory<w3_arr, dimension_inner, 3>();
 
 constexpr array w4_arr = {
         Point{0, 1}, 
@@ -242,7 +242,7 @@ constexpr array w4_arr = {
         Point{4, 4}, Point{4, 3}, Point{4, 2},
         Point{5, 5}, Point{5, 4}, Point{5, 3}
 };
-constinit auto window4 = magic_points_factory<w4_arr, DIMENSION_INNER, 4>();
+constinit auto window4 = magic_points_factory<w4_arr, dimension_inner, 4>();
 
 constexpr array w5_arr = {
         Point{0, 1},
@@ -252,7 +252,7 @@ constexpr array w5_arr = {
         Point{4, 5}, Point{4, 4}, Point{4, 3},
         Point{5, 5}, Point{5, 4}
     };
-constinit auto window5 = magic_points_factory<w5_arr, DIMENSION_INNER, 5>();
+constinit auto window5 = magic_points_factory<w5_arr, dimension_inner, 5>();
 
 constexpr array w6_arr = {
         Point{0, 1},
@@ -262,7 +262,7 @@ constexpr array w6_arr = {
         Point{4, 5}, Point{4, 4},
         Point{5, 5}
 };
-constinit auto window6 = magic_points_factory<w6_arr, DIMENSION_INNER, 6>();
+constinit auto window6 = magic_points_factory<w6_arr, dimension_inner, 6>();
 
 constexpr array w7_arr = {
         Point{0, 1},
@@ -271,7 +271,7 @@ constexpr array w7_arr = {
         Point{3, 5}, Point{3, 4},
         Point{4, 5}
 };
-constinit auto window7 = magic_points_factory<w7_arr, DIMENSION_INNER, 7>();
+constinit auto window7 = magic_points_factory<w7_arr, dimension_inner, 7>();
 
 constexpr array w8_arr = {
         Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
@@ -279,14 +279,14 @@ constexpr array w8_arr = {
         Point{2, 5}, Point{2, 4}, Point{2, 3},
         Point{3, 5}
 };
-constinit auto window8 = magic_points_factory<w8_arr, DIMENSION_INNER, 8>();
+constinit auto window8 = magic_points_factory<w8_arr, dimension_inner, 8>();
 
 constexpr array w9_arr = {
         Point{0, 5}, Point{0, 4}, Point{0, 3}, Point{0, 2}, Point{0, 1},
         Point{1, 5}, Point{1, 4}, Point{1, 3}, Point{1, 2}, Point{1, 1}, Point{1, 0}, Point{1, -1}, 
         Point{2, 5}, Point{2, 4}, Point{2, 3}
 };
-constinit auto window9 = magic_points_factory<w9_arr, DIMENSION_INNER, 9>();
+constinit auto window9 = magic_points_factory<w9_arr, dimension_inner, 9>();
 
 
 auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);

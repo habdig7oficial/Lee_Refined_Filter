@@ -1,11 +1,11 @@
 #pragma once
 
-#define DIMENSION 11
-#define DIMENSION_INNER 3
+inline constexpr size_t dimension =  11;
+inline constexpr size_t dimension_inner = 3;
 
-#define INNER_HALF ((int) DIMENSION_INNER / 2)
-#define INNER_AREA (DIMENSION_INNER * DIMENSION_INNER)
-#define RELEVANT_POINTS_SIZE(N) (2 * INNER_AREA * (N + 1)) 
+inline constexpr size_t inner_half = dimension_inner / 2;
+inline constexpr size_t inner_area = (dimension_inner * dimension_inner);
+//#define RELEVANT_POINTS_SIZE(N) (2 * INNER_AREA * (N + 1)) 
 
 #define SIDE_A true
 #define SIDE_B false
@@ -14,19 +14,13 @@
 #define NOT_ROTATED true
 #define ROTATED false
 
-
-#if(DIMENSION / 2 <= (SCHAR_MAX >> (CHAR_BIT / 2)))
-    #define SIZE_POINT (CHAR_BIT / 2)
-#elif(DIMENSION / 2 <= SCHAR_MAX)
-    #define SIZE_POINT CHAR_BIT
-#endif
-
+inline constexpr size_t size_point = (dimension / 2 <= (SCHAR_MAX >> (CHAR_BIT / 2)))? CHAR_BIT / 2 : CHAR_BIT;
 
 /* In side A NOT_ROTATED is (x, y) */
 namespace Magic {
     struct Point {
-        signed char first : SIZE_POINT;
-        signed char second : SIZE_POINT;
+        signed char first : size_point;
+        signed char second : size_point;
 
         auto operator <=> (const Point&) const = default;
 
@@ -74,16 +68,16 @@ constexpr vector<Point> mark_relevant(const array<Point, M>arr){
     vector<Point> relevant_points;
 
     for(auto [rx, ry] : arr ){
-        for(signed char j = ry - INNER_HALF; j <= ry + INNER_HALF; j++){
-            for(signed char i = rx - INNER_HALF; i <= rx + INNER_HALF; i++){
+        for(signed char j = ry - inner_half; j <= ry + inner_half; j++){
+            for(signed char i = rx - inner_half; i <= rx + inner_half; i++){
 
                 /* Cap out of bounds points */
-                if(const_abs(i) > ((int) DIMENSION / 2) - 1 || const_abs(j) > ((int) DIMENSION / 2) - 1)
+                if(const_abs(i) > (dimension / 2) - 1 || const_abs(j) > (dimension / 2) - 1)
                     continue;
 
                 /* Ensure that the mirror points are placed */
                 if(rx == 0){
-                    for(int k = 0; k < DIMENSION; k++)
+                    for(int k = 0; k < dimension; k++)
                         relevant_points.push_back(Point{i, j});
 
                     continue;   
