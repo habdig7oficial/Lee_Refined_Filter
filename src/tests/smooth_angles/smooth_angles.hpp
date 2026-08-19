@@ -1,6 +1,6 @@
 constexpr size_t len = dimension + 2;
 constexpr size_t nglen = 2 * (dimension - 1);
-/*
+
 TEST_CASE("First integral pass", "[smooth_angles]"){
    (*Rbind).parseEvalQ("source(\"src/tests/smooth_angles/smooth_angles.R\")");
 
@@ -62,4 +62,3 @@ array<array<double, nglen>, nglen> test = diff(dist<double, len>(), angles);
         (*Rbind).parseEvalQ("j <- 1");
    }
 }
-*/

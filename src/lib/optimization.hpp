@@ -77,13 +77,3 @@ constexpr array<T, N> abs(array<T, N> arr){
     
     return new_arr;
 }
-
-template<typename T, size_t N, size_t M>
-constexpr array<T, N> diff(array<T, N> a, array<T, M> b){
-    array<T, N>res;
-
-
-    //auto it = set_difference(at.begin(), at.end(), bt.begin(), bt.end(), res.begin());
-
-    return a;
-}
