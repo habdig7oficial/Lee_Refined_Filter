@@ -73,8 +73,8 @@ tuple<double, double, int> match_area_x(gsl_function *F, double lower_limit, dou
 }
 
 /* image, image x point, image y point, correspodent window, direction */
-template <typename T = double, size_t N, size_t M>
-double calc_mean_complex(Mat& image, uint tx, uint ty, MagicPoints<N, M>& window, bool is_reverse){
+template <typename T = double, size_t N = 1, size_t M = 1>
+double calc_mean_complex(Mat& image, uint tx, uint ty, MagicPoints& window, bool is_reverse){
   double sin_complex = 0, cos_real = 0;
   auto lambda = [&image, &tx, &ty, &window, &sin_complex, &cos_real](char rx, char ry, bool scope){
         /* Make the absolut points for x and y take the value from image via pointer and cast it to complex */
@@ -185,17 +185,7 @@ constexpr array<T, N> min_row(array<array<T, N>, N> matrix){
   return min_row;
 }
 /*
-template <typename T>
-struct is_magic_points : false_type {};
-
-template <size_t N, size_t M>
-struct is_magic_points<MagicPoints<N, M>> : true_type {};
-
-template <typename T, typename U>
-inline constexpr bool is_magic_points_v = is_magic_points<T, U>::value;
-
 void select_angle(Mat &image, uint tx, uint ty){}
-
 */
 
 template<typename T>
@@ -232,7 +222,7 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
       int select_win;
       Magic::Point *relevant;
       size_t relevant_size;
-
+/*
       apply([&, i, j](auto&&... win){
         double aux;
           ((
@@ -269,7 +259,7 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
             }()
           ), ...);
       }, all_windows);
-
+*/
 
       if constexpr(dev_mode)      
         for(int i = 0; i < relevant_size; i++)

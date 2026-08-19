@@ -10,6 +10,8 @@ inline constexpr size_t size_point = (dimension / 2 <= (SCHAR_MAX >> (CHAR_BIT /
 
 //#define RELEVANT_POINTS_SIZE(N) (2 * INNER_AREA * (N + 1)) 
 
+inline constexpr uint num_windows = 2 * (dimension - 1);
+
 #define SIDE_A true
 #define SIDE_B false
 

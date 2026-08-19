@@ -125,5 +125,7 @@ int main(int argc, char *argv[]){
   bool saved = imwrite("./output.tiff", filtered);
 
   destroyAllWindows();
+
+  cout << num_windows << endl;
   return 0;
 }

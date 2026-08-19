@@ -15,33 +15,30 @@ using namespace std;
 using namespace env;
 using namespace Magic;
 
-template <size_t N, size_t M>
 class MagicPoints {
     private:
+        static constexpr uint N = 16; 
+        static constexpr uint M = 16; 
         const array<Point, N>relative_coordinates;
-        const array<Point, M> relevant_points; 
+        //const array<Point, M> relevant_points; 
 
-        BitSetMask<dimension> mask;
+        //BitSetMask<dimension> mask;
 
         int side, area;
         int win_number;
 
     public:
 
-    static inline constexpr size_t dimension =  11;
-    static inline constexpr size_t dimension_inner = 3;
-
-    static inline constexpr size_t inner_half = dimension_inner / 2;
-    static inline constexpr size_t inner_area = (dimension_inner * dimension_inner);
-    //#define RELEVANT_POINTS_SIZE(N) (2 * INNER_AREA * (N + 1)) 
-
-    static inline constexpr size_t size_point = (dimension / 2 <= (SCHAR_MAX >> (CHAR_BIT / 2)))? CHAR_BIT / 2 : CHAR_BIT;
-
-    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl), relevant_points{ gen_static<N, M>(rl, side) }, mask(BitSetMask<dimension>(relevant_points, rl)) {
+    constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl) {
         this -> win_number = win_number;
         this -> side = dimension;
         this -> area = this -> side * this -> side;
     }
+
+    static constexpr double angle(int win_number) {
+        return win_number * numbers::pi / (2 * (dimension - 1));
+    }
+    
 
     /* 
         Lambda type should be:
@@ -83,6 +80,11 @@ class MagicPoints {
             lambda(point.second, -point.first, SIDE_B);
     }
 
+        template<typename Lambda>
+    void traverse_relevant(Lambda lambda){}
+        template<typename Lambda>
+    void traverse_relevant_inverse(Lambda lambda){}
+    /*
     template<typename Lambda>
     void traverse_relevant(Lambda lambda){
         if constexpr (dev_mode)
@@ -116,7 +118,7 @@ class MagicPoints {
              cout << "SIDE_B: ";
         for(const Point& point : this -> relevant_points)
             lambda(point.second, -point.first, SIDE_B);
-    }
+    }*/
 
     template<typename Lambda>
     void traverse_data(Lambda lambda){
@@ -132,12 +134,12 @@ class MagicPoints {
     }
 
     double angle() const {
-        return this -> win_number * numbers::pi / (2 * (dimension - 1));
+        return MagicPoints::angle(this -> get_win_num());
     }
 
     /* Angle of the mirror image */
     double angle_inverse() const {
-        return this -> get_mirror_num() * numbers::pi / (2 * (dimension - 1));
+        return MagicPoints::angle(get_mirror_num());
     }
 
     size_t size() const {
@@ -153,9 +155,10 @@ class MagicPoints {
     int get_win_num()    const { return this -> win_number; }
     int get_mirror_num() const { return this -> win_number + (dimension - 1); }
 
-    BitSetMask<dimension> get_mask() const { return this -> mask; } 
+    //BitSetMask<dimension> get_mask() const { return this -> mask; } 
 
-    const Point* get_relevant() const { return relevant_points.data(); }
+    const Point* get_relevant() const { return NULL; }
+    //const Point* get_relevant() const { return relevant_points.data(); }
     size_t get_relevant_size()  const { return M; }
 
     #if !NDEBUG  
@@ -181,29 +184,18 @@ constexpr auto magic_points_factory(){
 
     auto relevant_points = gen_static<N, M>(RelativeCoordinates, Side);
 
-    return MagicPoints<N, M>(WinNumber, sort_compile_time(RelativeCoordinates, sorting_lambda), Side);
+    return MagicPoints(WinNumber, sort_compile_time(RelativeCoordinates, sorting_lambda), Side);
 }
 
 template<typename T, size_t N>
-constexpr array<T, N> all_angles(auto& all_windows){
+constexpr array<T, N> all_angles(){
+    constexpr size_t angle_size = num_windows; // change later to an static method 
     array<T,  N> new_arr;
-    int i = 0;
-    apply([&i, &new_arr](auto&&... win){
-        ((
-            new_arr[i] = win.angle(),
-            i++
-        ), ...);
-    }, all_windows);
-
-    apply([&i, &new_arr](auto&&... win){
-        ((
-            new_arr[i] = win.angle_inverse(),
-            i++
-        ), ...);
-    }, all_windows);
+    for(int i = 0; i < N; i++)
+        new_arr[i] = MagicPoints::angle(i);
     return new_arr;
 };
-
+/*
 constexpr array w0_arr = {
         Point{0, 1}, 
         Point{1, 1}, Point{1, 0}, Point{1, -1},
@@ -300,9 +292,26 @@ constinit auto window9 = magic_points_factory<w9_arr, dimension_inner, 9>();
 
 
 auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
+*/
+
+constexpr array w0_arr = {
+        Point{0, 1}, 
+        Point{1, 1}, Point{1, 0}, Point{1, -1},
+        Point{2, 1}, Point{2, 0}, Point{2, -1},
+        Point{3, 1}, Point{3, 0}, Point{3, -1},
+        Point{4, 1}, Point{4, 0}, Point{4, -1},
+        Point{5, 1}, Point{5, 0}, Point{5, -1}
+};
+
+constinit auto window0  = MagicPoints(0, w0_arr, dimension_inner);
+
+auto all_windows = tie(window0);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
-array<double, 2 * all_windows_size> angles = all_angles<double, 2 * all_windows_size>(all_windows);
+
+//array<double, 2 * all_windows_size> angles = all_angles<double, 2 * all_windows_size>(all_windows);
+
+
 
 
 
