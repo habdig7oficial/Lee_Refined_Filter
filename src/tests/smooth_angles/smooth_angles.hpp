@@ -1,5 +1,5 @@
-constexpr size_t len = MagicPoints::dimension + 2;
-constexpr size_t nglen = 2 * (MagicPoints::dimension - 1);
+constexpr size_t len = dimension + 2;
+constexpr size_t nglen = 2 * (dimension - 1);
 /*
 TEST_CASE("First integral pass", "[smooth_angles]"){
    (*Rbind).parseEvalQ("source(\"src/tests/smooth_angles/smooth_angles.R\")");
