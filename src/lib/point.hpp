@@ -1,11 +1,5 @@
 #pragma once
 
-inline constexpr size_t dimension =  11;
-inline constexpr size_t dimension_inner = 3;
-
-inline constexpr size_t inner_half = dimension_inner / 2;
-inline constexpr size_t inner_area = (dimension_inner * dimension_inner);
-//#define RELEVANT_POINTS_SIZE(N) (2 * INNER_AREA * (N + 1)) 
 
 #define SIDE_A true
 #define SIDE_B false
@@ -14,13 +8,12 @@ inline constexpr size_t inner_area = (dimension_inner * dimension_inner);
 #define NOT_ROTATED true
 #define ROTATED false
 
-inline constexpr size_t size_point = (dimension / 2 <= (SCHAR_MAX >> (CHAR_BIT / 2)))? CHAR_BIT / 2 : CHAR_BIT;
 
 /* In side A NOT_ROTATED is (x, y) */
 namespace Magic {
     struct Point {
-        signed char first : size_point;
-        signed char second : size_point;
+        signed char first : MagicPoints::size_point;
+        signed char second : MagicPoints::size_point;
 
         auto operator <=> (const Point&) const = default;
 
@@ -72,12 +65,12 @@ constexpr vector<Point> mark_relevant(const array<Point, M>arr){
             for(signed char i = rx - inner_half; i <= rx + inner_half; i++){
 
                 /* Cap out of bounds points */
-                if(const_abs(i) > (dimension / 2) - 1 || const_abs(j) > (dimension / 2) - 1)
+                if(const_abs(i) > (MagicPoints::dimension / 2) - 1 || const_abs(j) > (MagicPoints::dimension / 2) - 1)
                     continue;
 
                 /* Ensure that the mirror points are placed */
                 if(rx == 0){
-                    for(int k = 0; k < dimension; k++)
+                    for(int k = 0; k < MagicPoints::dimension; k++)
                         relevant_points.push_back(Point{i, j});
 
                     continue;   
