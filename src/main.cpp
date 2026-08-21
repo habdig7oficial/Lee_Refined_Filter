@@ -140,11 +140,9 @@ int main(int argc, char *argv[]){
 
   cout << MagicPoints::num_windows(dimension) << endl;
 
-  for(int i = 0; i < masks.size; i++){
-    cout << angle << endl;
-
+  for(int i = 0; i < masks.size; i++)
     cout << masks[i];
-  }
+  
 
   return 0;
 }
