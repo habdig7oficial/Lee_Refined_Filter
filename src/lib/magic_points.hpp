@@ -36,7 +36,7 @@ class MagicPoints {
         this -> area = this -> side * this -> side;
     }*/
 
-    constexpr MagicPoints(uint win_number, uint dimension){
+    constexpr MagicPoints(uint win_number){
 
     }
 
@@ -231,13 +231,12 @@ constexpr array<T, N> all_angles(){
 };
 
 constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
-template<size_t Dim>
-constexpr array<MagicPoints, masks_size, Dim = dimension> magic_points_arr(){
+constexpr array<MagicPoints, masks_size> magic_points_arr(){
   array<MagicPoints, masks_size> masks;
 
   for(int i = 0; i < masks_size; i++){
     //masks[i] = MagicPoints::gen_mask<dimension>(angles[i], thickness);
-    masks[i] = MagicPoints(i, Dim);
+    masks[i] = MagicPoints(i);
   }
 
   return masks;
