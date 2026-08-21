@@ -3,6 +3,9 @@
 CXX = g++
 CXX_FLAGS = `pkg-config --cflags --libs opencv4 gsl`
 
+# Should be at least 23 because of constexpr bitset
+CXX_VERSION=23
+
 
 # R binds for test only
 R_TEST    := $(shell Rscript -e "cat(R.home('include'))")
@@ -17,29 +20,29 @@ CXX_FLAGS_BENCHMARK = `pkg-config --cflags --libs opencv4 gsl benchmark` # Catch
 
 
 compile:
-	 $(CXX) -march=native -fconstexpr-depth=4096 -std=c++23 src/main.cpp -o exec.elf $(CXX_FLAGS)
+	 $(CXX) -march=native -fconstexpr-depth=4096 -std=c++$(CXX_VERSION) src/main.cpp -o exec.elf $(CXX_FLAGS)
 
 release: 
-	$(CXX) -Wdeprecated-enum-enum-conversion -march=native -fconstexpr-depth=4096 -O3 -std=c++23 -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
+	$(CXX) -march=native -fconstexpr-depth=4096 -O3 -std=c++$(CXX_VERSION) -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
 
 testO0:
-	$(CXX) -std=c++23 -fconstexpr-depth=4096 -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf --abort #--rng-seed 3144853315
+	$(CXX) -std=c++$(CXX_VERSION) -fconstexpr-depth=4096 -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf --abort #--rng-seed 3144853315
 
 testO3:
-	$(CXX) -std=c++23 -fconstexpr-depth=4096 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf --abort
+	$(CXX) -std=c++$(CXX_VERSION) -fconstexpr-depth=4096 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf --abort
 
 test: testO0 testO3
 
 
 
 benchmark:
-	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native -DNDEBUG src/benchmark/benchmark.cpp -o benchmark.elf $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf --benchmark_repetitions=2 --benchmark_report_aggregates_only=true --benchmark_out=benchmark.json --benchmark_out_format=json
+	$(CXX) -std=c++$(CXX_VERSION) -fconstexpr-steps=0 -O3 -march=native -DNDEBUG src/benchmark/benchmark.cpp -o benchmark.elf $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf --benchmark_repetitions=2 --benchmark_report_aggregates_only=true --benchmark_out=benchmark.json --benchmark_out_format=json
 
 benchmark_paper:
-	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native -DNDEBUG src/benchmark/benchmark.cpp -o benchmark.elf $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf --benchmark_min_warmup_time=2 --benchmark_repetitions=40 --benchmark_report_aggregates_only=true --benchmark_out=benchmark.json --benchmark_out_format=json
+	$(CXX) -std=c++$(CXX_VERSION) -fconstexpr-steps=0 -O3 -march=native -DNDEBUG src/benchmark/benchmark.cpp -o benchmark.elf $(CXX_FLAGS_BENCHMARK) && ./benchmark.elf --benchmark_min_warmup_time=2 --benchmark_repetitions=40 --benchmark_report_aggregates_only=true --benchmark_out=benchmark.json --benchmark_out_format=json
 
 
 # Deno && Image magick required
