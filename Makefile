@@ -17,19 +17,19 @@ CXX_FLAGS_BENCHMARK = `pkg-config --cflags --libs opencv4 gsl benchmark` # Catch
 
 
 compile:
-	 $(CXX) -march=native -fconstexpr-steps=0 -std=c++23 src/main.cpp -o exec.elf $(CXX_FLAGS) 
+	 $(CXX) -march=native -fconstexpr-depth=4096 -std=c++23 src/main.cpp -o exec.elf $(CXX_FLAGS) 
 
 release: 
-	$(CXX) -march=native -fconstexpr-steps=0 -O3 -std=c++23 -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
+	$(CXX) -march=native -fconstexpr-depth=4096 -O3 -std=c++23 -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
 
 testO0:
-	$(CXX) -std=c++23 -fconstexpr-steps=0 -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf --abort #--rng-seed 3144853315
+	$(CXX) -std=c++23 -fconstexpr-depth=4096 -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf --abort #--rng-seed 3144853315
 
 testO3:
-	$(CXX) -std=c++23 -fconstexpr-steps=0 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf --abort
+	$(CXX) -std=c++23 -fconstexpr-depth=4096 -O3 -march=native src/tests/test.cpp -o test_optimized.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test_optimized.elf --abort
 
 test: testO0 testO3
 
