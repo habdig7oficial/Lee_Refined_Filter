@@ -8,3 +8,4 @@ satelite
 *.tiff
 *.elf
 !benchmark.json
+src/tests
