@@ -338,7 +338,7 @@ auto all_windows = tie(window0);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
 
-constexpr array<double, MagicPoints::num_windows(dimension / 2 + dimension % 2)> angles = all_angles<double, MagicPoints::num_windows(dimension / 2 + dimension % 2)>();
+//constexpr array<double, MagicPoints::num_windows(dimension / 2 + dimension % 2)> angles = all_angles<double, MagicPoints::num_windows(dimension / 2 + dimension % 2)>();
 
 
 
