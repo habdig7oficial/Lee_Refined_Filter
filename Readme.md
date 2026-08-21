@@ -61,3 +61,14 @@ See calc_mean_complex optimization acording to paper formula
 add select window integrated test
 
 # Unused 
+
+Copyright © 2026 Terry Jones Mateus Felipe da Silveira Vieira, Rogério de Oliveira, Anderson Adaime de Borba
+
+This file is part of Geschwindigkeit.
+
+Geschwindigkeit is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Geschwindigkeit is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>. 
+
