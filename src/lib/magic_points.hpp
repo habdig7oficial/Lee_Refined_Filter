@@ -113,7 +113,7 @@ class MagicPoints {
     void traverse_relevant(Lambda lambda){}
         template<typename Lambda>
     void traverse_relevant_inverse(Lambda lambda){}
-    /*
+    
     template<typename Lambda>
     void traverse_relevant(Lambda lambda){
         if constexpr (dev_mode)
@@ -147,7 +147,7 @@ class MagicPoints {
              cout << "SIDE_B: ";
         for(const Point& point : this -> relevant_points)
             lambda(point.second, -point.first, SIDE_B);
-    }*/
+    }
 
     template<typename Lambda>
     void traverse_data(Lambda lambda){
