@@ -17,10 +17,10 @@ CXX_FLAGS_BENCHMARK = `pkg-config --cflags --libs opencv4 gsl benchmark` # Catch
 
 
 compile:
-	 $(CXX) -Wdeprecated-enum-enum-conversion -march=native -fconstexpr-depth=4096 -std=c++23 src/main.cpp -o exec.elf $(CXX_FLAGS)
+	 $(CXX) -march=native -fconstexpr-depth=4096 -std=c++23 src/main.cpp -o exec.elf $(CXX_FLAGS)
 
 release: 
-	$(CXX) -march=native -fconstexpr-depth=4096 -O3 -std=c++23 -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
+	$(CXX) -Wdeprecated-enum-enum-conversion -march=native -fconstexpr-depth=4096 -O3 -std=c++23 -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
 
 run: compile
 	./exec.elf
