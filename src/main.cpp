@@ -15,6 +15,7 @@ struct config_struct {
   char window;
 };
 
+constexpr BitSetMask<dimension> mask = MagicPoints::gen_mask<dimension>(0, 3);
 
 int main(int argc, char *argv[]){
 
@@ -131,7 +132,7 @@ int main(int argc, char *argv[]){
   for(auto angle : angles){
     cout << angle << endl;
 
-    cout << MagicPoints::gen_mask<dimension>(angle, 3);
+    cout << mask;
   }
 
   return 0;
