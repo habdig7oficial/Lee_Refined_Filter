@@ -1,6 +1,6 @@
 # OpenCv and Gnu Scientific Library (gsl) must be installed
 
-CXX = clang++
+CXX = g++
 CXX_FLAGS = `pkg-config --cflags --libs opencv4 gsl`
 
 
