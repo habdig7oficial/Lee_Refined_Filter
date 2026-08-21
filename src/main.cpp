@@ -143,7 +143,7 @@ int main(int argc, char *argv[]){
   for(auto angle : angles){
     cout << angle << endl;
 
-    cout << mask;
+    cout << masks;
   }
 
   return 0;
