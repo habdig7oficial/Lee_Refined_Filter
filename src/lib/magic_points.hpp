@@ -231,6 +231,7 @@ constexpr array<T, N> all_angles(){
 };
 
 constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
+template<size_t Dim>
 constexpr array<MagicPoints, masks_size, Dim = dimension> magic_points_arr(){
   array<MagicPoints, masks_size> masks;
 
