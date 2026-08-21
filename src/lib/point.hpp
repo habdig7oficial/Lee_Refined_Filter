@@ -7,7 +7,7 @@ inline constexpr size_t inner_half = dimension_inner / 2;
 inline constexpr size_t inner_area = (dimension_inner * dimension_inner);
 
 inline constexpr size_t size_point = (dimension / 2 <= (SCHAR_MAX >> (CHAR_BIT / 2)))? CHAR_BIT / 2 : CHAR_BIT;
-
+inline constexpr size_t thickness = 3;
 //#define RELEVANT_POINTS_SIZE(N) (2 * INNER_AREA * (N + 1)) 
 
 #define EPSILON 1e-9
