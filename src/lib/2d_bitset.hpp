@@ -78,7 +78,7 @@ class BitSetMask {
             return mask[(y * Len) + x];
         }
 
-        auto operator [] (uint x, uint y){
+        auto constexpr operator [] (uint x, uint y){
             return mask[(y * Len) + x];
         }
 /*
