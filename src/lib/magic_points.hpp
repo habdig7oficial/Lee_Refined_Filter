@@ -19,7 +19,7 @@ class MagicPoints {
     private:
         static constexpr uint N = 16; 
         static constexpr uint M = 16; 
-        const array<Point, N>relative_coordinates;
+        const array<Point, N>relative_coordinates = {};
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
