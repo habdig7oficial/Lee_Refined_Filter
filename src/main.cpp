@@ -16,7 +16,7 @@ struct config_struct {
 };
 
 
-constexpr array<BitSetMask<dimension>, masks_size> masks = mask_arr();
+constexpr array<BitSetMask<dimension>, masks_size> masks = magic_points_arr();
 
 int main(int argc, char *argv[]){
 
