@@ -29,10 +29,15 @@ class MagicPoints {
 
     public:
 
+    /*
     constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl) {
         this -> win_number = win_number;
         this -> side = dimension;
         this -> area = this -> side * this -> side;
+    }*/
+
+    constexpr MagicPoints(uint win_number, uint dimension){
+
     }
 
     static constexpr double angle(uint win_number, uint dim = dimension) {
@@ -224,6 +229,19 @@ constexpr array<T, N> all_angles(){
         new_arr[i] = MagicPoints::angle(i);
     return new_arr;
 };
+
+constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
+constexpr array<MagicPoints, masks_size, Dim = dimension> magic_points_arr(){
+  array<MagicPoints, masks_size> masks;
+
+  for(int i = 0; i < masks_size; i++){
+    //masks[i] = MagicPoints::gen_mask<dimension>(angles[i], thickness);
+    masks[i] = MagicPoints(i, Dim);
+  }
+
+  return masks;
+}
+
 /*
 constexpr array w0_arr = {
         Point{0, 1}, 

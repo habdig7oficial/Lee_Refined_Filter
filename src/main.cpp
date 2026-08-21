@@ -15,16 +15,6 @@ struct config_struct {
   char window;
 };
 
-constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
-constexpr array<BitSetMask<dimension>, masks_size> mask_arr(){
-  array<BitSetMask<dimension>, masks_size> masks;
-
-  for(int i = 0; i < masks_size; i++){
-     masks[i] = MagicPoints::gen_mask<dimension>(angles[i], thickness);
-  }
-
-  return masks;
-}
 
 constexpr array<BitSetMask<dimension>, masks_size> masks = mask_arr();
 
