@@ -51,6 +51,7 @@ class MagicPoints {
     }
 
 
+    template<size_t Dim = dimension>
     static constexpr BitSetMask<Dim> gen_mask(double angle, double threshold){
         BitSetMask<Dim> mask {};
 
