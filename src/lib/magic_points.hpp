@@ -19,7 +19,7 @@ using namespace Magic;
 
 class MagicPoints {
     private:
-        static constexpr N = dimension * dimension;
+        static constexpr size_t N = dimension * dimension;
         const array<Point, N>relative_coordinates;
         //const array<Point, M> relevant_points; 
 
