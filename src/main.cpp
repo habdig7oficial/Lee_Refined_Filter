@@ -18,7 +18,7 @@ struct config_struct {
 
 constexpr array<BitSetMask<dimension>, masks_size> masks = magic_points_arr();
 
-array<vector<Magic::Point>, masks_size> test = vec_mask();
+Magic::Point> test = vec_mask(0, dimension);
 
 
 int main(int argc, char *argv[]){
