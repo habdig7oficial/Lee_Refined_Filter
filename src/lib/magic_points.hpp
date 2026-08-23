@@ -369,7 +369,7 @@ constinit auto window9 = magic_points_factory<w9_arr, dimension_inner, 9>();
 
 auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
 */
-
+/*
 constexpr array w0_arr = {
         Point{0, 1}, 
         Point{1, 1}, Point{1, 0}, Point{1, -1},
@@ -380,6 +380,8 @@ constexpr array w0_arr = {
 };
 
 constinit auto window0 = MagicPoints(0, w0_arr, dimension_inner);
+
+*/
 
 auto all_windows = tie(window0);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
