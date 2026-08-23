@@ -20,7 +20,7 @@ using namespace Magic;
 class MagicPoints {
     private:
         static constexpr size_t N = dimension * dimension;
-        const array<Point, N>relative_coordinates;
+        const array<Point, N>relative_coordinates = {};
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
