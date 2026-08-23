@@ -19,7 +19,7 @@ class MagicPoints {
     private:
         static constexpr uint N = 16; 
         static constexpr uint M = 16; 
-        const array<Point, N>relative_coordinates = {};
+        const array<Point, N>relative_coordinates;
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
@@ -235,8 +235,8 @@ constexpr array<MagicPoints, masks_size> magic_points_arr(){
   array<MagicPoints, masks_size> masks;
 
   for(int i = 0; i < masks_size; i++){
-    //masks[i] = MagicPoints::gen_mask<dimension>(angles[i], thickness);
-    masks[i] = MagicPoints(i);
+    masks[i] = MagicPoints::gen_mask<dimension>(angles[i], thickness);
+    //masks[i] = MagicPoints(i);
   }
 
   return masks;
