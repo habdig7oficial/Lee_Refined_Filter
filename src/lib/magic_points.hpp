@@ -67,7 +67,7 @@ class MagicPoints {
                     double res = abs(xs - yc);
                     if(res <= threshold / 2){
                         /* Side A  NOT_ROTATED*/
-                        mask[center - y, center + x] = true;
+                        mask[center - x, center + y] = true;
                         //mask[center + y, center - x] = true;
 
                     }
