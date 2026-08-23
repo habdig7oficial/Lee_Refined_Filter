@@ -4,6 +4,8 @@
 #include "utility"
 #include "ranges"
 
+#include "vector"
+
 
 #include "tuple"
 #include "2d_bitset.hpp"
@@ -48,7 +50,7 @@ class MagicPoints {
         return 2 * (dim - 1);
     }
 
-    template <size_t Dim>
+
     static constexpr BitSetMask<Dim> gen_mask(double angle, double threshold){
         BitSetMask<Dim> mask {};
 
@@ -231,11 +233,12 @@ constexpr array<T, N> all_angles(){
 };
 
 constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
-constexpr array<BitSetMask<dimension>, masks_size> magic_points_arr(){
-  array<BitSetMask<dimension>, masks_size> masks;
+template <size_t Dim = dimension>
+constexpr array<BitSetMask<Dim, masks_size> magic_points_arr(){
+  array<BitSetMask<Dim>, masks_size> masks;
 
   for(int i = 0; i < masks_size; i++){
-    //masks[i] = MagicPoints::gen_mask<dimension>(angles[i], thickness);
+    masks[i] = MagicPoints::gen_mask<dimension>(MagicPoints::angle(i, mask), thickness);
     //masks[i] = MagicPoints(i);
   }
 
