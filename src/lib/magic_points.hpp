@@ -222,7 +222,7 @@ class MagicPoints {
 
     const Point* get_relevant() const { return NULL; }
     //const Point* get_relevant() const { return relevant_points.data(); }
-    size_t get_relevant_size()  const { return M; }
+    //size_t get_relevant_size()  const { return M; }
 
     #if !NDEBUG  
         vector<Point> show_marked(){ return mark_relevant(relative_coordinates); }
