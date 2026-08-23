@@ -233,8 +233,8 @@ constexpr array<T, N> all_angles(){
 };
 
 constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
-template<size_t Dim = dimension>
-constexpr array<BitSetMask<Dim, masks_size> magic_points_arr(){
+template <size_t Dim = dimension>
+constexpr array<BitSetMask<Dim>, masks_size> magic_points_arr(){
   array<BitSetMask<Dim>, masks_size> masks;
 
   for(int i = 0; i < masks_size; i++){
