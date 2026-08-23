@@ -23,7 +23,7 @@ compile:
 	 $(CXX) -march=native -fconstexpr-depth=4096 -std=c++$(CXX_VERSION) src/main.cpp -o exec.elf $(CXX_FLAGS)
 
 release: 
-	$(CXX) -march=native -fconstexpr-depth=4096 -O3 -std=c++$(CXX_VERSION) -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) 
+	$(CXX) -march=native -fconstexpr-depth=4096 -O3 -std=c++$(CXX_VERSION) -DNDEBUG src/main.cpp -o prod_binary $(CXX_FLAGS) -Wdeprecated-enum-enum-conversion
 
 run: compile
 	./exec.elf

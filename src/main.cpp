@@ -136,6 +136,8 @@ int main(int argc, char *argv[]){
   for(int i = 0; i < masks.size(); i++)
     cout << masks[i];
   
+  for(int i = 0; i < test.size(); i++)
+    cout << masks[i];
 
   return 0;
 }
