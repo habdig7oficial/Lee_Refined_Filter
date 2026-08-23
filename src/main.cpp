@@ -20,6 +20,7 @@ constexpr array<BitSetMask<dimension>, masks_size> masks = magic_points_arr();
 
 auto [test, tsize] = MagicPoints::vec_mask(0, 3);
 
+MagicPoints hello(5);
 
 
 int main(int argc, char *argv[]){
