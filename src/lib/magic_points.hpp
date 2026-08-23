@@ -69,7 +69,33 @@ class MagicPoints {
                         /* Side A  NOT_ROTATED*/
                         mask[center - x, center + y] = true;
                         //mask[center + y, center - x] = true;
+                        mask.push_back(Point{x, y});
+                    }
+                }
+            }
 
+        return mask;
+    }
+
+    template<size_t Dim = dimension>
+    static constexpr vector<Point> vec_mask(double angle, double threshold){
+        vector<Point> mask {};
+
+            double s = sin(angle);
+            double c = cos(angle);
+
+            int center = Dim / 2;
+            for(int y = -center; y <= center; y++){
+                double yc = y * c;
+                for(int x = -center; x <= center; x++){
+                    double xs = x * s;
+
+                    double res = abs(xs - yc);
+                    if(res <= threshold / 2){
+                        /* Side A  NOT_ROTATED*/
+                        //mask[center - x, center + y] = true;
+                        //mask[center + y, center - x] = true;
+                        mask.push_back(Point{x, y});
                     }
                 }
             }
