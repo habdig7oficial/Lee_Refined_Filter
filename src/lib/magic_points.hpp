@@ -34,11 +34,11 @@ class MagicPoints {
         this -> win_number = win_number;
         this -> side = dimension;
         this -> area = this -> side * this -> side;
-    }*/
+    }
 
     constexpr MagicPoints(uint win_number){
 
-    }
+    }*/
 
     static constexpr double angle(uint win_number, uint dim = dimension) {
         return win_number * numbers::pi / (2 * (dim - 1));
