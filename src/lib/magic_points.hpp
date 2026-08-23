@@ -19,15 +19,15 @@ using namespace Magic;
 
 class MagicPoints {
     private:
-        static constexpr uint N = 16; 
-        static constexpr uint M = 16; 
-        const array<Point, N>relative_coordinates;
+
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
 
         int side, area;
-        int win_number;
+        constexpr int win_number;
+
+        const array<Point, win_number>relative_coordinates;
 
     public:
 
@@ -38,9 +38,7 @@ class MagicPoints {
         this -> area = this -> side * this -> side;
     }
     
-    constexpr MagicPoints(uint win_number) : relative_coordinates(win_number){
-
-    }
+    constexpr MagicPoints(uint win_number) : win_number(win_number){}
 
     static constexpr double angle(uint win_number, uint dim = dimension) {
         return win_number * numbers::pi / (2 * (dim - 1));
