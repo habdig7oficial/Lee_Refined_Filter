@@ -19,15 +19,13 @@ using namespace Magic;
 
 class MagicPoints {
     private:
-
+        const array<Point, N>relative_coordinates;
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
 
         int side, area;
-        constexpr int win_number;
-
-        const array<Point, win_number>relative_coordinates;
+        int win_number;
 
     public:
 
