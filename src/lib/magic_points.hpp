@@ -26,7 +26,7 @@ class MagicPoints {
         int side, area;
         int win_number;
 
-        static constexpr size_t N = get<1>(vec_mask(MagicPoints::angle(win_number),3));
+        static constexpr size_t N = get<1>(vec_mask(0,3));
         const array<Point, N>relative_coordinates = {};
 
     public:
