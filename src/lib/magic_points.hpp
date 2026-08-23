@@ -95,7 +95,7 @@ class MagicPoints {
                         /* Side A  NOT_ROTATED*/
                         //mask[center - x, center + y] = true;
                         //mask[center + y, center - x] = true;
-                        mask.push_back(Point{x, y});
+                        mask.push_back(Point{(signed char)x, (signed char)y});
                     }
                 }
             }
