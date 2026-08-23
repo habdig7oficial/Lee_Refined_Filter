@@ -29,13 +29,13 @@ class MagicPoints {
 
     public:
 
-    /*
+
     constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl) {
         this -> win_number = win_number;
         this -> side = dimension;
         this -> area = this -> side * this -> side;
     }
-
+    /*
     constexpr MagicPoints(uint win_number){
 
     }*/
@@ -350,7 +350,7 @@ constexpr array w0_arr = {
         Point{5, 1}, Point{5, 0}, Point{5, -1}
 };
 
-constinit auto window0  = MagicPoints(0, w0_arr, dimension_inner);
+constinit auto window0 = MagicPoints(0, w0_arr, dimension_inner);
 
 auto all_windows = tie(window0);
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
