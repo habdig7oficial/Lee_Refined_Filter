@@ -78,30 +78,33 @@ class MagicPoints {
     }
 
     template<size_t Dim = dimension>
-    static constexpr vector<Point> vec_mask(double angle, double threshold){
+    static constexpr tuple<vector<Point>, size_t> vec_mask(double angle, double threshold){
         vector<Point> mask {};
+        size_t mask_size = 0;
+    
+        double s = sin(angle);
+        double c = cos(angle);
 
-            double s = sin(angle);
-            double c = cos(angle);
+        int center = Dim / 2;
+        for(int y = -center; y <= center; y++){
+            double yc = y * c;
+            for(int x = -center; x <= center; x++){
+                double xs = x * s;
 
-            int center = Dim / 2;
-            for(int y = -center; y <= center; y++){
-                double yc = y * c;
-                for(int x = -center; x <= center; x++){
-                    double xs = x * s;
-
-                    double res = abs(xs - yc);
-                    if(res <= threshold / 2){
-                        /* Side A  NOT_ROTATED*/
-                        //mask[center - x, center + y] = true;
-                        //mask[center + y, center - x] = true;
-                        mask.push_back(Point{(signed char)x, (signed char)y});
-                    }
+                double res = abs(xs - yc);
+                if(res <= threshold / 2){
+                    /* Side A  NOT_ROTATED*/
+                    //mask[center - x, center + y] = true;
+                    //mask[center + y, center - x] = true;
+                    mask.push_back(Point{(signed char)x, (signed char)y});
+                    mask_size++
                 }
             }
+        }
 
-        return mask;
+        return {mask, mask_size};
     }
+
 
     /* 
         Lambda type should be:
