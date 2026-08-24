@@ -271,6 +271,7 @@ constexpr array<BitSetMask<dimension>, masks_size> magic_points_arr(){
   return masks;
 }
 
+
 /*
 constexpr array w0_arr = {
         Point{0, 1}, 
