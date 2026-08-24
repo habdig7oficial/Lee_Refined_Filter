@@ -31,14 +31,14 @@ using namespace Magic;
 
 class MagicPoints {
     private:
-        static constexpr size_t N = dimension * dimension;
+        static constexpr size_t N = (int)ceil(sqrt(2) * dimension * thickness);
         const array<Point, N>relative_coordinates = {};
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
 
-        int side, area;
-        int win_number;
+        uint side, area;
+        uint win_number;
 
     public:
 
@@ -49,7 +49,7 @@ class MagicPoints {
         this -> area = this -> side * this -> side;
     }
     
-    constexpr MagicPoints(uint win_number) : win_number(win_number){}
+    constexpr MagicPoints(uint win_number, uint side, uint dim = dimension) : win_number(win_number), side(side * side){}
 
     static constexpr double angle(uint win_number, uint dim = dimension) {
         return win_number * numbers::pi / (2 * (dim - 1));
@@ -97,9 +97,10 @@ class MagicPoints {
         return mask;
     }
 
-    template<size_t Dim = dimension>
-    static constexpr tuple<vector<Point>, size_t> vec_mask(double angle, double threshold){
-        vector<Point> mask {};
+    
+    static constexpr tuple<array<Point, N>, size_t> vec_mask(double angle, double threshold = thickness){
+	array<Point, N> mask {};
+
         size_t mask_size = 0;
 
         #if CONSTEXP_SUPPORT == 1
@@ -111,7 +112,7 @@ class MagicPoints {
             double c = gcem::cos(angle);
         #endif
 
-        int center = Dim / 2;
+        int center = dimension / 2;
         for(int y = -center; y <= center; y++){
             double yc = y * c;
             for(int x = -center; x <= center; x++){
@@ -129,8 +130,7 @@ class MagicPoints {
                     /* Side A  NOT_ROTATED*/
                     //mask[center - x, center + y] = true;
                     //mask[center + y, center - x] = true;
-                    mask.push_back(Point{(signed char)x, (signed char)y});
-                    mask_size++;
+                    mask[mask_size++] = Point{(signed char)x, (signed char)y};
                 }
             }
         }
@@ -296,12 +296,12 @@ constexpr array<T, N> all_angles(){
 };
 
 constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
-constexpr array<BitSetMask<dimension>, masks_size> magic_points_arr(){
-  array<BitSetMask<dimension>, masks_size> masks;
+constexpr array<MagicPoints, masks_size> magic_points_arr(){
+  array<MagicPoints, masks_size> masks;
 
   for(int i = 0; i < masks_size; i++){
-    masks[i] = MagicPoints::gen_mask<dimension>(MagicPoints::angle(i, dimension), thickness);
-    //masks[i] = MagicPoints(i);
+    //masks[i] = MagicPoints::gen_mask<dimension>(MagicPoints::angle(i, dimension), thickness);
+    MagicPoints(i, dimension_inner);
   }
 
   return masks;
