@@ -13,6 +13,18 @@
 #include "optimization.hpp" 
 
 
+#if defined(__clang__)
+    #if __cplusplus < 202603L
+        #include "../../vendor/gcem/include/gcem.hpp"
+        #define CONSTEXP_SUPPORT 0
+
+    #else
+        #define CONSTEXP_SUPPORT 1
+    #endif
+    #else 
+        #define CONSTEXP_SUPPORT 1
+#endif
+
 using namespace std;
 using namespace env;
 using namespace Magic;
@@ -52,8 +64,13 @@ class MagicPoints {
     static constexpr BitSetMask<Dim> gen_mask(double angle, double threshold){
         BitSetMask<Dim> mask {};
 
-            double s = sin(angle);
-            double c = cos(angle);
+            #if CONSTEXP_SUPPORT == 1
+                double s = sin(angle);
+                double c = cos(angle);
+            #else
+                double s = gcem::sin(angle);
+                double c = gcem::cos(angle);
+            #endif
 
             int center = Dim / 2;
             for(int y = -center; y <= center; y++){
@@ -61,7 +78,13 @@ class MagicPoints {
                 for(int x = -center; x <= center; x++){
                     double xs = x * s;
 
-                    double res = abs(xs - yc);
+
+                    #if CONSTEXP_SUPPORT == 1
+                        double res = abs(xs - yc);
+                    #else
+                        double res = gcem::abs(xs - yc);
+                    #endif
+
                     if(res <= threshold / 2){
                         /* Side A  NOT_ROTATED*/
                         mask[center - x, center + y] = true;
@@ -78,9 +101,15 @@ class MagicPoints {
     static constexpr tuple<vector<Point>, size_t> vec_mask(double angle, double threshold){
         vector<Point> mask {};
         size_t mask_size = 0;
-    
-        double s = sin(angle);
-        double c = cos(angle);
+
+        #if CONSTEXP_SUPPORT == 1
+            double s = sin(angle);
+            double c = cos(angle);
+
+        #else
+            double s = gcem::sin(angle);
+            double c = gcem::cos(angle);
+        #endif
 
         int center = Dim / 2;
         for(int y = -center; y <= center; y++){
@@ -88,7 +117,14 @@ class MagicPoints {
             for(int x = -center; x <= center; x++){
                 double xs = x * s;
 
-                double res = abs(xs - yc);
+
+                #if CONSTEXP_SUPPORT == 1
+                    double res = abs(xs - yc);
+                #else
+                    double res = gcem::abs(xs - yc);
+                #endif
+
+
                 if(res <= threshold / 2){
                     /* Side A  NOT_ROTATED*/
                     //mask[center - x, center + y] = true;
