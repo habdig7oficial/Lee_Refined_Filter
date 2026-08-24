@@ -260,8 +260,8 @@ constexpr array<T, N> all_angles(){
 };
 
 constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
-constexpr array<BitSetMask<dimension>, masks_size> magic_points_arr(){
-  array<BitSetMask<dimension>, masks_size> masks;
+constexpr array<MagicPoints, masks_size> magic_points_arr(){
+  array<MagicPoints, masks_size> masks;
 
   for(int i = 0; i < masks_size; i++){
     //masks[i] = MagicPoints::gen_mask<dimension>(MagicPoints::angle(i, dimension), thickness);
