@@ -23,7 +23,9 @@ struct config_struct {
 
 //auto [test, tsize] = MagicPoints::vec_mask(0, 3);
 
-constexpr MagicPoints hello(0, dimension_inner, 3);
+
+constinit array<MagicPoints, Windows> hello = magic_points_factory();
+
 
 
 int main(int argc, char *argv[]){
@@ -138,9 +140,8 @@ int main(int argc, char *argv[]){
 
   cout << MagicPoints::num_windows(dimension) << endl;
 
-
-  for(int i = 0; i < hello.end(); i++){
-    cout << hello[i] << endl;
+  for(int i = 0; i < Windows; i++){
+    cout << hello[i].get_win_num() << endl;
   }
 
   return 0;

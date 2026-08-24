@@ -72,3 +72,8 @@ Geschwindigkeit is distributed in the hope that it will be useful, but WITHOUT A
 
 You should have received a copy of the GNU Lesser General Public License along with Foobar. If not, see <https://www.gnu.org/licenses/>. 
 
+
+
+  for(int i = 0; i < hello.end(); i++){
+    cout << hello[i] << endl;
+  }

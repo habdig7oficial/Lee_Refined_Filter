@@ -51,6 +51,7 @@ class MagicPoints {
 
     public:
 
+    MagicPoints() = default; /* Inicialize all with empty */
 
     constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl) {
         this -> win_number = win_number;
@@ -322,7 +323,7 @@ class MagicPoints {
         return os;
     }
 };
-
+/*
 template<array RelativeCoordinates, uint Side, uint WinNumber>
 constexpr auto magic_points_factory(){
     constexpr size_t N = RelativeCoordinates.size();
@@ -331,6 +332,18 @@ constexpr auto magic_points_factory(){
     auto relevant_points = gen_static<N, M>(RelativeCoordinates, Side);
 
     return MagicPoints(WinNumber, sort_compile_time(RelativeCoordinates, sorting_lambda), Side);
+}*/
+
+
+constexpr size_t Windows = MagicPoints::num_windows(dimension) / 2;
+constexpr array<MagicPoints, Windows> magic_points_factory(){
+    array<MagicPoints, Windows> arr;
+
+    for(int i = 0; i < Windows; i++){
+        arr[i] = MagicPoints(i, dimension_inner, thickness);
+    }
+
+    return arr;
 }
 
 template<typename T, size_t N>
