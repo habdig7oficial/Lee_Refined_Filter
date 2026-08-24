@@ -264,8 +264,8 @@ constexpr array<BitSetMask<dimension>, masks_size> magic_points_arr(){
   array<BitSetMask<dimension>, masks_size> masks;
 
   for(int i = 0; i < masks_size; i++){
-    masks[i] = MagicPoints::gen_mask<dimension>(MagicPoints::angle(i, dimension), thickness);
-    //masks[i] = MagicPoints(i);
+    //masks[i] = MagicPoints::gen_mask<dimension>(MagicPoints::angle(i, dimension), thickness);
+    masks[i] = MagicPoints(i);
   }
 
   return masks;
