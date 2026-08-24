@@ -19,15 +19,14 @@ using namespace Magic;
 
 class MagicPoints {
     private:
+        static constexpr size_t N = dimension * dimension;
+        const array<Point, N>relative_coordinates = {};
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
 
         int side, area;
         int win_number;
-
-        static constexpr size_t N = get<1>(MagicPoints::vec_mask(0,3));
-        const array<Point, N>relative_coordinates = {};
 
     public:
 
