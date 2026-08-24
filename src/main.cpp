@@ -16,7 +16,7 @@ struct config_struct {
 };
 
 
-constexpr array<MagicPoints, masks_size> masks = magic_points_arr();
+constexpr array<BitSetMask<dimension>, masks_size> masks = magic_points_arr();
 
 auto [test, tsize] = MagicPoints::vec_mask(0, 3);
 
