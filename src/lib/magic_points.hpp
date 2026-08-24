@@ -125,7 +125,7 @@ class MagicPoints {
                 #endif
 
 
-                if(res <= threshold / 2){
+                if(res <= threshold / 2 && x >= 0){
                     /* Side A  NOT_ROTATED*/
                     //mask[center - x, center + y] = true;
                     //mask[center + y, center - x] = true;
