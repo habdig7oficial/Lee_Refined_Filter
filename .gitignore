@@ -9,3 +9,4 @@ satelite
 *.elf
 !benchmark.json
 src/tests
+latex

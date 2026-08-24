@@ -1,3 +1,8 @@
+/** 
+* @file main.cpp
+* @brief The main file
+*/
+
 #include "iostream"
 #include "string.h"
 #include "lib/filter.hpp"
