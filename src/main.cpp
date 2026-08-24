@@ -21,11 +21,9 @@ struct config_struct {
 };
 
 
-constexpr array<MagicPoints, MagicPoints::num_windows(dimension) / 2> masks = magic_points_arr();
-
 //auto [test, tsize] = MagicPoints::vec_mask(0, 3);
 
-MagicPoints hello(5, dimension_inner, 3);
+constexpr MagicPoints hello(0, dimension_inner, 3);
 
 
 int main(int argc, char *argv[]){
@@ -140,11 +138,10 @@ int main(int argc, char *argv[]){
 
   cout << MagicPoints::num_windows(dimension) << endl;
 
-  for(int i = 0; i < masks.size(); i++)
-    cout << masks[i];
-  
-  for(int i = 0; i < test.size(); i++)
-    cout << test[i];
+
+  for(int i = 0; i < hello.end(); i++){
+    cout << hello[i] << endl;
+  }
 
   return 0;
 }

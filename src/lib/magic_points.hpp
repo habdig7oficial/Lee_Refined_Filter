@@ -31,14 +31,23 @@ using namespace Magic;
 
 class MagicPoints {
     private:
-        static constexpr size_t N = (int)ceil(sqrt(2) * dimension * thickness);
-        const array<Point, N>relative_coordinates = {};
+        
+        #if CONSTEXP_SUPPORT == 1
+            static constexpr size_t N = (int)ceil(sqrt(2) * (dimension / 2) * thickness);
+        #else
+            static constexpr size_t N = (int)gcem::ceil(gcem::sqrt(2) * (dimension / 2) * thickness);
+        #endif
+
+        array<Point, N>relative_coordinates = {};
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
 
         uint side, area;
         uint win_number;
+        double win_angle;
+
+        uint win_end;
 
     public:
 
@@ -49,7 +58,40 @@ class MagicPoints {
         this -> area = this -> side * this -> side;
     }
     
-    constexpr MagicPoints(uint win_number, uint side, uint dim = dimension) : win_number(win_number), side(side * side){}
+    constexpr MagicPoints(uint win_number, uint side, uint dim = dimension) : win_number(win_number), side(dimension), area(side * side), win_end(0), win_angle(MagicPoints::angle(win_number)){
+
+        #if CONSTEXP_SUPPORT == 1
+            double s = sin(win_angle);
+            double c = cos(win_angle);
+
+        #else
+            double s = gcem::sin(win_angle);
+            double c = gcem::cos(win_angle);
+        #endif
+
+        int center = dimension / 2;
+        for(int y = -center; y <= center; y++){
+            double yc = y * c;
+            for(int x = -center; x <= center; x++){
+                double xs = x * s;
+
+
+                #if CONSTEXP_SUPPORT == 1
+                    double res = abs(xs - yc);
+                #else
+                    double res = gcem::abs(xs - yc);
+                #endif
+
+
+                if(res <= thickness / 2 && x >= 0){
+                    /* Side A  NOT_ROTATED*/
+                    //mask[center - x, center + y] = true;
+                    //mask[center + y, center - x] = true;
+                    this -> relative_coordinates[win_end++] = Point{(signed char)x, (signed char)y};
+                }
+            }
+        }
+    }
 
     static constexpr double angle(uint win_number, uint dim = dimension) {
         return win_number * numbers::pi / (2 * (dim - 1));
@@ -249,12 +291,17 @@ class MagicPoints {
         return this -> area - this -> size(); 
     }
 
+    uint end()       const { return this -> win_end; }
     int get_side()       const { return this -> side; }
     int get_area()       const { return this -> area; }
     int get_win_num()    const { return this -> win_number; }
     int get_mirror_num() const { return this -> win_number + (dimension - 1); }
 
     //BitSetMask<dimension> get_mask() const { return this -> mask; } 
+
+    Point constexpr operator [] (uint pos) const {
+        return this -> relative_coordinates[pos];
+    }
 
     const Point* get_relevant() const { return NULL; }
     //const Point* get_relevant() const { return relevant_points.data(); }
@@ -295,6 +342,7 @@ constexpr array<T, N> all_angles(){
     return new_arr;
 };
 
+/*
 constexpr size_t masks_size = MagicPoints::num_windows(dimension) / 2;
 constexpr array<MagicPoints, masks_size> magic_points_arr(){
   array<MagicPoints, masks_size> masks;
@@ -306,7 +354,7 @@ constexpr array<MagicPoints, masks_size> magic_points_arr(){
 
   return masks;
 }
-
+*/
 
 /*
 constexpr array w0_arr = {
