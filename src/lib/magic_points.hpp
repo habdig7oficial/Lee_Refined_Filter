@@ -444,7 +444,9 @@ constinit auto window0 = MagicPoints(0, w0_arr, dimension_inner);
 
 */
 
-auto all_windows = tie();
+
+
+constinit array<MagicPoints, Windows> all_windows = magic_points_factory();
 constexpr size_t all_windows_size = tuple_size_v<decltype(all_windows)>;
 
 

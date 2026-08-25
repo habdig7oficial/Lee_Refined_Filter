@@ -217,31 +217,33 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
   /* Main Loop */
   for(int j = padding; j < image.cols - padding; j++){
     for(int i = padding; i < image.rows - padding; i++){
+      MagicPoints selected_win;
       double max_mean = 0;
-      double select_angle;
-      int select_win;
-      Magic::Point *relevant;
-      size_t relevant_size;
-/*
-      apply([&, i, j](auto&&... win){
-        double aux;
-          ((
-            aux = calc_mean_complex<double>(image, i, j, win, NOT_ROTATED),
-            (void)[&, aux](){
-              if(abs(aux) > max_mean){
-                max_mean = aux;
-                select_win = win.get_win_num();
-                select_angle = win.angle();
-                relevant = (Magic::Point *) win.get_relevant(); // overrides class type
-                relevant_size = (size_t) win.get_relevant_size();
-                //relevant_points = win.get_relevant();
-              }
-              if constexpr(dev_mode)
-                cout << win.get_win_num() << ") " << aux << endl;
-            }()
-          ), ...);
-      }, all_windows);
+      bool mode;
 
+      for(int k = 0; k < Windows; k++){
+        MagicPoints win = all_windows[k];
+        double aux = calc_mean_complex<double>(image, i, j, win, NOT_ROTATED);
+        if(abs(aux) > max_mean){
+          selected_win = win;
+          mode = NOT_ROTATED;
+        }
+        if constexpr(dev_mode)
+          cout << win.get_win_num() << ") " << aux << endl;
+      }
+
+      for(int k = 0; k < Windows; k++){
+        MagicPoints win = all_windows[k];
+        double aux = calc_mean_complex<double>(image, i, j, win, ROTATED);
+        if(abs(aux) > max_mean){
+          selected_win = win;
+          mode = ROTATED;
+        }
+        if constexpr(dev_mode)
+          cout << win.get_win_num() << ") " << aux << endl;
+      }
+
+/*
       apply([&, i, j](auto&&... win){
           double aux;
           ((
@@ -260,16 +262,11 @@ Mat refinedFilter(Mat &image, int window, int type = CV_32F, double eth = 0.01, 
           ), ...);
       }, all_windows);
 */
-
-      if constexpr(dev_mode)      
-        for(int i = 0; i < relevant_size; i++)
-          cout << relevant[i] << endl;
-      
-
       if constexpr(dev_mode){
         cout << "Max Mean: " << max_mean << endl;
-        cout << "Select win: " << select_win << endl;
-        cout << "Angle win: " << select_angle << endl;
+        cout << "Select win: " << selected_win.get_win_num() << endl;
+        cout << "Mode: " << ((mode == NOT_ROTATED)? "normal" : "rotated") << endl;
+        cout << "Angle win: " << selected_win.angle() << endl;
       }
 
       /*
