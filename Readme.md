@@ -77,3 +77,43 @@ You should have received a copy of the GNU Lesser General Public License along w
   for(int i = 0; i < hello.end(); i++){
     cout << hello[i] << endl;
   }
+
+
+
+
+    template<size_t Dim = dimension>
+    static constexpr BitSetMask<Dim> gen_mask(double angle, double threshold){
+        BitSetMask<Dim> mask {};
+
+            #if CONSTEXP_SUPPORT == 1
+                double s = sin(angle);
+                double c = cos(angle);
+            #else
+                double s = gcem::sin(angle);
+                double c = gcem::cos(angle);
+            #endif
+
+            int center = Dim / 2;
+            for(int y = -center; y <= center; y++){
+                double yc = y * c;
+                for(int x = -center; x <= center; x++){
+                    double xs = x * s;
+
+
+                    #if CONSTEXP_SUPPORT == 1
+                        double res = abs(xs - yc);
+                    #else
+                        double res = gcem::abs(xs - yc);
+                    #endif
+
+                    if(res <= threshold / 2){
+                        /* Side A  NOT_ROTATED*/
+                        mask[center - x, center + y] = true;
+                        //mask[center + y, center - x] = true;
+                        //mask.push_back(Point{x, y});
+                    }
+                }
+            }
+
+        return mask;
+    }

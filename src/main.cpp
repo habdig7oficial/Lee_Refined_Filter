@@ -142,6 +142,18 @@ int main(int argc, char *argv[]){
 
   for(int i = 0; i < Windows; i++){
     cout << hello[i].get_win_num() << endl;
+
+    hello[i].traverse([](char rx, char ry, bool scope){
+      cout << "(" << (int)rx << ", " << (int)ry << "), ";
+    });
+
+    cout << endl << " Traverse Reverse: " << endl;
+
+    hello[i].traverse_inverse([](char rx, char ry, bool scope){
+      cout << "(" << (int)rx << ", " << (int)ry << "), ";
+    });
+
+    cout << endl;
   }
 
   return 0;

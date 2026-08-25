@@ -4,7 +4,7 @@
 #include "utility"
 #include "ranges"
 
-#include "vector"
+#include "algorithm"
 
 
 #include "tuple"
@@ -83,6 +83,8 @@ class MagicPoints {
                     double res = gcem::abs(xs - yc);
                 #endif
 
+                if(x == 0 && y == 0)
+                    continue;
 
                 if(res <= thickness / 2 && x >= 0){
                     /* Side A  NOT_ROTATED*/
@@ -101,45 +103,6 @@ class MagicPoints {
     static constexpr uint num_windows(uint dim = dimension){
         return 2 * (dim - 1);
     }
-
-
-    template<size_t Dim = dimension>
-    static constexpr BitSetMask<Dim> gen_mask(double angle, double threshold){
-        BitSetMask<Dim> mask {};
-
-            #if CONSTEXP_SUPPORT == 1
-                double s = sin(angle);
-                double c = cos(angle);
-            #else
-                double s = gcem::sin(angle);
-                double c = gcem::cos(angle);
-            #endif
-
-            int center = Dim / 2;
-            for(int y = -center; y <= center; y++){
-                double yc = y * c;
-                for(int x = -center; x <= center; x++){
-                    double xs = x * s;
-
-
-                    #if CONSTEXP_SUPPORT == 1
-                        double res = abs(xs - yc);
-                    #else
-                        double res = gcem::abs(xs - yc);
-                    #endif
-
-                    if(res <= threshold / 2){
-                        /* Side A  NOT_ROTATED*/
-                        mask[center - x, center + y] = true;
-                        //mask[center + y, center - x] = true;
-                        //mask.push_back(Point{x, y});
-                    }
-                }
-            }
-
-        return mask;
-    }
-
     
     static constexpr tuple<array<Point, N>, size_t> vec_mask(double angle, double threshold = thickness){
 	array<Point, N> mask {};
@@ -195,13 +158,13 @@ class MagicPoints {
 
         if constexpr (dev_mode)
             cout << "SIDE_A: ";
-        for(const Point& point : this -> relative_coordinates)
-            lambda(point.first, point.second, SIDE_A);
+        for(int i = 0; i < this -> win_end; i++)
+            lambda(this -> relative_coordinates[i].first, this -> relative_coordinates[i].second, SIDE_A);
 
         if constexpr (dev_mode)
             cout << "SIDE_B: ";
-        for(const Point& point : this -> relative_coordinates)
-            lambda(-point.first, -point.second, SIDE_B);
+        for(int i = 0; i < this -> win_end; i++)
+            lambda(-this -> relative_coordinates[i].first, -this -> relative_coordinates[i].second, SIDE_B);
     }
 
 
@@ -213,13 +176,13 @@ class MagicPoints {
     
         if constexpr (dev_mode)
             cout << "SIDE_A: ";
-        for(const Point& point : this -> relative_coordinates)
-            lambda(-point.second, point.first, SIDE_A);
+        for(int i = 0; i < this -> win_end; i++)
+            lambda(-this -> relative_coordinates[i].second, this -> relative_coordinates[i].first, SIDE_A);
 
         if constexpr (dev_mode)
              cout << "SIDE_B: ";
-        for(const Point& point : this -> relative_coordinates)
-            lambda(point.second, -point.first, SIDE_B);
+        for(int i = 0; i < this -> win_end; i++)
+            lambda(this -> relative_coordinates[i].second, -this -> relative_coordinates[i].first, SIDE_B);
     }
 
         template<typename Lambda>
@@ -271,8 +234,8 @@ class MagicPoints {
 
         if constexpr (dev_mode)
             cout << "SIDE_A: ";
-        for(const Point& point : this -> relative_coordinates)
-            lambda(point.first, point.second, SIDE_A);
+        for(int i = 0; i < this -> win_end; i++)
+            lambda(this -> relative_coordinates[i].first, this -> relative_coordinates[i].second, SIDE_A);
     }
 
     double angle() const {
