@@ -60,3 +60,7 @@ clean_img:
 clean: clean_bin clean_img
 #leaks: compile
 #	valgrind --leak-check=full --track-origins=yes -- ./exec.elf $(ARGS)
+
+
+test_s:
+	$(CXX) -std=c++$(CXX_VERSION) -fconstexpr-depth=4096 -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[magic_points]" --abort #--rng-seed 3144853315

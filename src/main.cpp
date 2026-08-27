@@ -134,6 +134,10 @@ int main(int argc, char *argv[]){
   destroyAllWindows();
 
   cout << MagicPoints::num_windows(dimension) << endl;
+
+  if constexpr(dev_mode)
+    for(int i = 0; i < Windows; i++)
+      cout << i << ") Normal: " << all_windows[i].angle() << " Mirrored: " << all_windows[i].angle_inverse() << endl;
 /*
   for(int i = 0; i < Windows; i++){
     cout << hello[i].get_win_num() << endl;

@@ -32,11 +32,13 @@ using namespace Magic;
 class MagicPoints {
     private:
         
-        #if CONSTEXP_SUPPORT == 1
+        /*        #if CONSTEXP_SUPPORT == 1
             static constexpr size_t N = (int)ceil(sqrt(2) * (dimension / 2) * thickness);
         #else
             static constexpr size_t N = (int)gcem::ceil(gcem::sqrt(2) * (dimension / 2) * thickness);
-        #endif
+        #endif*/
+
+        static constexpr size_t N = dimension * dimension;
 
         array<Point, N>relative_coordinates = {};
         //const array<Point, M> relevant_points; 
@@ -62,7 +64,7 @@ class MagicPoints {
     constexpr MagicPoints(uint win_number, uint side, uint dim = dimension) : win_number(win_number), side(dimension), area(side * side), win_end(0), win_angle(MagicPoints::angle(win_number)){
 
         #if CONSTEXP_SUPPORT == 1
-            double s = sin(win_angle);
+            double s = tan(win_angle);
             double c = cos(win_angle);
 
         #else
@@ -86,7 +88,8 @@ class MagicPoints {
                 if(x == 0 && y == 0)
                     continue;
 
-                if(res <= thickness / 2 && x >= 0){
+                /** @warning Ensure double conversion */
+                if(res <= 1.5){
                     /* Side A  NOT_ROTATED*/
                     //mask[center - x, center + y] = true;
                     //mask[center + y, center - x] = true;
@@ -94,6 +97,7 @@ class MagicPoints {
                 }
             }
         }
+
     }
 
     static constexpr double angle(uint win_number, uint dim = dimension) {
@@ -104,47 +108,6 @@ class MagicPoints {
         return 2 * (dim - 1);
     }
     
-    static constexpr tuple<array<Point, N>, size_t> vec_mask(double angle, double threshold = thickness){
-	array<Point, N> mask {};
-
-        size_t mask_size = 0;
-
-        #if CONSTEXP_SUPPORT == 1
-            double s = sin(angle);
-            double c = cos(angle);
-
-        #else
-            double s = gcem::sin(angle);
-            double c = gcem::cos(angle);
-        #endif
-
-        int center = dimension / 2;
-        for(int y = -center; y <= center; y++){
-            double yc = y * c;
-            for(int x = -center; x <= center; x++){
-                double xs = x * s;
-
-
-                #if CONSTEXP_SUPPORT == 1
-                    double res = abs(xs - yc);
-                #else
-                    double res = gcem::abs(xs - yc);
-                #endif
-
-
-                if(res <= threshold / 2 && x >= 0){
-                    /* Side A  NOT_ROTATED*/
-                    //mask[center - x, center + y] = true;
-                    //mask[center + y, center - x] = true;
-                    mask[mask_size++] = Point{(signed char)x, (signed char)y};
-                }
-            }
-        }
-
-        return {mask, mask_size};
-    }
-
-
     /* 
         Lambda type should be:
             char (relative x), char (relative y), bool scope(inverted or original)
