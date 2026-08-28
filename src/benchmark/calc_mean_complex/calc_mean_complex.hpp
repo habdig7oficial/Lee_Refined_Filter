@@ -3,8 +3,10 @@
 #include "utility"
 #include "../../lib/filter.hpp"
 #include "mean_baseline.hpp"
+#include "../magic_points_hardcoded.hpp"
 
 #include "random"
+
 
 using namespace std;
 using namespace benchmark;
