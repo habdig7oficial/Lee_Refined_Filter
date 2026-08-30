@@ -3,9 +3,11 @@
 CXX = g++
 CXX_FLAGS = `pkg-config --cflags --libs opencv4 gsl`
 
+# Boost is only need if compiler dont suport math function as constexpr
+BOOST_PATH = /opt/homebrew/Cellar/boost/1.92.0/include/
+
 # Should be at least 23 because of constexpr bitset
 CXX_VERSION=23
-
 CONST_EXPR_DEPTH=4096
 
 
@@ -65,4 +67,4 @@ clean: clean_bin clean_img
 
 
 test_s:
-	$(CXX) -std=c++$(CXX_VERSION) -fconstexpr-depth=$(CONST_EXPR_DEPTH) -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) && ./test.elf "[magic_points]" --abort #--rng-seed 3144853315
+	$(CXX) -std=c++2c -fconstexpr-depth=$(CONST_EXPR_DEPTH) -O0 -march=native src/tests/test.cpp -o test.elf -I"$(R_TEST)" -I"$(RCPP_TEST)" -L"$(R_LIBS_TEST)" $(RINSIDE_CXX_TEST) $(RINSIDE_LDF_TEST) -lR $(CXX_FLAGS_TEST) -I$(BOOST_PATH)  && ./test.elf "[magic_points]" --abort #--rng-seed 3144853315

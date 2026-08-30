@@ -1,4 +1,4 @@
-constexpr array w0_arr = {
+/*constexpr array w0_arr = {
         Magic::Point{0, 1}, 
         Magic::Point{1, 1}, Magic::Point{1, 0}, Magic::Point{1, -1},
         Magic::Point{2, 1}, Magic::Point{2, 0}, Magic::Point{2, -1},
@@ -95,3 +95,4 @@ constexpr array w9_arr = {
 
 //auto all_windows = tie(window0, window1, window2, window3, window4, window5, window6, window7, window8, window9);
 auto hardcoded_windows = tie(w0_arr, w1_arr, w2_arr, w3_arr, w4_arr, w5_arr, w6_arr, w7_arr, w8_arr, w9_arr);
+*/

@@ -15,14 +15,61 @@
 
 #if defined(__clang__)
     #if __cplusplus < 202603L
-        #include "../../vendor/gcem/include/gcem.hpp"
         #define CONSTEXP_SUPPORT 0
-
     #else
         #define CONSTEXP_SUPPORT 1
     #endif
     #else 
         #define CONSTEXP_SUPPORT 1
+#endif
+
+#if CONSTEXP_SUPPORT == 1
+    namespace constant = std;
+    namespace patched = std;
+#else
+    #include "../../vendor/gcem/include/gcem.hpp"
+    #include "boost/math/special_functions/atanh.hpp"
+    namespace constant = gcem;
+    /*
+    namespace patched {
+        template <typename T>
+        constexpr T atan2(T y, T x) {
+            if (x == 0) {
+                if (y > 0) return std::numbers::pi_v<T> / 2;
+                if (y < 0) return -std::numbers::pi_v<T> / 2;
+                return 0;
+            }
+
+            auto atan_approx = [](T z) {
+                bool invert = false;
+                if (z < 0) z = -z;
+                if (z > 1) {
+                    z = T(1) / z;
+                    invert = true;
+                }
+
+                T z2 = z * z;
+                // Minimax polynomial approximation for atan(z) on [0, 1]
+                T res = z * (T(0.999866) + z2 * (T(-0.330299) + z2 * (T(0.196838) + z2 * T(-0.061656))));
+
+                if (invert) {
+                    res = (std::numbers::pi_v<T> / 2) - res;
+                }
+                return res;
+            };
+
+            T z = y / x;
+            T val = atan_approx(z);
+
+            if (x > 0) {
+                return val;
+            } else if (y >= 0) {
+                return val + std::numbers::pi_v<T>;
+            } else {
+                return val - std::numbers::pi_v<T>;
+            }
+        }
+    }*/
 #endif
 
 using namespace std;
@@ -31,16 +78,9 @@ using namespace Magic;
 
 class MagicPoints {
     private:
-        
-        /*        #if CONSTEXP_SUPPORT == 1
-            static constexpr size_t N = (int)ceil(sqrt(2) * (dimension / 2) * thickness);
-        #else
-            static constexpr size_t N = (int)gcem::ceil(gcem::sqrt(2) * (dimension / 2) * thickness);
-        #endif*/
+        static constexpr auto windows_matrix = tie(w0_arr, w1_arr, w2_arr, w3_arr, w4_arr, w5_arr, w6_arr, w7_arr, w8_arr, w9_arr);
 
-        static constexpr size_t N = dimension * dimension;
-
-        array<Point, N>relative_coordinates = {};
+        span<const Point> relative_coordinates;
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
@@ -49,54 +89,29 @@ class MagicPoints {
         uint win_number;
         double win_angle;
 
-        uint win_end;
+       //uint win_end;
+
+        static constexpr std::span<const Point> get_window(std::size_t idx) {
+        return std::apply([idx](auto&&... windows) -> std::span<const Point> {
+            std::span<const Point> res;
+            std::size_t current = 0;
+            // Using a fold expression with a comma operator to find the matching tuple element at index
+            ((current++ == idx ? (res = windows, true) : false) || ...);
+            return res;
+        }, windows_matrix);
+    }
 
     public:
 
     MagicPoints() = default; /* Inicialize all with empty */
-
+/*
     constexpr MagicPoints(int win_number, const array<Point, N>& rl, int side) : relative_coordinates(rl) {
         this -> win_number = win_number;
         this -> side = dimension;
         this -> area = this -> side * this -> side;
-    }
-    
-    constexpr MagicPoints(uint win_number, uint side, uint dim = dimension) : win_number(win_number), side(dimension), area(side * side), win_end(0), win_angle(MagicPoints::angle(win_number)){
+    }*/
 
-        #if CONSTEXP_SUPPORT == 1
-            double s = tan(win_angle);
-            double c = cos(win_angle);
-
-        #else
-            double s = gcem::sin(win_angle);
-            double c = gcem::cos(win_angle);
-        #endif
-
-        int center = dimension / 2;
-        for(int y = -center; y <= center; y++){
-            double yc = y * c;
-            for(int x = -center; x <= center; x++){
-                double xs = x * s;
-
-
-                #if CONSTEXP_SUPPORT == 1
-                    double res = abs(xs - yc);
-                #else
-                    double res = gcem::abs(xs - yc);
-                #endif
-
-                if(x == 0 && y == 0)
-                    continue;
-
-                /** @warning Ensure double conversion */
-                if(res <= 1.5){
-                    /* Side A  NOT_ROTATED*/
-                    //mask[center - x, center + y] = true;
-                    //mask[center + y, center - x] = true;
-                    this -> relative_coordinates[win_end++] = Point{(signed char)x, (signed char)y};
-                }
-            }
-        }
+    constexpr MagicPoints(uint win_number, uint side, uint dim = dimension) : win_number(win_number), side(dimension), area(side * side), win_angle(MagicPoints::angle(win_number)), relative_coordinates(get_window(win_number)) {
 
     }
 
@@ -121,12 +136,12 @@ class MagicPoints {
 
         if constexpr (dev_mode)
             cout << "SIDE_A: ";
-        for(int i = 0; i < this -> win_end; i++)
+        for(int i = 0; i < this -> relative_coordinates.size(); i++)
             lambda(this -> relative_coordinates[i].first, this -> relative_coordinates[i].second, SIDE_A);
 
         if constexpr (dev_mode)
             cout << "SIDE_B: ";
-        for(int i = 0; i < this -> win_end; i++)
+        for(int i = 0; i < this -> relative_coordinates.size(); i++)
             lambda(-this -> relative_coordinates[i].first, -this -> relative_coordinates[i].second, SIDE_B);
     }
 
@@ -139,12 +154,12 @@ class MagicPoints {
     
         if constexpr (dev_mode)
             cout << "SIDE_A: ";
-        for(int i = 0; i < this -> win_end; i++)
+        for(int i = 0; i < this -> relative_coordinates.size(); i++)
             lambda(-this -> relative_coordinates[i].second, this -> relative_coordinates[i].first, SIDE_A);
 
         if constexpr (dev_mode)
              cout << "SIDE_B: ";
-        for(int i = 0; i < this -> win_end; i++)
+        for(int i = 0; i < this -> relative_coordinates.size(); i++)
             lambda(this -> relative_coordinates[i].second, -this -> relative_coordinates[i].first, SIDE_B);
     }
 
@@ -197,7 +212,7 @@ class MagicPoints {
 
         if constexpr (dev_mode)
             cout << "SIDE_A: ";
-        for(int i = 0; i < this -> win_end; i++)
+        for(int i = 0; i < this -> relative_coordinates.size(); i++)
             lambda(this -> relative_coordinates[i].first, this -> relative_coordinates[i].second, SIDE_A);
     }
 
@@ -218,7 +233,7 @@ class MagicPoints {
         return this -> area - this -> size(); 
     }
 
-    uint end()       const { return this -> win_end; }
+    uint end()       const { return this -> relative_coordinates.size(); }
     int get_side()       const { return this -> side; }
     int get_area()       const { return this -> area; }
     int get_win_num()    const { return this -> win_number; }
@@ -261,7 +276,7 @@ constexpr auto magic_points_factory(){
 }*/
 
 
-constexpr size_t Windows = MagicPoints::num_windows(dimension) / 2;
+constexpr size_t Windows = MagicPoints::num_windows(dimension) / 2 + 1;
 constexpr array<MagicPoints, Windows> magic_points_factory(){
     array<MagicPoints, Windows> arr;
 

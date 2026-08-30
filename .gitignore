@@ -10,3 +10,5 @@ satelite
 !benchmark.json
 
 latex
+
+vendor/build
