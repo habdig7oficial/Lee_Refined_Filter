@@ -78,9 +78,16 @@ using namespace Magic;
 
 class MagicPoints {
     private:
-        static constexpr auto windows_matrix = tie(w0_arr, w1_arr, w2_arr, w3_arr, w4_arr, w5_arr, w6_arr, w7_arr, w8_arr, w9_arr);
+        
+        #if CONSTEXP_SUPPORT == 1
+            static constexpr size_t N = (int)ceil((sqrt(2) * ceil(dimension) * thickness) / 2 + 1);
+        #else
+            static constexpr size_t N = (int)gcem::ceil((gcem::sqrt(2) * gcem::ceil(dimension) * thickness) / 2 + 1);
+        #endif
 
-        span<const Point> relative_coordinates;
+        //static constexpr size_t N = dimension * dimension;
+
+        array<Point, N>relative_coordinates = {};
         //const array<Point, M> relevant_points; 
 
         //BitSetMask<dimension> mask;
@@ -109,9 +116,45 @@ class MagicPoints {
         this -> win_number = win_number;
         this -> side = dimension;
         this -> area = this -> side * this -> side;
-    }*/
+    }
+    
+    constexpr MagicPoints(uint win_number, uint side, uint dim = dimension) : win_number(win_number), side(dimension), area(side * side), win_end(0), win_angle(MagicPoints::angle(win_number)){
 
-    constexpr MagicPoints(uint win_number, uint side, uint dim = dimension) : win_number(win_number), side(dimension), area(side * side), win_angle(MagicPoints::angle(win_number)), relative_coordinates(get_window(win_number)) {
+        #if CONSTEXP_SUPPORT == 1
+            double s = sin(win_angle);
+            double c = cos(win_angle);
+            double scale_factor = (abs(s) > abs(c))? abs(s) : abs(c);
+        #else
+            double s = gcem::sin(win_angle);
+            double c = gcem::cos(win_angle);
+            double scale_factor = (gcem::abs(s) > gcem::abs(c))? gcem::abs(s) : gcem::abs(c);
+        #endif
+
+        int center = dimension / 2;
+        for(int y = -center; y <= center; y++){
+            double yc = y * c;
+            for(int x = 0; x <= center; x++){
+                double xs = x * s;
+
+
+                #if CONSTEXP_SUPPORT == 1
+                    double res = abs(xs - yc);
+                #else
+                    double res = gcem::abs(xs - yc);
+                #endif
+
+                if(x == 0 && y == 0)
+                    continue;
+
+                /** @warning Ensure double conversion */
+                if(res  < ((double)thickness / 2)){
+                    /* Side A  NOT_ROTATED*/ //  Correct:0.917 0.913
+                    //mask[center - x, center + y] = true;
+                    //mask[center + y, center - x] = true;
+                    this -> relative_coordinates[win_end++] = Point{(signed char)x, (signed char)y};
+                }
+            }
+        }
 
     }
 

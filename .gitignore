@@ -12,3 +12,4 @@ satelite
 latex
 
 vendor/build
+*.py
